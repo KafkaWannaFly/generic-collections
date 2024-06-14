@@ -1,6 +1,7 @@
 package list
 
 import (
+	"fmt"
 	"generic-collections/interfaces"
 	"generic-collections/utils"
 )
@@ -51,14 +52,17 @@ func (receiver *List[T]) Contains(item T) bool {
 }
 
 func (receiver *List[T]) ContainsAll(items interfaces.ICollection[T]) bool {
-	var result = true
+	elementMap := make(map[string]bool)
+	receiver.ForEach(func(index int, element T) {
+		elementMap[fmt.Sprintf("%v", element)] = true
+	})
 
-	for _, element := range items.ToSlice() {
-		if !receiver.Contains(element) {
+	var result = true
+	items.ForEach(func(index int, item T) {
+		if _, exists := elementMap[fmt.Sprintf("%v", item)]; !exists {
 			result = false
-			break
 		}
-	}
+	})
 
 	return result
 }
@@ -109,22 +113,18 @@ func (receiver *List[T]) Remove(item T) {
 }
 
 func (receiver *List[T]) RemoveAll(items interfaces.ICollection[T]) {
-	var notRemoveIndices = make(map[int]bool, 0)
+	itemMap := make(map[string]bool)
+	items.ForEach(func(index int, item T) {
+		itemMap[fmt.Sprintf("%v", item)] = true
+	})
 
-	for _, element := range receiver.elements {
-		items.ForEach(func(index int, item T) {
-			if !utils.IsEqual(element, item) {
-				notRemoveIndices[index] = true
-			}
-		})
-	}
-
-	newSize := receiver.Count() - items.Count()
 	newCollection := make([]T, 0)
-	for k, _ := range notRemoveIndices {
-		newCollection = append(newCollection, receiver.elements[k])
+	for _, element := range receiver.elements {
+		if _, exists := itemMap[fmt.Sprintf("%v", element)]; !exists {
+			newCollection = append(newCollection, element)
+		}
 	}
 
 	receiver.elements = newCollection
-	receiver.count = newSize
+	receiver.count = len(newCollection)
 }
