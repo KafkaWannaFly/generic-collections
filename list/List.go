@@ -27,14 +27,17 @@ func (receiver *List[T]) ForEach(appliedFunc func(int, T)) {
 	}
 }
 
-func (receiver *List[T]) Add(item T) {
+func (receiver *List[T]) Add(item T) interfaces.ICollection[T] {
 	receiver.elements = append(receiver.elements, item)
 	receiver.count++
+
+	return receiver
 }
 
-func (receiver *List[T]) AddAll(items interfaces.ICollection[T]) {
+func (receiver *List[T]) AddAll(items interfaces.ICollection[T]) interfaces.ICollection[T] {
 	receiver.elements = append(receiver.elements, items.ToSlice()...)
 	receiver.count = len(receiver.elements)
+	return receiver
 }
 
 func (receiver *List[T]) Count() int {
@@ -67,9 +70,11 @@ func (receiver *List[T]) ContainsAll(items interfaces.ICollection[T]) bool {
 	return result
 }
 
-func (receiver *List[T]) Clear() {
+func (receiver *List[T]) Clear() interfaces.ICollection[T] {
 	receiver.elements = make([]T, 0)
 	receiver.count = 0
+
+	return receiver
 }
 
 func (receiver *List[T]) Filter(predicate func(T) bool) interfaces.ICollection[T] {
@@ -89,9 +94,11 @@ func (receiver *List[T]) Get(i any) T {
 	return receiver.elements[index]
 }
 
-func (receiver *List[T]) Set(i any, item T) {
+func (receiver *List[T]) Set(i any, item T) interfaces.ICollection[T] {
 	var index = i.(int)
 	receiver.elements[index] = item
+
+	return receiver
 }
 
 func (receiver *List[T]) ToSlice() []T {
@@ -102,7 +109,7 @@ func (receiver *List[T]) IsEmpty() bool {
 	return receiver.count == 0
 }
 
-func (receiver *List[T]) Remove(item T) {
+func (receiver *List[T]) Remove(item T) interfaces.ICollection[T] {
 	for i, element := range receiver.elements {
 		if utils.IsEqual(element, item) {
 			receiver.elements = append(receiver.elements[:i], receiver.elements[i+1:]...)
@@ -110,9 +117,11 @@ func (receiver *List[T]) Remove(item T) {
 			break
 		}
 	}
+
+	return receiver
 }
 
-func (receiver *List[T]) RemoveAll(items interfaces.ICollection[T]) {
+func (receiver *List[T]) RemoveAll(items interfaces.ICollection[T]) interfaces.ICollection[T] {
 	itemMap := make(map[string]bool)
 	items.ForEach(func(index int, item T) {
 		itemMap[fmt.Sprintf("%v", item)] = true
@@ -127,4 +136,6 @@ func (receiver *List[T]) RemoveAll(items interfaces.ICollection[T]) {
 
 	receiver.elements = newCollection
 	receiver.count = len(newCollection)
+
+	return receiver
 }

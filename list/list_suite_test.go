@@ -70,16 +70,7 @@ var _ = Describe("Test List implements ICollection", func() {
 		})
 
 		It("Should set an element", func() {
-			integerList.Set(0, 11)
-			integerList.Set(1, 12)
-			integerList.Set(2, 13)
-			integerList.Set(3, 14)
-			integerList.Set(4, 15)
-			integerList.Set(5, 16)
-			integerList.Set(6, 17)
-			integerList.Set(7, 18)
-			integerList.Set(8, 19)
-			integerList.Set(9, 20)
+			integerList.Set(0, 11).Set(1, 12).Set(2, 13).Set(3, 14).Set(4, 15).Set(5, 16).Set(6, 17).Set(7, 18).Set(8, 19).Set(9, 20)
 
 			Expect(integerList.Get(0)).To(Equal(11))
 			Expect(integerList.Get(1)).To(Equal(12))
