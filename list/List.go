@@ -108,34 +108,3 @@ func (receiver *List[T]) ToSlice() []T {
 func (receiver *List[T]) IsEmpty() bool {
 	return receiver.count == 0
 }
-
-func (receiver *List[T]) Remove(item T) interfaces.ICollection[T] {
-	for i, element := range receiver.elements {
-		if utils.IsEqual(element, item) {
-			receiver.elements = append(receiver.elements[:i], receiver.elements[i+1:]...)
-			receiver.count--
-			break
-		}
-	}
-
-	return receiver
-}
-
-func (receiver *List[T]) RemoveAll(items interfaces.ICollection[T]) interfaces.ICollection[T] {
-	itemMap := make(map[string]bool)
-	items.ForEach(func(index int, item T) {
-		itemMap[fmt.Sprintf("%v", item)] = true
-	})
-
-	newCollection := make([]T, 0)
-	for _, element := range receiver.elements {
-		if _, exists := itemMap[fmt.Sprintf("%v", element)]; !exists {
-			newCollection = append(newCollection, element)
-		}
-	}
-
-	receiver.elements = newCollection
-	receiver.count = len(newCollection)
-
-	return receiver
-}

@@ -13,6 +13,4 @@ type ICollection[T any] interface {
 	Set(any, T) ICollection[T]
 	ToSlice() []T
 	IsEmpty() bool
-	Remove(T) ICollection[T]
-	RemoveAll(ICollection[T]) ICollection[T]
 }

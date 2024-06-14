@@ -67,19 +67,6 @@ var _ = Describe("Test List implements ICollection", func() {
 			Expect(integerList.IsEmpty(), BeTrue())
 		})
 
-		It("Should remove an element", func() {
-			integerList.Remove(5)
-
-			Expect(integerList.Count()).To(Equal(9))
-			Expect(integerList.IsEmpty(), BeFalse())
-		})
-
-		It("Should remove all elements", func() {
-			integerList.RemoveAll(list.From(1, 2, 3, 4, 5))
-
-			Expect(integerList.Count()).To(Equal(5))
-		})
-
 		It("Should get an element", func() {
 			Expect(integerList.Get(0)).To(Equal(1))
 			Expect(integerList.Get(1)).To(Equal(2))
@@ -178,19 +165,6 @@ var _ = Describe("Test List implements ICollection", func() {
 
 			Expect(stringList.Count()).To(Equal(0))
 			Expect(stringList.IsEmpty()).To(BeTrue())
-		})
-
-		It("Should remove an element", func() {
-			stringList.Remove("Elderberry").Remove("Devil Fruit")
-
-			Expect(stringList.Count()).To(Equal(9))
-			Expect(stringList.IsEmpty()).To(BeFalse())
-		})
-
-		It("Should remove all elements", func() {
-			stringList.RemoveAll(list.From("Apple", "Banana", "Cherry", "Dates", "Elderberry"))
-
-			Expect(stringList.Count()).To(Equal(5))
 		})
 
 		It("Should contain an element", func() {
@@ -336,32 +310,6 @@ var _ = Describe("Test List implements ICollection", func() {
 
 			Expect(bookList.Count()).To(Equal(0))
 			Expect(bookList.IsEmpty()).To(BeTrue())
-		})
-
-		It("Should remove an element", func() {
-			bookList.Remove(Book{
-				Title: "The Alchemist",
-			}).Remove(Book{
-				Title: "The Great Gatsby", // There is no such book
-			})
-
-			Expect(bookList.Count()).To(Equal(2))
-		})
-
-		It("Should remove all elements", func() {
-			bookList.RemoveAll(list.From(
-				Book{
-					Title: "The Alchemist",
-				},
-				Book{
-					Title: "The Little Prince",
-				},
-				Book{
-					Title: "The Catcher in the Rye",
-				},
-			))
-
-			Expect(bookList.Count()).To(Equal(0))
 		})
 
 		It("Should contain an element", func() {
