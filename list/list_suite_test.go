@@ -80,7 +80,16 @@ var _ = Describe("Test List implements ICollection", func() {
 		})
 
 		It("Should set an element", func() {
-			integerList.Set(0, 11).Set(1, 12).Set(2, 13).Set(3, 14).Set(4, 15).Set(5, 16).Set(6, 17).Set(7, 18).Set(8, 19).Set(9, 20)
+			integerList.Set(0, 11)
+			integerList.Set(1, 12)
+			integerList.Set(2, 13)
+			integerList.Set(3, 14)
+			integerList.Set(4, 15)
+			integerList.Set(5, 16)
+			integerList.Set(6, 17)
+			integerList.Set(7, 18)
+			integerList.Set(8, 19)
+			integerList.Set(9, 20)
 
 			Expect(integerList.Get(0)).To(Equal(11))
 			Expect(integerList.Get(1)).To(Equal(12))
@@ -200,7 +209,12 @@ var _ = Describe("Test List implements ICollection", func() {
 		})
 
 		It("Should set elements", func() {
-			stringList.Set(0, "Lemon").Set(1, "Mango").Set(2, "Nectarine").Set(3, "Orange").Set(4, "Papaya").Set(5, "Quince")
+			stringList.Set(0, "Lemon")
+			stringList.Set(1, "Mango")
+			stringList.Set(2, "Nectarine")
+			stringList.Set(3, "Orange")
+			stringList.Set(4, "Papaya")
+			stringList.Set(5, "Quince")
 
 			Expect(stringList.Get(0)).To(Equal("Lemon"))
 			Expect(stringList.Get(1)).To(Equal("Mango"))
@@ -361,9 +375,11 @@ var _ = Describe("Test List implements ICollection", func() {
 		It("Should set elements", func() {
 			bookList.Set(0, Book{
 				Title: "The Great Gatsby",
-			}).Set(1, Book{
+			})
+			bookList.Set(1, Book{
 				Title: "To Kill a Mockingbird",
-			}).Set(2, Book{
+			})
+			bookList.Set(2, Book{
 				Title: "1984",
 			})
 
@@ -390,6 +406,28 @@ var _ = Describe("Test List implements ICollection", func() {
 			})
 
 			Expect(sum).To(Equal(3))
+		})
+	})
+
+	Context("Try panic", func() {
+		var floatList *list.List[float64]
+
+		BeforeEach(func() {
+			floatList = list.From(1.1, 2.2, 3.3, 4.4, 5.5)
+		})
+
+		It("Should panic when index out of range", func() {
+			Expect(func() {
+				floatList.Get(5)
+				floatList.Set(5, 6.6)
+			}).To(Panic())
+		})
+
+		It("Should panic when index is negative", func() {
+			Expect(func() {
+				floatList.Get(-1)
+				floatList.Set(-1, 6.6)
+			}).To(Panic())
 		})
 	})
 })

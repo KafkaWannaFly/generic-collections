@@ -9,8 +9,6 @@ type ICollection[T any] interface {
 	HasAll(ICollection[T]) bool
 	Clear() ICollection[T]
 	Filter(func(T) bool) ICollection[T]
-	Get(any) T
-	Set(any, T) ICollection[T]
 	ToSlice() []T
 	IsEmpty() bool
 }

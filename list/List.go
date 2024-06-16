@@ -6,6 +6,9 @@ import (
 )
 
 type List[T any] struct {
+	interfaces.ICollection[T]
+	interfaces.IGetterSetter[int, T]
+
 	elements []T
 	count    int
 }
@@ -90,16 +93,12 @@ func (receiver *List[T]) Filter(predicate func(T) bool) interfaces.ICollection[T
 	return ans
 }
 
-func (receiver *List[T]) Get(i any) T {
-	var index = i.(int)
-	return receiver.elements[index]
+func (receiver *List[T]) Get(i int) T {
+	return receiver.elements[i]
 }
 
-func (receiver *List[T]) Set(i any, item T) interfaces.ICollection[T] {
-	var index = i.(int)
-	receiver.elements[index] = item
-
-	return receiver
+func (receiver *List[T]) Set(i int, item T) {
+	receiver.elements[i] = item
 }
 
 func (receiver *List[T]) ToSlice() []T {
