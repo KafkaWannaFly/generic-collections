@@ -5,8 +5,8 @@ type ICollection[T any] interface {
 	Add(T) ICollection[T]
 	AddAll(ICollection[T]) ICollection[T]
 	Count() int
-	Contains(T) bool
-	ContainsAll(ICollection[T]) bool
+	Has(T) bool
+	HasAll(ICollection[T]) bool
 	Clear() ICollection[T]
 	Filter(func(T) bool) ICollection[T]
 	Get(any) T

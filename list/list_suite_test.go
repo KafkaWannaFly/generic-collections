@@ -22,11 +22,6 @@ type Book struct {
 	Price         float64
 }
 
-func (receiver Book) OpenPage(num int) string {
-	receiver.CurrentPage = num
-	return receiver.Pages[num]
-}
-
 func (receiver Book) Compare(book Book) int {
 	if receiver.Title == book.Title {
 		return 0
@@ -35,6 +30,10 @@ func (receiver Book) Compare(book Book) int {
 	} else {
 		return -1
 	}
+}
+
+func (receiver Book) GetHashCode() string {
+	return receiver.Title
 }
 
 var _ = Describe("Test List implements ICollection", func() {
@@ -100,13 +99,13 @@ var _ = Describe("Test List implements ICollection", func() {
 		})
 
 		It("Should check if contains an element", func() {
-			Expect(integerList.Contains(5)).To(BeTrue())
-			Expect(integerList.Contains(15)).To(BeFalse())
+			Expect(integerList.Has(5)).To(BeTrue())
+			Expect(integerList.Has(15)).To(BeFalse())
 		})
 
 		It("Should check if contains all elements", func() {
-			Expect(integerList.ContainsAll(list.From(1, 2, 3, 4, 5))).To(BeTrue())
-			Expect(integerList.ContainsAll(list.From(1, 2, 3, 4, 15))).To(BeFalse())
+			Expect(integerList.HasAll(list.From(1, 2, 3, 4, 5))).To(BeTrue())
+			Expect(integerList.HasAll(list.From(1, 2, 3, 4, 15))).To(BeFalse())
 		})
 
 		It("Should filter elements", func() {
@@ -168,14 +167,14 @@ var _ = Describe("Test List implements ICollection", func() {
 		})
 
 		It("Should contain an element", func() {
-			Expect(stringList.Contains("Apple")).To(BeTrue())
-			Expect(stringList.Contains("Elderberry")).To(BeTrue())
-			Expect(stringList.Contains("Devil Fruit")).To(BeFalse())
+			Expect(stringList.Has("Apple")).To(BeTrue())
+			Expect(stringList.Has("Elderberry")).To(BeTrue())
+			Expect(stringList.Has("Devil Fruit")).To(BeFalse())
 		})
 
 		It("Should contain all elements", func() {
-			Expect(stringList.ContainsAll(list.From("Apple", "Banana", "Cherry", "Dates", "Elderberry"))).To(BeTrue())
-			Expect(stringList.ContainsAll(list.From("Apple", "Banana", "Cherry", "Dates", "Devil Fruit"))).To(BeFalse())
+			Expect(stringList.HasAll(list.From("Apple", "Banana", "Cherry", "Dates", "Elderberry"))).To(BeTrue())
+			Expect(stringList.HasAll(list.From("Apple", "Banana", "Cherry", "Dates", "Devil Fruit"))).To(BeFalse())
 		})
 
 		It("Should filter elements", func() {
@@ -184,7 +183,7 @@ var _ = Describe("Test List implements ICollection", func() {
 			})
 
 			Expect(filtered.Count()).To(Equal(9))
-			Expect(filtered.Contains("Apple")).To(BeFalse())
+			Expect(filtered.Has("Apple")).To(BeFalse())
 		})
 
 		It("Should get elements", func() {
@@ -313,17 +312,17 @@ var _ = Describe("Test List implements ICollection", func() {
 		})
 
 		It("Should contain an element", func() {
-			Expect(bookList.Contains(Book{
+			Expect(bookList.Has(Book{
 				Title: "The Alchemist",
 			})).To(BeTrue())
 
-			Expect(bookList.Contains(Book{
+			Expect(bookList.Has(Book{
 				Title: "The Great Gatsby",
 			})).To(BeFalse())
 		})
 
 		It("Should contain all elements", func() {
-			Expect(bookList.ContainsAll(list.From(
+			Expect(bookList.HasAll(list.From(
 				Book{
 					Title: "The Alchemist",
 				},
@@ -335,7 +334,7 @@ var _ = Describe("Test List implements ICollection", func() {
 				},
 			))).To(BeTrue())
 
-			Expect(bookList.ContainsAll(list.From(
+			Expect(bookList.HasAll(list.From(
 				Book{
 					Title: "The Alchemist",
 				},

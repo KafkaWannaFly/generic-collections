@@ -1,7 +1,6 @@
 package list
 
 import (
-	"fmt"
 	"generic-collections/interfaces"
 	"generic-collections/utils"
 )
@@ -44,7 +43,7 @@ func (receiver *List[T]) Count() int {
 	return receiver.count
 }
 
-func (receiver *List[T]) Contains(item T) bool {
+func (receiver *List[T]) Has(item T) bool {
 	for _, element := range receiver.elements {
 		if utils.IsEqual(element, item) {
 			return true
@@ -54,15 +53,17 @@ func (receiver *List[T]) Contains(item T) bool {
 	return false
 }
 
-func (receiver *List[T]) ContainsAll(items interfaces.ICollection[T]) bool {
+func (receiver *List[T]) HasAll(items interfaces.ICollection[T]) bool {
 	elementMap := make(map[string]bool)
 	receiver.ForEach(func(index int, element T) {
-		elementMap[fmt.Sprintf("%v", element)] = true
+		var key = utils.HashCodeOf(element)
+		elementMap[key] = true
 	})
 
 	var result = true
 	items.ForEach(func(index int, item T) {
-		if _, exists := elementMap[fmt.Sprintf("%v", item)]; !exists {
+		var key = utils.HashCodeOf(item)
+		if _, exists := elementMap[key]; !exists {
 			result = false
 		}
 	})

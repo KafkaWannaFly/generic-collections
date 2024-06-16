@@ -1,6 +1,7 @@
 package utils
 
 import (
+	"fmt"
 	"generic-collections/interfaces"
 )
 
@@ -10,11 +11,24 @@ func IsEqual[T any](a T, b T) bool {
 	var ia interface{} = a
 	var ib interface{} = b
 
-	ica, aOk := ia.(interfaces.IComparer[T])
+	iComparerA, aOk := ia.(interfaces.IComparer[T])
 
 	if aOk {
-		return ica.Compare(b) == 0
+		return iComparerA.Compare(b) == 0
 	}
 
 	return ia == ib
+}
+
+// HashCodeOf If item implement IHashCoder, then use GetHashCode method to get hash code.
+// Else. use fmt.Sprintf to convert item to string
+func HashCodeOf[T any](item T) string {
+	var iItem interface{} = item
+	var iHashCoder, ok = iItem.(interfaces.IHashCoder)
+
+	if ok {
+		return iHashCoder.GetHashCode()
+	}
+
+	return fmt.Sprintf("%v", item)
 }
