@@ -31,4 +31,4 @@ jobs:
         uses: codecov/codecov-action@v4.0.1
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
-          files: ./report.xml
+          files: report.xml,cover.profile
