@@ -6,9 +6,6 @@ import (
 )
 
 type List[T any] struct {
-	interfaces.ICollection[T]
-	interfaces.IGetterSetter[int, T]
-
 	elements []T
 	count    int
 }
