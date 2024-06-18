@@ -105,3 +105,7 @@ func (receiver *List[T]) ToSlice() []T {
 func (receiver *List[T]) IsEmpty() bool {
 	return receiver.count == 0
 }
+
+func (receiver *List[T]) Clone() interfaces.ICollection[T] {
+	return From[T](receiver.elements...)
+}

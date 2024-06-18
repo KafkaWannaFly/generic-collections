@@ -5,7 +5,7 @@ import (
 	"generic-collections/utils"
 )
 
-// Set Implement the ICollection interface
+// Set implements the ICollection interface
 type Set[T any] struct {
 	elements map[string]T
 	count    int
@@ -21,6 +21,8 @@ func From[T any](items ...T) *Set[T] {
 		var key = utils.HashCodeOf(item)
 		set.elements[key] = item
 	}
+	set.count = len(items)
+
 	return set
 }
 
@@ -103,4 +105,12 @@ func (receiver *Set[T]) ToSlice() []T {
 
 func (receiver *Set[T]) IsEmpty() bool {
 	return receiver.Count() == 0
+}
+
+func (receiver *Set[T]) Clone() interfaces.ICollection[T] {
+	var set = New[T]()
+	for _, element := range receiver.elements {
+		set.Add(element)
+	}
+	return set
 }

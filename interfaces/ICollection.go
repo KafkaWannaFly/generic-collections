@@ -11,4 +11,5 @@ type ICollection[T any] interface {
 	Filter(func(T) bool) ICollection[T]
 	ToSlice() []T
 	IsEmpty() bool
+	Clone() ICollection[T]
 }
