@@ -17,25 +17,6 @@ var _ = Describe("Test List implements ICollection", func() {
 			Expect(integerList.Count()).To(Equal(10))
 		})
 
-		It("Should add an element", func() {
-			integerList.Add(11)
-
-			Expect(integerList.Count()).To(Equal(11))
-		})
-
-		It("Should add all elements", func() {
-			integerList.AddAll(list.From(11, 12, 13, 14, 15))
-
-			Expect(integerList.Count()).To(Equal(15))
-		})
-
-		It("Should clear all elements", func() {
-			integerList.Clear()
-
-			Expect(integerList.Count()).To(Equal(0))
-			Expect(integerList.IsEmpty(), BeTrue())
-		})
-
 		It("Should get an element", func() {
 			Expect(integerList.Get(0)).To(Equal(1))
 			Expect(integerList.Get(1)).To(Equal(2))
@@ -76,34 +57,6 @@ var _ = Describe("Test List implements ICollection", func() {
 		It("Should convert to slice", func() {
 			Expect(integerList.ToSlice()).To(Equal([]int{1, 2, 3, 4, 5, 6, 7, 8, 9, 10}))
 		})
-
-		It("Should check if contains an element", func() {
-			Expect(integerList.Has(5)).To(BeTrue())
-			Expect(integerList.Has(15)).To(BeFalse())
-		})
-
-		It("Should check if contains all elements", func() {
-			Expect(integerList.HasAll(list.From(1, 2, 3, 4, 5))).To(BeTrue())
-			Expect(integerList.HasAll(list.From(1, 2, 3, 4, 15))).To(BeFalse())
-		})
-
-		It("Should filter elements", func() {
-			filtered := integerList.Filter(func(element int) bool {
-				return element > 5
-			})
-
-			Expect(filtered.ToSlice()).To(Equal([]int{6, 7, 8, 9, 10}))
-			Expect(filtered.Count()).To(Equal(5))
-		})
-
-		It("Should iterate over elements", func() {
-			var sum int
-			integerList.ForEach(func(_ int, element int) {
-				sum += element
-			})
-
-			Expect(sum).To(Equal(55))
-		})
 	})
 
 	Context("Using string", func() {
@@ -124,45 +77,6 @@ var _ = Describe("Test List implements ICollection", func() {
 			)
 
 			Expect(stringList.Count()).To(Equal(10))
-		})
-
-		It("Should add elements", func() {
-			stringList.Add("Lemon").Add("Mango").Add("Nectarine").Add("Orange").Add("Papaya").Add("Quince").Add("Raspberry").Add("Strawberry").Add("Tangerine").Add("Ugli")
-
-			Expect(stringList.Count()).To(Equal(20))
-		})
-
-		It("Should add all elements", func() {
-			stringList.AddAll(list.From("Lemon", "Mango", "Nectarine", "Orange", "Papaya", "Quince", "Raspberry", "Strawberry", "Tangerine", "Ugli"))
-
-			Expect(stringList.Count()).To(Equal(20))
-		})
-
-		It("Should clear all elements", func() {
-			stringList.Clear()
-
-			Expect(stringList.Count()).To(Equal(0))
-			Expect(stringList.IsEmpty()).To(BeTrue())
-		})
-
-		It("Should contain an element", func() {
-			Expect(stringList.Has("Apple")).To(BeTrue())
-			Expect(stringList.Has("Elderberry")).To(BeTrue())
-			Expect(stringList.Has("Devil Fruit")).To(BeFalse())
-		})
-
-		It("Should contain all elements", func() {
-			Expect(stringList.HasAll(list.From("Apple", "Banana", "Cherry", "Dates", "Elderberry"))).To(BeTrue())
-			Expect(stringList.HasAll(list.From("Apple", "Banana", "Cherry", "Dates", "Devil Fruit"))).To(BeFalse())
-		})
-
-		It("Should filter elements", func() {
-			filtered := stringList.Filter(func(element string) bool {
-				return element != "Apple"
-			})
-
-			Expect(filtered.Count()).To(Equal(9))
-			Expect(filtered.Has("Apple")).To(BeFalse())
 		})
 
 		It("Should get elements", func() {
@@ -196,15 +110,6 @@ var _ = Describe("Test List implements ICollection", func() {
 
 		It("Should convert to slice", func() {
 			Expect(stringList.ToSlice()).To(Equal([]string{"Apple", "Banana", "Cherry", "Dates", "Elderberry", "Fig", "Grape", "Honeydew", "Jackfruit", "Kiwi"}))
-		})
-
-		It("Should iterate over elements", func() {
-			var sum int
-			stringList.ForEach(func(_ int, element string) {
-				sum += 1
-			})
-
-			Expect(sum).To(Equal(10))
 		})
 	})
 

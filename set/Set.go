@@ -40,6 +40,10 @@ func (receiver *Set[T]) ForEach(appliedFunc func(int, T)) {
 func (receiver *Set[T]) Add(item T) interfaces.ICollection[T] {
 	var key = utils.HashCodeOf(item)
 
+	if !receiver.Has(item) {
+		receiver.count++
+	}
+
 	receiver.elements[key] = item
 
 	return receiver
@@ -49,12 +53,10 @@ func (receiver *Set[T]) Add(item T) interfaces.ICollection[T] {
 // Overwrites the element if it already exists.
 func (receiver *Set[T]) AddAll(items interfaces.ICollection[T]) interfaces.ICollection[T] {
 	for _, item := range items.ToSlice() {
-		if receiver.Has(item) {
-			receiver.count++
-		}
-
 		receiver.Add(item)
 	}
+
+	receiver.count = len(receiver.elements)
 
 	return receiver
 }
@@ -89,6 +91,7 @@ func (receiver *Set[T]) Filter(predicateFunc func(T) bool) interfaces.ICollectio
 	receiver.ForEach(func(index int, element T) {
 		if !predicateFunc(element) {
 			delete(receiver.elements, utils.HashCodeOf(element))
+			receiver.count--
 		}
 	})
 
