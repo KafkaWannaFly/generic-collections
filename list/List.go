@@ -20,6 +20,8 @@ func From[T any](elements ...T) *List[T] {
 	return list
 }
 
+// region ICollection[T] implementation
+
 func (receiver *List[T]) ForEach(appliedFunc func(int, T)) {
 	for i, element := range receiver.elements {
 		appliedFunc(i, element)
@@ -90,14 +92,6 @@ func (receiver *List[T]) Filter(predicate func(T) bool) interfaces.ICollection[T
 	return ans
 }
 
-func (receiver *List[T]) Get(i int) T {
-	return receiver.elements[i]
-}
-
-func (receiver *List[T]) Set(i int, item T) {
-	receiver.elements[i] = item
-}
-
 func (receiver *List[T]) ToSlice() []T {
 	return receiver.elements
 }
@@ -109,3 +103,32 @@ func (receiver *List[T]) IsEmpty() bool {
 func (receiver *List[T]) Clone() interfaces.ICollection[T] {
 	return From[T](receiver.elements...)
 }
+
+// endregion
+
+// region IGetterSetter[T] implementation
+
+func (receiver *List[T]) Get(i int) T {
+	return receiver.elements[i]
+}
+
+func (receiver *List[T]) Set(i int, item T) {
+	receiver.elements[i] = item
+}
+
+// Find the first element that satisfies the predicate.
+// Returns the index of the element if found, otherwise -1.
+func (receiver *List[T]) Find(predicate func(T) bool) int {
+	var index = -1
+
+	for i, element := range receiver.elements {
+		if predicate(element) {
+			index = i
+			break
+		}
+	}
+
+	return index
+}
+
+// endregion

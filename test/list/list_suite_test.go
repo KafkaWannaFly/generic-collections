@@ -7,7 +7,7 @@ import (
 	. "github.com/onsi/gomega"
 )
 
-func TestStruct(t *testing.T) {
+func TestList(t *testing.T) {
 	RegisterFailHandler(Fail)
 	RunSpecs(t, "List Suite")
 }

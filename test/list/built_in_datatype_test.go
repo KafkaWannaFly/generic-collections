@@ -4,6 +4,7 @@ import (
 	"generic-collections/list"
 	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"
+	"strings"
 )
 
 var _ = Describe("Test List implements ICollection", func() {
@@ -56,6 +57,23 @@ var _ = Describe("Test List implements ICollection", func() {
 
 		It("Should convert to slice", func() {
 			Expect(integerList.ToSlice()).To(Equal([]int{1, 2, 3, 4, 5, 6, 7, 8, 9, 10}))
+		})
+
+		It("Should find an element", func() {
+			var index = integerList.Find(func(element int) bool {
+				return element >= 5
+			})
+
+			Expect(index).To(Equal(4))
+			Expect(integerList.Get(index)).To(Equal(5))
+		})
+
+		It("Should not find an element", func() {
+			var index = integerList.Find(func(element int) bool {
+				return element == 11
+			})
+
+			Expect(index).To(Equal(-1))
 		})
 	})
 
@@ -110,6 +128,36 @@ var _ = Describe("Test List implements ICollection", func() {
 
 		It("Should convert to slice", func() {
 			Expect(stringList.ToSlice()).To(Equal([]string{"Apple", "Banana", "Cherry", "Dates", "Elderberry", "Fig", "Grape", "Honeydew", "Jackfruit", "Kiwi"}))
+		})
+
+		It("Should find an element", func() {
+			var index = stringList.Find(func(element string) bool {
+				return element == "Grape"
+			})
+
+			Expect(index).To(Equal(6))
+			Expect(stringList.Get(index)).To(Equal("Grape"))
+
+			index = stringList.Find(func(element string) bool {
+				return strings.Contains(element, "r")
+			})
+
+			Expect(index).To(Equal(2))
+			Expect(stringList.Get(index)).To(Equal("Cherry"))
+		})
+
+		It("Should not find an element", func() {
+			var index = stringList.Find(func(element string) bool {
+				return element == "Lime"
+			})
+
+			Expect(index).To(Equal(-1))
+
+			index = stringList.Find(func(element string) bool {
+				return strings.Contains(element, "z")
+			})
+
+			Expect(index).To(Equal(-1))
 		})
 	})
 

@@ -144,6 +144,23 @@ var _ = Describe("Test List implements ICollection", func() {
 
 			Expect(sum).To(Equal(3))
 		})
+
+		It("Should find elements", func() {
+			var index = bookList.Find(func(book Book) bool {
+				return book.Title == "The Little Prince"
+			})
+
+			Expect(index).To(Equal(1))
+			Expect(bookList.Get(index).Title).To(Equal("The Little Prince"))
+		})
+
+		It("Should not find elements", func() {
+			var index = bookList.Find(func(book Book) bool {
+				return book.Title == "The Great Gatsby"
+			})
+
+			Expect(index).To(Equal(-1))
+		})
 	})
 
 	Context("Using pointer", func() {
