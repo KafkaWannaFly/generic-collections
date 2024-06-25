@@ -6,6 +6,7 @@ import (
 )
 
 // IsEqual If a, b implement IComparer, then use Compare method to compare them.
+// If a, b implement IHashCoder, then use GetHashCode method to compare them.
 // Else. use == operand
 func IsEqual[T any](a T, b T) bool {
 	var ia interface{} = a
@@ -15,6 +16,11 @@ func IsEqual[T any](a T, b T) bool {
 
 	if aOk {
 		return iComparerA.Compare(b) == 0
+	}
+
+	iHashCoder, aOk := ia.(interfaces.IHashCoder)
+	if aOk {
+		return iHashCoder.GetHashCode() == HashCodeOf(b)
 	}
 
 	return ia == ib
