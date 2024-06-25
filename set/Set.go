@@ -71,14 +71,15 @@ func (receiver *Set[T]) Has(item T) bool {
 	return ok
 }
 
-func (receiver *Set[T]) HasAll(i interfaces.ICollection[T]) bool {
-	for _, item := range i.ToSlice() {
-		if !receiver.Has(item) {
-			return false
+func (receiver *Set[T]) HasAll(items interfaces.ICollection[T]) bool {
+	var hasAll = true
+	items.ForEach(func(_ int, element T) {
+		if !receiver.Has(element) {
+			hasAll = false
 		}
-	}
+	})
 
-	return true
+	return hasAll
 }
 
 func (receiver *Set[T]) Clear() interfaces.ICollection[T] {
