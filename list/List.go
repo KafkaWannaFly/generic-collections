@@ -106,7 +106,7 @@ func (receiver *List[T]) Clone() interfaces.ICollection[T] {
 
 // endregion
 
-// region IGetterSetter[T] implementation
+// region IIndexable[T] implementation
 
 func (receiver *List[T]) Get(i int) T {
 	return receiver.elements[i]
@@ -129,6 +129,16 @@ func (receiver *List[T]) Find(predicate func(T) bool) int {
 	}
 
 	return index
+}
+
+// Remove item at the specified index.
+// Panics if the index is out of range.
+func (receiver *List[T]) Remove(i int) T {
+	var item = receiver.elements[i]
+	receiver.elements = append(receiver.elements[:i], receiver.elements[i+1:]...)
+	receiver.count--
+
+	return item
 }
 
 // endregion
