@@ -125,6 +125,19 @@ var _ = Describe("Test List implements ICollection", func() {
 			Expect(bookList.Get(2).Title).To(Equal("1984"))
 		})
 
+		It("Should remove elements", func() {
+			var book0 = bookList.Remove(0)
+			Expect(book0.Title).To(Equal("The Alchemist"))
+
+			var book1 = bookList.Remove(0)
+			Expect(book1.Title).To(Equal("The Little Prince"))
+
+			var book2 = bookList.Remove(0)
+			Expect(book2.Title).To(Equal("The Catcher in the Rye"))
+
+			Expect(bookList.Count()).To(Equal(0))
+		})
+
 		It("Should convert to slice", func() {
 			var bookSlice = bookList.ToSlice()
 			Expect(bookSlice[0].Title).To(Equal("The Alchemist"))

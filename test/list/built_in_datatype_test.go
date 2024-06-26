@@ -55,6 +55,29 @@ var _ = Describe("Test List implements ICollection", func() {
 			Expect(integerList.Get(9)).To(Equal(20))
 		})
 
+		It("Should remove an element", func() {
+			integerList.Remove(0)
+			integerList.Remove(0)
+			integerList.Remove(0)
+			integerList.Remove(0)
+			integerList.Remove(0)
+			integerList.Remove(0)
+			integerList.Remove(0)
+			integerList.Remove(0)
+			integerList.Remove(0)
+			integerList.Remove(0)
+
+			Expect(integerList.Count()).To(Equal(0))
+
+			Expect(func() {
+				integerList.Remove(-1)
+			}).To(Panic())
+
+			Expect(func() {
+				integerList.Remove(0)
+			}).To(Panic())
+		})
+
 		It("Should convert to slice", func() {
 			Expect(integerList.ToSlice()).To(Equal([]int{1, 2, 3, 4, 5, 6, 7, 8, 9, 10}))
 		})
