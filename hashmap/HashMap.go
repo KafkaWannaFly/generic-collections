@@ -5,6 +5,8 @@ import (
 	"generic-collections/utils"
 )
 
+// HashMap is a collection that stores key-value pairs.
+// If using struct as key, the struct must implement IHashCoder interface.
 type HashMap[K any, V any] struct {
 	elements map[string]Entry[K, V]
 	count    int
@@ -36,6 +38,8 @@ func (receiver *HashMap[K, V]) ForEach(appliedFunc func(int, Entry[K, V])) {
 	}
 }
 
+// Add new element to the hashmap.
+// If the element already exists, it is overwritten.
 func (receiver *HashMap[K, V]) Add(item Entry[K, V]) interfaces.ICollection[Entry[K, V]] {
 	if !receiver.Has(item) {
 		receiver.count++
@@ -101,6 +105,7 @@ func (receiver *HashMap[K, V]) Filter(predicate func(Entry[K, V]) bool) interfac
 	return filtered
 }
 
+// ToSlice converts the hashmap to a slice of entries.
 func (receiver *HashMap[K, V]) ToSlice() []Entry[K, V] {
 	var slice = make([]Entry[K, V], 0, receiver.Count())
 	receiver.ForEach(func(_ int, entry Entry[K, V]) {
@@ -152,7 +157,9 @@ func (receiver *HashMap[K, V]) Find(predicate func(entry Entry[K, V]) bool) K {
 
 // endregion
 
-func (receiver *HashMap[K, V]) Put(key K, value V) interfaces.ICollection[Entry[K, V]] {
+// Put adds a new element to the hashmap. Similar to Add method.
+// Returns the hashmap itself.
+func (receiver *HashMap[K, V]) Put(key K, value V) *HashMap[K, V] {
 	receiver.Add(Entry[K, V]{
 		Key:   key,
 		Value: value,
@@ -161,6 +168,7 @@ func (receiver *HashMap[K, V]) Put(key K, value V) interfaces.ICollection[Entry[
 	return receiver
 }
 
+// GetKeys returns all keys of the hashmap.
 func (receiver *HashMap[K, V]) GetKeys() []K {
 	var keys = make([]K, 0, receiver.Count())
 	receiver.ForEach(func(_ int, entry Entry[K, V]) {
@@ -169,6 +177,7 @@ func (receiver *HashMap[K, V]) GetKeys() []K {
 	return keys
 }
 
+// GetValues returns all values of the hashmap.
 func (receiver *HashMap[K, V]) GetValues() []V {
 	var values = make([]V, 0, receiver.Count())
 	receiver.ForEach(func(_ int, entry Entry[K, V]) {
@@ -177,6 +186,8 @@ func (receiver *HashMap[K, V]) GetValues() []V {
 	return values
 }
 
+// GetEntries returns all entries of the hashmap.
+// Equivalent to ToSlice method.
 func (receiver *HashMap[K, V]) GetEntries() []Entry[K, V] {
 	return receiver.ToSlice()
 }
@@ -200,6 +211,9 @@ func (receiver *HashMap[K, V]) HasAllKey(keys []K) bool {
 	return hasAll
 }
 
+// Remove the element with the specified key.
+// Returns the value of the removed element.
+// If the key does not exist, the default value of the value type is returned.
 func (receiver *HashMap[K, V]) Remove(key K) V {
 	var hashCode = utils.HashCodeOf(key)
 	var entry, ok = receiver.elements[hashCode]
