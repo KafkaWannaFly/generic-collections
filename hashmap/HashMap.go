@@ -12,10 +12,12 @@ type HashMap[K any, V any] struct {
 	count    int
 }
 
+// New creates a new empty hashmap.
 func New[K any, V any]() *HashMap[K, V] {
 	return &HashMap[K, V]{elements: make(map[string]Entry[K, V])}
 }
 
+// From creates a new hashmap from a slice of entries.
 func From[K any, V any](entries ...Entry[K, V]) *HashMap[K, V] {
 	var hashMap = New[K, V]()
 	for _, entry := range entries {
@@ -40,6 +42,7 @@ func (receiver *HashMap[K, V]) ForEach(appliedFunc func(int, Entry[K, V])) {
 
 // Add new element to the hashmap.
 // If the element already exists, it is overwritten.
+// Returns the hashmap itself.
 func (receiver *HashMap[K, V]) Add(item Entry[K, V]) interfaces.ICollection[Entry[K, V]] {
 	if !receiver.Has(item) {
 		receiver.count++
@@ -52,6 +55,7 @@ func (receiver *HashMap[K, V]) Add(item Entry[K, V]) interfaces.ICollection[Entr
 
 // AddAll adds all elements of the given collection to the hashmap.
 // Overwrites the element if it already exists.
+// Returns the hashmap itself.
 func (receiver *HashMap[K, V]) AddAll(items interfaces.ICollection[Entry[K, V]]) interfaces.ICollection[Entry[K, V]] {
 	items.ForEach(func(_ int, entry Entry[K, V]) {
 		receiver.Add(entry)
@@ -62,6 +66,7 @@ func (receiver *HashMap[K, V]) AddAll(items interfaces.ICollection[Entry[K, V]])
 	return receiver
 }
 
+// Count returns the number of elements in the hashmap.
 func (receiver *HashMap[K, V]) Count() int {
 	return receiver.count
 }
@@ -85,6 +90,8 @@ func (receiver *HashMap[K, V]) HasAll(items interfaces.ICollection[Entry[K, V]])
 	return hasAll
 }
 
+// Clear removes all elements from the hashmap.
+// Returns original hashmap itself.
 func (receiver *HashMap[K, V]) Clear() interfaces.ICollection[Entry[K, V]] {
 	receiver.elements = make(map[string]Entry[K, V])
 	receiver.count = 0
@@ -114,10 +121,12 @@ func (receiver *HashMap[K, V]) ToSlice() []Entry[K, V] {
 	return slice
 }
 
+// IsEmpty checks if the hashmap is empty.
 func (receiver *HashMap[K, V]) IsEmpty() bool {
 	return receiver.Count() == 0
 }
 
+// Clone creates a new hashmap with the same elements.
 func (receiver *HashMap[K, V]) Clone() interfaces.ICollection[Entry[K, V]] {
 	var cloned = New[K, V]()
 	return cloned.AddAll(receiver)

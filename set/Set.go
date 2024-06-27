@@ -11,10 +11,12 @@ type Set[T any] struct {
 	count    int
 }
 
+// New creates a new empty set.
 func New[T any]() *Set[T] {
 	return &Set[T]{elements: make(map[string]T)}
 }
 
+// From creates a new set from a slice of elements.
 func From[T any](items ...T) *Set[T] {
 	var set = New[T]()
 	for _, item := range items {
@@ -61,16 +63,19 @@ func (receiver *Set[T]) AddAll(items interfaces.ICollection[T]) interfaces.IColl
 	return receiver
 }
 
+// Count returns the number of elements in the set.
 func (receiver *Set[T]) Count() int {
 	return receiver.count
 }
 
+// Has checks if the set contains the specified item.
 func (receiver *Set[T]) Has(item T) bool {
 	var key = utils.HashCodeOf(item)
 	var _, ok = receiver.elements[key]
 	return ok
 }
 
+// HasAll checks if the set contains all the items of the specified collection.
 func (receiver *Set[T]) HasAll(items interfaces.ICollection[T]) bool {
 	var hasAll = true
 	items.ForEach(func(_ int, element T) {
@@ -82,23 +87,28 @@ func (receiver *Set[T]) HasAll(items interfaces.ICollection[T]) bool {
 	return hasAll
 }
 
+// Clear removes the specified item from the set.
+// Returns the set itself.
 func (receiver *Set[T]) Clear() interfaces.ICollection[T] {
 	receiver.elements = make(map[string]T)
 	receiver.count = 0
 	return receiver
 }
 
+// Filter removes all elements from the set that do not satisfy the predicate function.
+// Returns the set itself.
 func (receiver *Set[T]) Filter(predicateFunc func(T) bool) interfaces.ICollection[T] {
+	var filtered = New[T]()
 	receiver.ForEach(func(index int, element T) {
-		if !predicateFunc(element) {
-			delete(receiver.elements, utils.HashCodeOf(element))
-			receiver.count--
+		if predicateFunc(element) {
+			filtered.Add(element)
 		}
 	})
 
-	return receiver
+	return filtered
 }
 
+// ToSlice converts the set to a slice.
 func (receiver *Set[T]) ToSlice() []T {
 	var slice = make([]T, 0)
 	for _, element := range receiver.elements {
@@ -107,10 +117,12 @@ func (receiver *Set[T]) ToSlice() []T {
 	return slice
 }
 
+// IsEmpty checks if the set is empty.
 func (receiver *Set[T]) IsEmpty() bool {
 	return receiver.Count() == 0
 }
 
+// Clone returns a new set with the same elements.
 func (receiver *Set[T]) Clone() interfaces.ICollection[T] {
 	var set = New[T]()
 	for _, element := range receiver.elements {
