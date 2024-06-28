@@ -28,6 +28,8 @@ func From[T any](items ...T) *Set[T] {
 	return set
 }
 
+// region ICollection[T] implementation
+
 // ForEach iterates over the elements of the set.
 // First argument of the appliedFunc is always 0 because sets do not have indexes.
 // Second argument of the appliedFunc is the element of the set.
@@ -130,3 +132,60 @@ func (receiver *Set[T]) Clone() interfaces.ICollection[T] {
 	}
 	return set
 }
+
+// endregion
+
+// region Set[T] specific methods
+
+// Union returns a new set that contains all elements of the set and the specified set.
+// Does not modify the original sets.
+func (receiver *Set[T]) Union(set *Set[T]) *Set[T] {
+	var union = receiver.Clone().(*Set[T])
+	union.AddAll(set)
+	return union
+}
+
+// Intersect returns a new set that contains all elements that are in both the set and the specified set.
+// Does not modify the original sets.
+func (receiver *Set[T]) Intersect(set *Set[T]) *Set[T] {
+	var intersect = New[T]()
+	receiver.ForEach(func(_ int, element T) {
+		if set.Has(element) {
+			intersect.Add(element)
+		}
+	})
+	return intersect
+}
+
+// Difference returns a new set that contains all elements that are in the set but not in the specified set.
+// Does not modify the original sets.
+func (receiver *Set[T]) Difference(set *Set[T]) *Set[T] {
+	var difference = New[T]()
+	receiver.ForEach(func(_ int, element T) {
+		if !set.Has(element) {
+			difference.Add(element)
+		}
+	})
+	return difference
+}
+
+// SymmetricDifference returns a new set that contains all elements that are in the set or the specified set but not in both.
+// Does not modify the original sets.
+func (receiver *Set[T]) SymmetricDifference(set *Set[T]) *Set[T] {
+	var symmetricDifference = New[T]()
+	receiver.ForEach(func(_ int, element T) {
+		if !set.Has(element) {
+			symmetricDifference.Add(element)
+		}
+	})
+
+	set.ForEach(func(_ int, element T) {
+		if !receiver.Has(element) {
+			symmetricDifference.Add(element)
+		}
+	})
+
+	return symmetricDifference
+}
+
+// endregion
