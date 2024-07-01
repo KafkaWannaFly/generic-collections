@@ -89,6 +89,18 @@ func (receiver *Set[T]) HasAll(items interfaces.ICollection[T]) bool {
 	return hasAll
 }
 
+// HasAny checks if the set contains any of the items of the specified collection.
+func (receiver *Set[T]) HasAny(items interfaces.ICollection[T]) bool {
+	var hasAny = false
+	items.ForEach(func(_ int, element T) {
+		if receiver.Has(element) {
+			hasAny = true
+		}
+	})
+
+	return hasAny
+}
+
 // Clear removes the specified item from the set.
 // Returns the set itself.
 func (receiver *Set[T]) Clear() interfaces.ICollection[T] {

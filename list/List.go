@@ -85,6 +85,18 @@ func (receiver *List[T]) HasAll(items interfaces.ICollection[T]) bool {
 	return result
 }
 
+// HasAny checks if the list contains any of the items of the specified collection.
+func (receiver *List[T]) HasAny(items interfaces.ICollection[T]) bool {
+	var result = false
+	items.ForEach(func(index int, item T) {
+		if receiver.Has(item) {
+			result = true
+		}
+	})
+
+	return result
+}
+
 // Clear removes all elements from the list.
 func (receiver *List[T]) Clear() interfaces.ICollection[T] {
 	receiver.elements = make([]T, 0)

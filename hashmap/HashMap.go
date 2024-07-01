@@ -90,6 +90,18 @@ func (receiver *HashMap[K, V]) HasAll(items interfaces.ICollection[Entry[K, V]])
 	return hasAll
 }
 
+// HasAny checks if any key and value exist in the hashmap.
+func (receiver *HashMap[K, V]) HasAny(items interfaces.ICollection[Entry[K, V]]) bool {
+	var hasAny = false
+	items.ForEach(func(_ int, entry Entry[K, V]) {
+		if receiver.Has(entry) {
+			hasAny = true
+		}
+	})
+
+	return hasAny
+}
+
 // Clear removes all elements from the hashmap.
 // Returns original hashmap itself.
 func (receiver *HashMap[K, V]) Clear() interfaces.ICollection[Entry[K, V]] {
@@ -164,6 +176,21 @@ func (receiver *HashMap[K, V]) Find(predicate func(entry Entry[K, V]) bool) K {
 	return key
 }
 
+// Remove the element with the specified key.
+// Returns the value of the removed element.
+// If the key does not exist, the default value of the value type is returned.
+func (receiver *HashMap[K, V]) Remove(key K) V {
+	var hashCode = utils.HashCodeOf(key)
+	var entry, ok = receiver.elements[hashCode]
+	if ok {
+		delete(receiver.elements, hashCode)
+		receiver.count--
+		return entry.Value
+	}
+
+	return entry.Value
+}
+
 // endregion
 
 // Put adds a new element to the hashmap. Similar to Add method.
@@ -220,17 +247,14 @@ func (receiver *HashMap[K, V]) HasAllKey(keys []K) bool {
 	return hasAll
 }
 
-// Remove the element with the specified key.
-// Returns the value of the removed element.
-// If the key does not exist, the default value of the value type is returned.
-func (receiver *HashMap[K, V]) Remove(key K) V {
-	var hashCode = utils.HashCodeOf(key)
-	var entry, ok = receiver.elements[hashCode]
-	if ok {
-		delete(receiver.elements, hashCode)
-		receiver.count--
-		return entry.Value
+// HasAnyKey checks if any key exists in the hashmap.
+func (receiver *HashMap[K, V]) HasAnyKey(keys []K) bool {
+	var hasAny = false
+	for _, key := range keys {
+		if receiver.HasKey(key) {
+			hasAny = true
+		}
 	}
 
-	return entry.Value
+	return hasAny
 }

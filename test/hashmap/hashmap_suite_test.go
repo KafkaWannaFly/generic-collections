@@ -139,6 +139,21 @@ var _ = Describe("Hashmap", func() {
 			Expect(newMap.HasAllKey(stringMap.GetKeys())).To(BeFalse())
 		})
 
+		It("Should has any entries from another map", func() {
+			var newMap = hashmap.New[string, string]()
+			newMap.Put("key5", "value5")
+			newMap.Put("key6", "value6")
+			newMap.Put("key7", "value7")
+			newMap.Put("key8", "value8")
+
+			Expect(stringMap.HasAny(newMap)).To(BeTrue())
+
+			var newMap2 = hashmap.From(
+				hashmap.NewEntry("key6", "value6"),
+			)
+			Expect(stringMap.HasAny(newMap2)).To(BeFalse())
+		})
+
 		It("Should be able to get all keys", func() {
 			var keys = stringMap.GetKeys()
 			Expect(len(keys)).To(Equal(5))

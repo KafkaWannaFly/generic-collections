@@ -59,7 +59,8 @@ var _ = Describe("Test Collection", func() {
 				},
 				PublishedYear: 1988,
 				Price:         10.99,
-			}).Add(
+			},
+		).Add(
 			Book{
 				Title:       "The Little Prince",
 				Author:      "Antoine de Saint-Exupéry",
@@ -72,7 +73,8 @@ var _ = Describe("Test Collection", func() {
 				},
 				PublishedYear: 1943,
 				Price:         9.99,
-			}).Add(
+			},
+		).Add(
 			Book{
 				Title:       "The Catcher in the Rye",
 				Author:      "J. D. Salinger",
@@ -85,7 +87,8 @@ var _ = Describe("Test Collection", func() {
 				},
 				PublishedYear: 1951,
 				Price:         11.99,
-			})
+			},
+		)
 		Context("For List", structTests(bookList))
 
 		var bookSet = set.From(bookList.ToSlice()...)
@@ -155,6 +158,11 @@ func integerTests(collection interfaces.ICollection[int]) func() {
 			Expect(integerCollection.HasAll(list.From(1, 2, 3, 4, 15))).To(BeFalse())
 		})
 
+		It("Should check if contains any element", func() {
+			Expect(integerCollection.HasAny(list.From(1, 2, 3, 4, 5, 20))).To(BeTrue())
+			Expect(integerCollection.HasAny(list.From(11, 12, 13, 14, 15))).To(BeFalse())
+		})
+
 		It("Should filter elements", func() {
 			filtered := integerCollection.Filter(func(element int) bool {
 				return element > 5
@@ -212,6 +220,12 @@ func stringTests(collection interfaces.ICollection[string]) func() {
 		It("Should contain all elements", func() {
 			Expect(stringCollection.HasAll(list.From("Apple", "Banana", "Cherry", "Dates", "Elderberry"))).To(BeTrue())
 			Expect(stringCollection.HasAll(list.From("Apple", "Banana", "Cherry", "Dates", "Devil Fruit"))).To(BeFalse())
+		})
+
+		It("Should contain any element", func() {
+			Expect(stringCollection.HasAny(list.From("Apple", "Banana", "Cherry", "Dates", "Elderberry", "Devil Fruit"))).To(BeTrue())
+			Expect(stringCollection.HasAny(list.From("Devil Fruit", "Elderberry", "Fig", "Grape", "Honeydew", "Jackfruit"))).To(BeTrue())
+			Expect(stringCollection.HasAny(list.From("Devil Fruit"))).To(BeFalse())
 		})
 
 		It("Should filter elements", func() {
@@ -359,6 +373,26 @@ func structTests(collection interfaces.ICollection[Book]) func() {
 				Book{
 					Title: "The Alchemist",
 				},
+				Book{
+					Title: "The Great Gatsby",
+				},
+			))).To(BeFalse())
+		})
+
+		It("Should contain any element", func() {
+			Expect(bookList.HasAny(list.From(
+				Book{
+					Title: "The Alchemist",
+				},
+				Book{
+					Title: "The Great Gatsby",
+				},
+				Book{
+					Title: "The Catcher in the Rye",
+				},
+			))).To(BeTrue())
+
+			Expect(bookList.HasAny(list.From(
 				Book{
 					Title: "The Great Gatsby",
 				},

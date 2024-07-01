@@ -7,6 +7,7 @@ type ICollection[T any] interface {
 	Count() int
 	Has(T) bool
 	HasAll(ICollection[T]) bool
+	HasAny(ICollection[T]) bool
 	Clear() ICollection[T]
 	Filter(func(T) bool) ICollection[T]
 	ToSlice() []T
