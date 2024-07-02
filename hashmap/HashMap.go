@@ -193,6 +193,8 @@ func (receiver *HashMap[K, V]) Remove(key K) V {
 
 // endregion
 
+// region HashMap specific methods
+
 // Put adds a new element to the hashmap. Similar to Add method.
 // Returns the hashmap itself.
 func (receiver *HashMap[K, V]) Put(key K, value V) *HashMap[K, V] {
@@ -258,3 +260,19 @@ func (receiver *HashMap[K, V]) HasAnyKey(keys []K) bool {
 
 	return hasAny
 }
+
+// endregion
+
+// region Package functions
+
+// IsHashMap checks if the collection is a hashmap.
+func IsHashMap[K any, V any](collection any) bool {
+	if collection == nil {
+		return false
+	}
+
+	_, ok := collection.(*HashMap[K, V])
+	return ok
+}
+
+// endregion

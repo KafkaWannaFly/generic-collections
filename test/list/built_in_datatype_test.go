@@ -16,6 +16,7 @@ var _ = Describe("Test List implements ICollection", func() {
 			integerList = list.From(1, 2, 3, 4, 5, 6, 7, 8, 9, 10)
 
 			Expect(integerList.Count()).To(Equal(10))
+			Expect(list.IsList[int](integerList)).To(BeTrue())
 		})
 
 		It("Should get an element", func() {

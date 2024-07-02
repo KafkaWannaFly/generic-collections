@@ -201,3 +201,18 @@ func (receiver *Set[T]) SymmetricDifference(set *Set[T]) *Set[T] {
 }
 
 // endregion
+
+// region Package functions
+
+// IsSet checks if the specified collection is a set.
+func IsSet[T any](collection any) bool {
+	if collection == nil {
+		return false
+	}
+
+	_, ok := collection.(*Set[T])
+
+	return ok
+}
+
+// endregion

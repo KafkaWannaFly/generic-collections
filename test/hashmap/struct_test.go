@@ -53,6 +53,15 @@ var _ = Describe("Hashmap Struct Test", func() {
 			Expect(cityMap.Count()).To(Equal(5))
 		})
 
+		It("Should check data type", func() {
+			Expect(hashmap.IsHashMap[City, District](cityMap)).To(BeTrue())
+
+			Expect(hashmap.IsHashMap[string, string](cityMap)).To(BeFalse())
+			Expect(hashmap.IsHashMap[*City, *District](cityMap)).To(BeFalse())
+			Expect(hashmap.IsHashMap[City, District](nil)).To(BeFalse())
+			Expect(hashmap.IsHashMap[City, District](K1)).To(BeFalse())
+		})
+
 		It("Should not add new entry with same key and override value", func() {
 			var c1 = City{"Istanbul", "Turkey"}
 			var v1 = District{"Besiktas", 200000, []string{"Levent", "Etiler"}}

@@ -130,6 +130,24 @@ var _ = Describe("Set Specific Test", func() {
 			set2 = set.From(p2, p3, p4, p5)
 		})
 
+		It("Should check data type", func() {
+			Expect(set.IsSet[Person](set1)).To(BeTrue())
+			Expect(set.IsSet[Person](set2)).To(BeTrue())
+
+			Expect(set.IsSet[*Person](set1)).To(BeFalse())
+			Expect(set.IsSet[*Person](set2)).To(BeFalse())
+
+			Expect(set.IsSet[int](set1)).To(BeFalse())
+			Expect(set.IsSet[int](set2)).To(BeFalse())
+
+			Expect(set.IsSet[Person](nil)).To(BeFalse())
+			Expect(set.IsSet[int](nil)).To(BeFalse())
+
+			Expect(set.IsSet[Person](p1)).To(BeFalse())
+
+			Expect(set.IsSet[any](set1)).To(BeFalse())
+		})
+
 		It("Should union", func() {
 			var union = set1.Union(set2)
 			Expect(union.Count()).To(Equal(5))

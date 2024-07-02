@@ -176,3 +176,18 @@ func (receiver *List[T]) Remove(i int) T {
 }
 
 // endregion
+
+// region Package functions
+
+// IsList checks if the given collection is a list.
+func IsList[T any](collection any) bool {
+	if collection == nil {
+		return false
+	}
+
+	_, ok := collection.(*List[T])
+
+	return ok
+}
+
+// endregion

@@ -101,6 +101,7 @@ var _ = Describe("Test List implements ICollection", func() {
 				})
 
 			Expect(bookList.Count()).To(Equal(3))
+			Expect(list.IsList[Book](bookList)).To(BeTrue())
 		})
 
 		It("Should get elements", func() {
@@ -199,6 +200,16 @@ var _ = Describe("Test List implements ICollection", func() {
 				})
 
 			Expect(studentList.Count()).To(Equal(3))
+		})
+
+		It("Should assert correct data type", func() {
+			Expect(list.IsList[*Student](studentList)).To(BeTrue())
+
+			Expect(list.IsList[*Student](nil)).To(BeFalse())
+
+			Expect(list.IsList[Student](studentList)).To(BeFalse())
+			Expect(list.IsList[int](studentList)).To(BeFalse())
+			Expect(list.IsList[any](studentList)).To(BeFalse())
 		})
 
 		It("Should get elements", func() {
