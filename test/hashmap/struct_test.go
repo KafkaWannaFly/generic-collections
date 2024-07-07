@@ -155,7 +155,7 @@ var _ = Describe("Hashmap Struct Test", func() {
 
 		It("Should loop through all entries", func() {
 			var count = 0
-			cityMap.ForEach(func(_ int, entry hashmap.Entry[City, District]) {
+			cityMap.ForEach(func(entry hashmap.Entry[City, District]) {
 				count++
 			})
 
@@ -175,7 +175,7 @@ var _ = Describe("Hashmap Struct Test", func() {
 				V1,
 			)
 
-			cityMap.AddAll(newCityMap)
+			cityMap.AddAll(newCityMap.ToSlice()...)
 
 			Expect(cityMap.Count()).To(Equal(7))
 		})
@@ -190,7 +190,7 @@ var _ = Describe("Hashmap Struct Test", func() {
 				District{"Sol", 200000, []string{"Gran Via", "Chueca"}},
 			).Put(K1, V1)
 
-			Expect(cityMap.HasAll(newCityMap)).To(BeFalse())
+			Expect(cityMap.HasAll(newCityMap.ToSlice()...)).To(BeFalse())
 		})
 
 		It("Should be able to get all keys", func() {
@@ -225,7 +225,7 @@ var _ = Describe("Hashmap Struct Test", func() {
 		It("Should be able to filter entries", func() {
 			var filtered = cityMap.Filter(func(entry hashmap.Entry[City, District]) bool {
 				return entry.Key.Name == "Istanbul"
-			}).(*hashmap.HashMap[City, District])
+			})
 
 			Expect(filtered.Count()).To(Equal(1))
 			Expect(filtered.GetKeys()).To(ContainElements(K1))

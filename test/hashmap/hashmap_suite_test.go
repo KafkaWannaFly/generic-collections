@@ -100,7 +100,7 @@ var _ = Describe("Hashmap", func() {
 
 		It("Should loop through all entries", func() {
 			var count = 0
-			stringMap.ForEach(func(_ int, entry hashmap.Entry[string, string]) {
+			stringMap.ForEach(func(entry hashmap.Entry[string, string]) {
 				count++
 			})
 
@@ -113,10 +113,10 @@ var _ = Describe("Hashmap", func() {
 			newMap.Put("key7", "value7")
 			newMap.Put("key8", "value8")
 
-			stringMap.AddAll(newMap)
+			stringMap.AddAll(newMap.ToSlice()...)
 
 			Expect(stringMap.Count()).To(Equal(8))
-			Expect(stringMap.HasAll(newMap)).To(BeTrue())
+			Expect(stringMap.HasAll(newMap.ToSlice()...)).To(BeTrue())
 
 			Expect(stringMap.HasKey("key6")).To(BeTrue())
 			Expect(stringMap.HasKey("key7")).To(BeTrue())
@@ -132,8 +132,8 @@ var _ = Describe("Hashmap", func() {
 			newMap.Put("key7", "value7")
 			newMap.Put("key8", "value8")
 
-			Expect(stringMap.HasAll(newMap)).To(BeFalse())
-			Expect(newMap.HasAll(stringMap)).To(BeFalse())
+			Expect(stringMap.HasAll(newMap.ToSlice()...)).To(BeFalse())
+			Expect(newMap.HasAll(stringMap.ToSlice()...)).To(BeFalse())
 
 			Expect(stringMap.HasAllKey(newMap.GetKeys())).To(BeFalse())
 			Expect(newMap.HasAllKey(stringMap.GetKeys())).To(BeFalse())
@@ -146,12 +146,12 @@ var _ = Describe("Hashmap", func() {
 			newMap.Put("key7", "value7")
 			newMap.Put("key8", "value8")
 
-			Expect(stringMap.HasAny(newMap)).To(BeTrue())
+			Expect(stringMap.HasAny(newMap.ToSlice()...)).To(BeTrue())
 
 			var newMap2 = hashmap.From(
 				hashmap.NewEntry("key6", "value6"),
 			)
-			Expect(stringMap.HasAny(newMap2)).To(BeFalse())
+			Expect(stringMap.HasAny(newMap2.ToSlice()...)).To(BeFalse())
 		})
 
 		It("Should be able to get all keys", func() {
@@ -193,12 +193,10 @@ var _ = Describe("Hashmap", func() {
 			})
 			Expect(filtered.Count()).To(Equal(2))
 
-			var filteredMap = filtered.(*hashmap.HashMap[string, string])
+			Expect(filtered.Get("key1")).To(Equal("value1"))
+			Expect(filtered.Get("key2")).To(Equal("value2"))
 
-			Expect(filteredMap.Get("key1")).To(Equal("value1"))
-			Expect(filteredMap.Get("key2")).To(Equal("value2"))
-
-			Expect(filteredMap.HasKey("key3")).To(BeFalse())
+			Expect(filtered.HasKey("key3")).To(BeFalse())
 		})
 	})
 })

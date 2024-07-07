@@ -1,7 +1,6 @@
 package hashmap
 
 import (
-	"generic-collections/interfaces"
 	"generic-collections/utils"
 )
 
@@ -34,16 +33,16 @@ func From[K any, V any](entries ...Entry[K, V]) *HashMap[K, V] {
 // ForEach iterates over the elements of the hashmap.
 // First argument of the appliedFunc is always 0 because hashmaps do not have indexes.
 // Second argument of the appliedFunc is the entry of the hashmap.
-func (receiver *HashMap[K, V]) ForEach(appliedFunc func(int, Entry[K, V])) {
+func (receiver *HashMap[K, V]) ForEach(appliedFunc func(Entry[K, V])) {
 	for _, element := range receiver.elements {
-		appliedFunc(0, element)
+		appliedFunc(element)
 	}
 }
 
 // Add new element to the hashmap.
 // If the element already exists, it is overwritten.
 // Returns the hashmap itself.
-func (receiver *HashMap[K, V]) Add(item Entry[K, V]) interfaces.ICollection[Entry[K, V]] {
+func (receiver *HashMap[K, V]) Add(item Entry[K, V]) *HashMap[K, V] {
 	if !receiver.Has(item) {
 		receiver.count++
 	}
@@ -56,10 +55,10 @@ func (receiver *HashMap[K, V]) Add(item Entry[K, V]) interfaces.ICollection[Entr
 // AddAll adds all elements of the given collection to the hashmap.
 // Overwrites the element if it already exists.
 // Returns the hashmap itself.
-func (receiver *HashMap[K, V]) AddAll(items interfaces.ICollection[Entry[K, V]]) interfaces.ICollection[Entry[K, V]] {
-	items.ForEach(func(_ int, entry Entry[K, V]) {
-		receiver.Add(entry)
-	})
+func (receiver *HashMap[K, V]) AddAll(items ...Entry[K, V]) *HashMap[K, V] {
+	for _, item := range items {
+		receiver.Add(item)
+	}
 
 	receiver.count = len(receiver.elements)
 
@@ -79,32 +78,33 @@ func (receiver *HashMap[K, V]) Has(item Entry[K, V]) bool {
 }
 
 // HasAll checks if all keys and values exist in the hashmap.
-func (receiver *HashMap[K, V]) HasAll(items interfaces.ICollection[Entry[K, V]]) bool {
+func (receiver *HashMap[K, V]) HasAll(items ...Entry[K, V]) bool {
 	var hasAll = true
-	items.ForEach(func(_ int, entry Entry[K, V]) {
-		if !receiver.Has(entry) {
+	for _, item := range items {
+		if !receiver.Has(item) {
 			hasAll = false
 		}
-	})
+	}
 
 	return hasAll
 }
 
 // HasAny checks if any key and value exist in the hashmap.
-func (receiver *HashMap[K, V]) HasAny(items interfaces.ICollection[Entry[K, V]]) bool {
+func (receiver *HashMap[K, V]) HasAny(items ...Entry[K, V]) bool {
 	var hasAny = false
-	items.ForEach(func(_ int, entry Entry[K, V]) {
-		if receiver.Has(entry) {
+
+	for _, item := range items {
+		if receiver.Has(item) {
 			hasAny = true
 		}
-	})
+	}
 
 	return hasAny
 }
 
 // Clear removes all elements from the hashmap.
 // Returns original hashmap itself.
-func (receiver *HashMap[K, V]) Clear() interfaces.ICollection[Entry[K, V]] {
+func (receiver *HashMap[K, V]) Clear() *HashMap[K, V] {
 	receiver.elements = make(map[string]Entry[K, V])
 	receiver.count = 0
 	return receiver
@@ -113,9 +113,9 @@ func (receiver *HashMap[K, V]) Clear() interfaces.ICollection[Entry[K, V]] {
 // Filter removes the elements that do not satisfy the predicate.
 // Return a new hashmap with the filtered elements.
 // The original hashmap is not modified.
-func (receiver *HashMap[K, V]) Filter(predicate func(Entry[K, V]) bool) interfaces.ICollection[Entry[K, V]] {
+func (receiver *HashMap[K, V]) Filter(predicate func(Entry[K, V]) bool) *HashMap[K, V] {
 	var filtered = New[K, V]()
-	receiver.ForEach(func(_ int, entry Entry[K, V]) {
+	receiver.ForEach(func(entry Entry[K, V]) {
 		if predicate(entry) {
 			filtered.Add(entry)
 		}
@@ -127,7 +127,7 @@ func (receiver *HashMap[K, V]) Filter(predicate func(Entry[K, V]) bool) interfac
 // ToSlice converts the hashmap to a slice of entries.
 func (receiver *HashMap[K, V]) ToSlice() []Entry[K, V] {
 	var slice = make([]Entry[K, V], 0, receiver.Count())
-	receiver.ForEach(func(_ int, entry Entry[K, V]) {
+	receiver.ForEach(func(entry Entry[K, V]) {
 		slice = append(slice, entry)
 	})
 	return slice
@@ -139,9 +139,9 @@ func (receiver *HashMap[K, V]) IsEmpty() bool {
 }
 
 // Clone creates a new hashmap with the same elements.
-func (receiver *HashMap[K, V]) Clone() interfaces.ICollection[Entry[K, V]] {
+func (receiver *HashMap[K, V]) Clone() *HashMap[K, V] {
 	var cloned = New[K, V]()
-	return cloned.AddAll(receiver)
+	return cloned.AddAll(receiver.ToSlice()...)
 }
 
 // endregion
@@ -167,7 +167,7 @@ func (receiver *HashMap[K, V]) Set(key K, value V) {
 // Find the key of the first element that satisfies the predicate.
 func (receiver *HashMap[K, V]) Find(predicate func(entry Entry[K, V]) bool) K {
 	var key K
-	receiver.ForEach(func(_ int, entry Entry[K, V]) {
+	receiver.ForEach(func(entry Entry[K, V]) {
 		if predicate(entry) {
 			key = entry.Key
 		}
@@ -209,7 +209,7 @@ func (receiver *HashMap[K, V]) Put(key K, value V) *HashMap[K, V] {
 // GetKeys returns all keys of the hashmap.
 func (receiver *HashMap[K, V]) GetKeys() []K {
 	var keys = make([]K, 0, receiver.Count())
-	receiver.ForEach(func(_ int, entry Entry[K, V]) {
+	receiver.ForEach(func(entry Entry[K, V]) {
 		keys = append(keys, entry.Key)
 	})
 	return keys
@@ -218,7 +218,7 @@ func (receiver *HashMap[K, V]) GetKeys() []K {
 // GetValues returns all values of the hashmap.
 func (receiver *HashMap[K, V]) GetValues() []V {
 	var values = make([]V, 0, receiver.Count())
-	receiver.ForEach(func(_ int, entry Entry[K, V]) {
+	receiver.ForEach(func(entry Entry[K, V]) {
 		values = append(values, entry.Value)
 	})
 	return values
