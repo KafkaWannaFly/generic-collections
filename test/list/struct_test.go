@@ -175,6 +175,79 @@ var _ = Describe("Test List implements ICollection", func() {
 
 			Expect(index).To(Equal(-1))
 		})
+
+		It("Should map to another type", func() {
+			var titleList = bookList.Map(func(index int, book Book) any {
+				return book.Title
+			})
+
+			Expect(titleList.Get(0)).To(Equal("The Alchemist"))
+			Expect(titleList.Get(1)).To(Equal("The Little Prince"))
+			Expect(titleList.Get(2)).To(Equal("The Catcher in the Rye"))
+
+			// Type of titleList is *List[any] instead of *List[string]
+			// Because List can't handle 2nd type parameter
+			Expect(list.IsList[any](titleList)).To(BeTrue())
+
+			var titleList2 = list.Map(bookList, func(index int, book Book) string {
+				return book.Title
+			})
+			// Type of titleList2 is *List[string]
+			Expect(list.IsList[string](titleList2)).To(BeTrue())
+
+			Expect(titleList.ToSlice()).To(ContainElements(titleList2.ToSlice()))
+		})
+
+		It("Should reduce elements", func() {
+			var total = bookList.Reduce(func(result any, book Book) any {
+				return result.(float64) + book.Price
+			}, 0.0).(float64)
+
+			var total2 = list.Reduce(bookList, func(result float64, book Book) float64 {
+				return result + book.Price
+			}, 0)
+
+			Expect(total).To(Equal(32.97))
+			Expect(total).To(Equal(total2))
+		})
+
+		It("Should map then reduce elements", func() {
+			var total = bookList.Map(func(index int, book Book) any {
+				return book.Price
+			}).Reduce(func(result any, price any) any {
+				return result.(float64) + price.(float64)
+			}, 0.0).(float64)
+
+			Expect(total).To(Equal(32.97))
+		})
+
+		It("Should group elements", func() {
+			var groups = bookList.GroupBy(func(book Book) any {
+				return book.PublishedYear
+			})
+
+			Expect(len(groups)).To(Equal(3))
+
+			var group1943 = groups[1943]
+			Expect(group1943.Count()).To(Equal(1))
+			Expect(group1943.Get(0).Title).To(Equal("The Little Prince"))
+
+			var group1951 = groups[1951]
+			Expect(group1951.Count()).To(Equal(1))
+			Expect(group1951.Get(0).Title).To(Equal("The Catcher in the Rye"))
+
+			var group1988 = groups[1988]
+			Expect(group1988.Count()).To(Equal(1))
+			Expect(group1988.Get(0).Title).To(Equal("The Alchemist"))
+		})
+
+		It("Should panic when group by non-comparable key", func() {
+			Expect(func() {
+				bookList.GroupBy(func(book Book) any {
+					return book.Pages
+				})
+			}).To(Panic())
+		})
 	})
 
 	Context("Using pointer", func() {

@@ -177,6 +177,25 @@ func (receiver *List[T]) Remove(i int) T {
 
 // endregion
 
+// region List specific methods
+
+// Map refers to the Map function in Transformers.go.
+func (receiver *List[T]) Map(mapper func(int, T) any) *List[any] {
+	return Map(receiver, mapper)
+}
+
+// Reduce refers to the Reduce function in Transformers.go.
+func (receiver *List[T]) Reduce(reducer func(any, T) any, initialValue any) any {
+	return Reduce(receiver, reducer, initialValue)
+}
+
+// GroupBy refers to the GroupBy function in Transformers.go.
+func (receiver *List[T]) GroupBy(keySelector func(T) any) map[any]*List[T] {
+	return GroupBy(receiver, keySelector)
+}
+
+// endregion
+
 // region Package functions
 
 // IsList checks if the given collection is a list.
