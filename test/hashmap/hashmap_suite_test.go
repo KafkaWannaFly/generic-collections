@@ -17,7 +17,7 @@ var _ = Describe("Hashmap", func() {
 	When("Use basic datatypes as key and value", func() {
 		var stringMap *hashmap.HashMap[string, string]
 		BeforeEach(func() {
-			stringMap = hashmap.New[string, string]()
+			stringMap = hashmap.Of(make(map[string]string))
 
 			stringMap.Put("key1", "value1")
 			stringMap.Put("key2", "value2")

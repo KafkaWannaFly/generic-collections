@@ -28,6 +28,16 @@ func From[K any, V any](entries ...Entry[K, V]) *HashMap[K, V] {
 	return hashMap
 }
 
+// Of creates a new HashMap from a built-in map
+func Of[K comparable, V any](inputMap map[K]V) *HashMap[K, V] {
+	var result = New[K, V]()
+	for k, v := range inputMap {
+		result.Put(k, v)
+	}
+
+	return result
+}
+
 // region HashMap specific methods
 
 // ForEach iterates over the elements of the hashmap.
