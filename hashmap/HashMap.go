@@ -28,7 +28,7 @@ func From[K any, V any](entries ...Entry[K, V]) *HashMap[K, V] {
 	return hashMap
 }
 
-// region ICollection implementation
+// region HashMap specific methods
 
 // ForEach iterates over the elements of the hashmap.
 // First argument of the appliedFunc is always 0 because hashmaps do not have indexes.
@@ -144,57 +144,6 @@ func (receiver *HashMap[K, V]) Clone() *HashMap[K, V] {
 	return cloned.AddAll(receiver.ToSlice()...)
 }
 
-// endregion
-
-// region IIndexable implementation
-
-// Get the value of the element at the specified key.
-// If the key does not exist, default value of the value type is returned.
-func (receiver *HashMap[K, V]) Get(index K) V {
-	var key = utils.HashCodeOf(index)
-	entry, _ := receiver.elements[key]
-
-	return entry.Value
-}
-
-// Set the value of the element at the specified key.
-// If the key does not exist, a new element is created with the specified key and value.
-// If the key exists, the value of the element is updated.
-func (receiver *HashMap[K, V]) Set(key K, value V) {
-	receiver.Add(Entry[K, V]{Key: key, Value: value})
-}
-
-// Find the key of the first element that satisfies the predicate.
-func (receiver *HashMap[K, V]) Find(predicate func(entry Entry[K, V]) bool) K {
-	var key K
-	receiver.ForEach(func(entry Entry[K, V]) {
-		if predicate(entry) {
-			key = entry.Key
-		}
-	})
-
-	return key
-}
-
-// Remove the element with the specified key.
-// Returns the value of the removed element.
-// If the key does not exist, the default value of the value type is returned.
-func (receiver *HashMap[K, V]) Remove(key K) V {
-	var hashCode = utils.HashCodeOf(key)
-	var entry, ok = receiver.elements[hashCode]
-	if ok {
-		delete(receiver.elements, hashCode)
-		receiver.count--
-		return entry.Value
-	}
-
-	return entry.Value
-}
-
-// endregion
-
-// region HashMap specific methods
-
 // Put adds a new element to the hashmap. Similar to Add method.
 // Returns the hashmap itself.
 func (receiver *HashMap[K, V]) Put(key K, value V) *HashMap[K, V] {
@@ -259,6 +208,53 @@ func (receiver *HashMap[K, V]) HasAnyKey(keys []K) bool {
 	}
 
 	return hasAny
+}
+
+// endregion
+
+// region IIndexable implementation
+
+// Get the value of the element at the specified key.
+// If the key does not exist, default value of the value type is returned.
+func (receiver *HashMap[K, V]) Get(index K) V {
+	var key = utils.HashCodeOf(index)
+	entry, _ := receiver.elements[key]
+
+	return entry.Value
+}
+
+// Set the value of the element at the specified key.
+// If the key does not exist, a new element is created with the specified key and value.
+// If the key exists, the value of the element is updated.
+func (receiver *HashMap[K, V]) Set(key K, value V) {
+	receiver.Add(Entry[K, V]{Key: key, Value: value})
+}
+
+// Find the key of the first element that satisfies the predicate.
+func (receiver *HashMap[K, V]) Find(predicate func(entry Entry[K, V]) bool) K {
+	var key K
+	receiver.ForEach(func(entry Entry[K, V]) {
+		if predicate(entry) {
+			key = entry.Key
+		}
+	})
+
+	return key
+}
+
+// Remove the element with the specified key.
+// Returns the value of the removed element.
+// If the key does not exist, the default value of the value type is returned.
+func (receiver *HashMap[K, V]) Remove(key K) V {
+	var hashCode = utils.HashCodeOf(key)
+	var entry, ok = receiver.elements[hashCode]
+	if ok {
+		delete(receiver.elements, hashCode)
+		receiver.count--
+		return entry.Value
+	}
+
+	return entry.Value
 }
 
 // endregion

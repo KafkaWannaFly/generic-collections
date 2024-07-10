@@ -200,6 +200,21 @@ func (receiver *Set[T]) SymmetricDifference(set *Set[T]) *Set[T] {
 	return symmetricDifference
 }
 
+// Map method refers to the Map function
+func (receiver *Set[T]) Map(mapper func(int, T) any) *Set[any] {
+	return Map(receiver, mapper)
+}
+
+// Reduce method refers to the Reduce function
+func (receiver *Set[T]) Reduce(reducer func(any, T) any, initialValue any) any {
+	return Reduce(receiver, reducer, initialValue)
+}
+
+// GroupBy method refers to the GroupBy function
+func (receiver *Set[T]) GroupBy(keySelector func(T) any) map[any]*Set[T] {
+	return GroupBy(receiver, keySelector)
+}
+
 // endregion
 
 // region Package functions
