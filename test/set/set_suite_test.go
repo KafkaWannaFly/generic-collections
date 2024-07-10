@@ -210,5 +210,37 @@ var _ = Describe("Set Specific Test", func() {
 			Expect(symmetricDifference2.Count()).To(Equal(2))
 			Expect(symmetricDifference2.ToSlice()).To(ConsistOf(symmetricDifference.ToSlice()))
 		})
+
+		It("Should map the new Set", func() {
+			var result = set1.Map(func(index int, person Person) any {
+				return person.Name
+			})
+			Expect(result.Count()).To(Equal(4))
+			Expect(result.ToSlice()).To(ConsistOf("Alice", "Bob", "Charlie", "David"))
+		})
+
+		It("Should reduce to a value", func() {
+			var result = set1.Reduce(
+				func(accumulator any, person Person) any {
+					return accumulator.(int) + person.Age
+				},
+				0,
+			)
+
+			Expect(result).To(Equal(20 + 25 + 30 + 35))
+		})
+
+		It("Should group by age", func() {
+			var result = set1.Union(set2).GroupBy(func(person Person) any {
+				if person.Age < 30 {
+					return "Under30"
+				} else {
+					return "Above30"
+				}
+			})
+
+			Expect(result["Under30"].Count()).To(Equal(2))
+			Expect(result["Above30"].Count()).To(Equal(3))
+		})
 	})
 })
