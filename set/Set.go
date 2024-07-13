@@ -12,6 +12,8 @@ type Set[T any] struct {
 	count    int
 }
 
+var _ interfaces.ICollection[any] = (*Set[any])(nil)
+
 // New creates a new empty set.
 func New[T any]() *Set[T] {
 	return &Set[T]{elements: make(map[string]T)}

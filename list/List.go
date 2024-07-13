@@ -11,6 +11,8 @@ type List[T any] struct {
 	count    int
 }
 
+var _ interfaces.ICollection[any] = (*List[any])(nil)
+
 // New creates a new empty list.
 func New[T any]() *List[T] {
 	return &List[T]{elements: make([]T, 0)}
