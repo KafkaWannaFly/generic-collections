@@ -1,6 +1,7 @@
 package set
 
 import (
+	"generic-collections/hashmap"
 	"generic-collections/interfaces"
 	"generic-collections/utils"
 )
@@ -211,7 +212,7 @@ func (receiver *Set[T]) Reduce(reducer func(any, T) any, initialValue any) any {
 }
 
 // GroupBy method refers to the GroupBy function
-func (receiver *Set[T]) GroupBy(keySelector func(T) any) map[any]*Set[T] {
+func (receiver *Set[T]) GroupBy(keySelector func(T) any) *hashmap.HashMap[any, *Set[T]] {
 	return GroupBy(receiver, keySelector)
 }
 

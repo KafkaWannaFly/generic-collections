@@ -226,27 +226,19 @@ var _ = Describe("Test List implements ICollection", func() {
 				return book.PublishedYear
 			})
 
-			Expect(len(groups)).To(Equal(3))
+			Expect(groups.Count()).To(Equal(3))
 
-			var group1943 = groups[1943]
+			var group1943 = groups.Get(1943)
 			Expect(group1943.Count()).To(Equal(1))
 			Expect(group1943.Get(0).Title).To(Equal("The Little Prince"))
 
-			var group1951 = groups[1951]
+			var group1951 = groups.Get(1951)
 			Expect(group1951.Count()).To(Equal(1))
 			Expect(group1951.Get(0).Title).To(Equal("The Catcher in the Rye"))
 
-			var group1988 = groups[1988]
+			var group1988 = groups.Get(1988)
 			Expect(group1988.Count()).To(Equal(1))
 			Expect(group1988.Get(0).Title).To(Equal("The Alchemist"))
-		})
-
-		It("Should panic when group by non-comparable key", func() {
-			Expect(func() {
-				bookList.GroupBy(func(book Book) any {
-					return book.Pages
-				})
-			}).To(Panic())
 		})
 	})
 

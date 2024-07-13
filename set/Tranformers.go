@@ -1,5 +1,7 @@
 package set
 
+import "generic-collections/hashmap"
+
 // Map applies the given mapper function to each element of the list.
 // Returns a new list containing the results.
 func Map[TType any, TResult any](set *Set[TType], mapper func(int, TType) TResult) *Set[TResult] {
@@ -22,14 +24,16 @@ func Reduce[TType any, TResult any](set *Set[TType], reducer func(TResult, TType
 
 // GroupBy groups the elements of the list by the specified key.
 // Returns a map where the key is the result of the keySelector function
-func GroupBy[TType any, TKey comparable](set *Set[TType], keySelector func(TType) TKey) map[TKey]*Set[TType] {
-	var groups = make(map[TKey]*Set[TType])
+func GroupBy[TType any, TKey comparable](set *Set[TType], keySelector func(TType) TKey) *hashmap.HashMap[TKey, *Set[TType]] {
+	var groups = hashmap.New[TKey, *Set[TType]]()
 	set.ForEach(func(index int, item TType) {
 		var key = keySelector(item)
-		if _, ok := groups[key]; !ok {
-			groups[key] = New[TType]()
+		if !groups.HasKey(key) {
+			groups.Put(key, From[TType](item))
+		} else {
+			groups.Get(key).Add(item)
 		}
-		groups[key].Add(item)
+
 	})
 	return groups
 }

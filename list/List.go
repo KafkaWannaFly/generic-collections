@@ -1,6 +1,7 @@
 package list
 
 import (
+	"generic-collections/hashmap"
 	"generic-collections/interfaces"
 	"generic-collections/utils"
 )
@@ -190,7 +191,7 @@ func (receiver *List[T]) Reduce(reducer func(any, T) any, initialValue any) any 
 }
 
 // GroupBy refers to the GroupBy function in Transformers.go.
-func (receiver *List[T]) GroupBy(keySelector func(T) any) map[any]*List[T] {
+func (receiver *List[T]) GroupBy(keySelector func(T) any) *hashmap.HashMap[any, *List[T]] {
 	return GroupBy(receiver, keySelector)
 }
 

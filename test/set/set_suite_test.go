@@ -239,8 +239,8 @@ var _ = Describe("Set Specific Test", func() {
 				}
 			})
 
-			Expect(result["Under30"].Count()).To(Equal(2))
-			Expect(result["Above30"].Count()).To(Equal(3))
+			Expect(result.Get("Under30").Count()).To(Equal(2))
+			Expect(result.Get("Above30").Count()).To(Equal(3))
 		})
 	})
 })
