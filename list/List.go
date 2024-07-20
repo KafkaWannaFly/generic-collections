@@ -26,7 +26,7 @@ func From[T any](elements ...T) *List[T] {
 	return list
 }
 
-// region ICollection[T] implementation
+// region ICollection[TItem] implementation
 
 // ForEach iterates over the elements of the list.
 // First argument of the appliedFunc is the index of the element.
@@ -140,7 +140,7 @@ func (receiver *List[T]) Clone() interfaces.ICollection[T] {
 
 // endregion
 
-// region IIndexable[T] implementation
+// region IIndexable[TItem] implementation
 
 // Get the value of the element at the specified index.
 // Panics if the index is out of range.

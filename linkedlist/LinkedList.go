@@ -155,3 +155,97 @@ func (receiver *LinkedList[T]) Clone() interfaces.ICollection[T] {
 
 	return linkedList
 }
+
+// Get item with certain index in LinkedList.
+// Panic if index out of range or less than 0
+func (receiver *LinkedList[T]) Get(index int) T {
+	if index > receiver.count-1 || index < 0 {
+		panic("Index out of range")
+	}
+
+	var curr = receiver.Head
+	var val T
+	for i := 0; curr != nil; i++ {
+		if i == index {
+			val = curr.Value
+		}
+
+		curr = curr.Next
+	}
+
+	return val
+}
+
+// Set value to index.
+// Panic if index out of range or less than 0
+func (receiver *LinkedList[T]) Set(index int, value T) {
+	if index > receiver.count-1 || index < 0 {
+		panic("Index out of range")
+	}
+
+	var curr = receiver.Head
+	for i := 0; curr != nil; i++ {
+		if index == i {
+			curr.Value = value
+			break
+		}
+
+		curr = curr.Next
+	}
+}
+
+// Find item based on predicate.
+// Return first matched index if found, else -1
+func (receiver *LinkedList[T]) Find(predicate func(T) bool) int {
+	var isFoundYet = false
+	var index = -1
+	receiver.ForEach(func(i int, item T) {
+		if predicate(item) && !isFoundYet {
+			index = i
+			isFoundYet = true
+		}
+	})
+
+	return index
+}
+
+// Remove item from LinkedList at certain index.
+// Return the removed item.
+// Panic if index out of range or less than 0
+func (receiver *LinkedList[T]) Remove(index int) T {
+	if index > receiver.count-1 || index < 0 {
+		panic("Index out of range")
+	}
+
+	var curr = receiver.Head
+	var removedItemValue T
+	for i := 0; curr != nil; i++ {
+		if index == 0 {
+			// If remove the head
+			removedItemValue = receiver.Head.Value
+			receiver.Head = receiver.Head.Next
+			break
+		}
+
+		if index-1 == i {
+			// If remove at middle of the list
+			var beforeRemovedItem = curr
+			var tobeRemovedItem = beforeRemovedItem.Next
+			var afterRemovedItem = tobeRemovedItem.Next
+			removedItemValue = tobeRemovedItem.Value
+
+			beforeRemovedItem.Next = afterRemovedItem
+
+			if index == receiver.count-1 {
+				// If remove at the tail
+				receiver.Tail = afterRemovedItem
+			}
+
+			break
+		}
+
+		curr = curr.Next
+	}
+
+	return removedItemValue
+}

@@ -31,7 +31,7 @@ func From[T any](items ...T) *Set[T] {
 	return set
 }
 
-// region ICollection[T] implementation
+// region ICollection[TItem] implementation
 
 // ForEach iterates over the elements of the set.
 // First argument of the appliedFunc is always 0 because sets do not have indexes.
@@ -150,7 +150,7 @@ func (receiver *Set[T]) Clone() interfaces.ICollection[T] {
 
 // endregion
 
-// region Set[T] specific methods
+// region Set[TItem] specific methods
 
 // Union returns a new set that contains all elements of the set and the specified set.
 // Does not modify the original sets.
