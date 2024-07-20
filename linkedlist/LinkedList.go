@@ -1,6 +1,7 @@
 package linkedlist
 
 import (
+	"generic-collections/guard"
 	"generic-collections/interfaces"
 	"generic-collections/set"
 	"generic-collections/utils"
@@ -160,9 +161,7 @@ func (receiver *LinkedList[T]) Clone() interfaces.ICollection[T] {
 // Get item with certain index in LinkedList.
 // Panic if index out of range or less than 0
 func (receiver *LinkedList[T]) Get(index int) T {
-	if index > receiver.count-1 || index < 0 {
-		panic("Index out of range")
-	}
+	guard.EnsureIndexRange(index, receiver.count)
 
 	var curr = receiver.Head
 	var val T
@@ -180,9 +179,7 @@ func (receiver *LinkedList[T]) Get(index int) T {
 // Set value to index.
 // Panic if index out of range or less than 0
 func (receiver *LinkedList[T]) Set(index int, value T) {
-	if index > receiver.count-1 || index < 0 {
-		panic("Index out of range")
-	}
+	guard.EnsureIndexRange(index, receiver.count)
 
 	var curr = receiver.Head
 	for i := 0; curr != nil; i++ {
@@ -251,4 +248,20 @@ func (receiver *LinkedList[T]) Remove(index int) T {
 	receiver.count--
 
 	return removedItemValue
+}
+
+// NodeAt get Node object at certain index.
+func (receiver *LinkedList[T]) NodeAt(index int) *Node[T] {
+	guard.EnsureIndexRange(index, receiver.count)
+
+	curr := receiver.Head
+	for i := 0; curr != nil; i++ {
+		if i == index {
+			return curr
+		}
+
+		curr = curr.Next
+	}
+
+	return nil
 }

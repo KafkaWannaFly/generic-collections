@@ -34,6 +34,17 @@ var _ = Describe("Test LinkedList implements ICollection", func() {
 			Expect(integerList.Get(7)).To(Equal(8))
 			Expect(integerList.Get(8)).To(Equal(9))
 			Expect(integerList.Get(9)).To(Equal(10))
+
+			Expect(integerList.NodeAt(0).Value).To(Equal(1))
+			Expect(integerList.NodeAt(1).Value).To(Equal(2))
+			Expect(integerList.NodeAt(2).Value).To(Equal(3))
+			Expect(integerList.NodeAt(3).Value).To(Equal(4))
+			Expect(integerList.NodeAt(4).Value).To(Equal(5))
+			Expect(integerList.NodeAt(5).Value).To(Equal(6))
+			Expect(integerList.NodeAt(6).Value).To(Equal(7))
+			Expect(integerList.NodeAt(7).Value).To(Equal(8))
+			Expect(integerList.NodeAt(8).Value).To(Equal(9))
+			Expect(integerList.NodeAt(9).Value).To(Equal(10))
 		})
 
 		It("Should set an element", func() {
@@ -207,6 +218,10 @@ var _ = Describe("Test LinkedList implements ICollection", func() {
 		It("Should panic", func() {
 			Expect(func() {
 				integerList.Get(-1)
+			}).To(Panic())
+
+			Expect(func() {
+				integerList.NodeAt(-1)
 			}).To(Panic())
 
 			Expect(func() {
