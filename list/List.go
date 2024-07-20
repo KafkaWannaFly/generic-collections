@@ -1,6 +1,7 @@
 package list
 
 import (
+	"generic-collections/guard"
 	"generic-collections/hashmap"
 	"generic-collections/interfaces"
 	"generic-collections/utils"
@@ -145,12 +146,16 @@ func (receiver *List[T]) Clone() interfaces.ICollection[T] {
 // Get the value of the element at the specified index.
 // Panics if the index is out of range.
 func (receiver *List[T]) Get(i int) T {
+	guard.EnsureIndexRange(i, receiver.count)
+
 	return receiver.elements[i]
 }
 
 // Set the value of the element at the specified index.
 // Panics if the index is out of range.
 func (receiver *List[T]) Set(i int, item T) {
+	guard.EnsureIndexRange(i, receiver.count)
+
 	receiver.elements[i] = item
 }
 
@@ -172,6 +177,8 @@ func (receiver *List[T]) Find(predicate func(T) bool) int {
 // Remove item at the specified index.
 // Panics if the index is out of range.
 func (receiver *List[T]) Remove(i int) T {
+	guard.EnsureIndexRange(i, receiver.count)
+
 	var item = receiver.elements[i]
 	receiver.elements = append(receiver.elements[:i], receiver.elements[i+1:]...)
 	receiver.count--

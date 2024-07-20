@@ -211,9 +211,7 @@ func (receiver *LinkedList[T]) Find(predicate func(T) bool) int {
 // Return the removed item.
 // Panic if index out of range or less than 0
 func (receiver *LinkedList[T]) Remove(index int) T {
-	if index > receiver.count-1 || index < 0 {
-		panic("Index out of range")
-	}
+	guard.EnsureIndexRange(index, receiver.count)
 
 	var curr = receiver.Head
 	var removedItemValue T
