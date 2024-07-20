@@ -2,6 +2,7 @@ package collection_test
 
 import (
 	"generic-collections/interfaces"
+	"generic-collections/linkedlist"
 	"generic-collections/list"
 	"generic-collections/set"
 	"testing"
@@ -23,6 +24,9 @@ var _ = Describe("Test Collection", func() {
 
 		var integerSet = set.From(1, 2, 3, 4, 5, 6, 7, 8, 9, 10)
 		Context("For Set", integerTests(integerSet))
+
+		var integerLinkedList = linkedlist.From(1, 2, 3, 4, 5, 6, 7, 8, 9, 10)
+		Context("For LinkedList", integerTests(integerLinkedList))
 	})
 
 	When("Using string", func() {
@@ -42,6 +46,9 @@ var _ = Describe("Test Collection", func() {
 
 		var stringSet = set.From(stringList.ToSlice()...)
 		Context("For Set", stringTests(stringSet))
+
+		var stringLinkedList = linkedlist.From(stringList.ToSlice()...)
+		Context("For LinkedList", stringTests(stringLinkedList))
 	})
 
 	When("Using struct", func() {
@@ -93,6 +100,9 @@ var _ = Describe("Test Collection", func() {
 
 		var bookSet = set.From(bookList.ToSlice()...)
 		Context("For Set", structTests(bookSet))
+
+		var bookLinkedList = linkedlist.From(bookList.ToSlice()...)
+		Context("For LinkedList", structTests(bookLinkedList))
 	})
 
 	When("Using pointer", func() {
@@ -117,6 +127,9 @@ var _ = Describe("Test Collection", func() {
 
 		var studentSet = set.From(studentList.ToSlice()...)
 		Context("For Set", pointerTests(studentSet))
+
+		var studentLinkedList = linkedlist.From(studentList.ToSlice()...)
+		Context("For LinkedList", pointerTests(studentLinkedList))
 	})
 })
 

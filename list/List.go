@@ -12,6 +12,7 @@ type List[T any] struct {
 }
 
 var _ interfaces.ICollection[any] = (*List[any])(nil)
+var _ interfaces.IIndexable[int, any] = (*List[any])(nil)
 
 // New creates a new empty list.
 func New[T any]() *List[T] {

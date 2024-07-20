@@ -1,4 +1,4 @@
-package linklist
+package linkedlist
 
 import (
 	"generic-collections/interfaces"
