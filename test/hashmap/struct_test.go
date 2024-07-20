@@ -12,7 +12,7 @@ type City struct {
 	CountyName string
 }
 
-func (c City) GetHashCode() string {
+func (c City) HashCode() string {
 	return fmt.Sprintf("%s-%s", c.Name, c.CountyName)
 }
 
@@ -22,7 +22,7 @@ type District struct {
 	SubDistricts []string
 }
 
-func (receiver District) GetHashCode() string {
+func (receiver District) HashCode() string {
 	return fmt.Sprintf("%s-%d-%v", receiver.Name, receiver.Population, receiver.SubDistricts)
 }
 

@@ -20,7 +20,7 @@ func New[K any, V any]() *HashMap[K, V] {
 func From[K any, V any](entries ...Entry[K, V]) *HashMap[K, V] {
 	var hashMap = New[K, V]()
 	for _, entry := range entries {
-		hashMap.elements[entry.GetHashCode()] = entry
+		hashMap.elements[entry.HashCode()] = entry
 	}
 
 	hashMap.count = len(entries)
@@ -57,7 +57,7 @@ func (receiver *HashMap[K, V]) Add(item Entry[K, V]) *HashMap[K, V] {
 		receiver.count++
 	}
 
-	receiver.elements[item.GetHashCode()] = item
+	receiver.elements[item.HashCode()] = item
 
 	return receiver
 }
@@ -82,7 +82,7 @@ func (receiver *HashMap[K, V]) Count() int {
 
 // Has compare key and value of the item with the elements of the hashmap.
 func (receiver *HashMap[K, V]) Has(item Entry[K, V]) bool {
-	var key = item.GetHashCode()
+	var key = item.HashCode()
 	value, ok := receiver.elements[key]
 	return ok && utils.IsEqual(value, item)
 }

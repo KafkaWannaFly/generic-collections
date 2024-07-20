@@ -6,7 +6,7 @@ import (
 )
 
 // IsEqual If a, b implement IComparer, then use Compare method to compare them.
-// If a, b implement IHashCoder, then use GetHashCode method to compare them.
+// If a, b implement IHashCoder, then use HashCode method to compare them.
 // Else. use == operand
 func IsEqual[T any](a T, b T) bool {
 	var ia interface{} = a
@@ -20,20 +20,20 @@ func IsEqual[T any](a T, b T) bool {
 
 	iHashCoder, aOk := ia.(interfaces.IHashCoder)
 	if aOk {
-		return iHashCoder.GetHashCode() == HashCodeOf(b)
+		return iHashCoder.HashCode() == HashCodeOf(b)
 	}
 
 	return ia == ib
 }
 
-// HashCodeOf If item implement IHashCoder, then use GetHashCode method to get hash code.
+// HashCodeOf If item implement IHashCoder, then use HashCode method to get hash code.
 // Else. use fmt.Sprintf to convert item to string
 func HashCodeOf[T any](item T) string {
 	var iItem interface{} = item
 	var iHashCoder, ok = iItem.(interfaces.IHashCoder)
 
 	if ok {
-		return iHashCoder.GetHashCode()
+		return iHashCoder.HashCode()
 	}
 
 	return fmt.Sprintf("%v", item)

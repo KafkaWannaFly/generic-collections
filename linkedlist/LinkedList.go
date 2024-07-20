@@ -27,6 +27,7 @@ func From[T any](elements ...T) *LinkedList[T] {
 }
 
 var _ interfaces.ICollection[any] = (*LinkedList[any])(nil)
+var _ interfaces.IIndexable[int, any] = (*LinkedList[any])(nil)
 
 // ForEach loops through each item in LinkedList and apply function
 func (receiver *LinkedList[T]) ForEach(appliedFunc func(int, T)) {
@@ -72,7 +73,7 @@ func (receiver *LinkedList[T]) Has(item T) bool {
 	var curr = receiver.Head
 
 	for curr != nil {
-		if utils.HashCodeOf(item) == curr.GetHashCode() {
+		if utils.HashCodeOf(item) == curr.HashCode() {
 			return true
 		}
 		curr = curr.Next
@@ -238,7 +239,7 @@ func (receiver *LinkedList[T]) Remove(index int) T {
 
 			if index == receiver.count-1 {
 				// If remove at the tail
-				receiver.Tail = afterRemovedItem
+				receiver.Tail = beforeRemovedItem
 			}
 
 			break
@@ -246,6 +247,8 @@ func (receiver *LinkedList[T]) Remove(index int) T {
 
 		curr = curr.Next
 	}
+
+	receiver.count--
 
 	return removedItemValue
 }

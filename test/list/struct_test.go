@@ -25,7 +25,7 @@ func (receiver Book) Compare(book Book) int {
 	}
 }
 
-func (receiver Book) GetHashCode() string {
+func (receiver Book) HashCode() string {
 	return receiver.Title
 }
 
@@ -45,7 +45,7 @@ func (receiver *Student) Compare(item *Student) int {
 	}
 }
 
-func (receiver *Student) GetHashCode() string {
+func (receiver *Student) HashCode() string {
 	return receiver.Name
 }
 

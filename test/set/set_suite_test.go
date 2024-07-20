@@ -20,7 +20,7 @@ type Person struct {
 	friends *set.Set[Person]
 }
 
-func (receiver Person) GetHashCode() string {
+func (receiver Person) HashCode() string {
 	return receiver.Name + " " + strconv.Itoa(receiver.Age)
 }
 

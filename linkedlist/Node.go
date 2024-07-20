@@ -20,6 +20,6 @@ func NodeOf[T any](value T) *Node[T] {
 	return &Node[T]{Value: value}
 }
 
-func (receiver *Node[T]) GetHashCode() string {
+func (receiver *Node[T]) HashCode() string {
 	return utils.HashCodeOf(receiver.Value)
 }

@@ -1,5 +1,5 @@
 package interfaces
 
 type IHashCoder interface {
-	GetHashCode() string
+	HashCode() string
 }
