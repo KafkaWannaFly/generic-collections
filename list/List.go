@@ -143,17 +143,17 @@ func (receiver *List[T]) Clone() interfaces.ICollection[T] {
 
 // region IIndexable[TItem] implementation
 
-// Get the value of the element at the specified index.
+// GetAt the value of the element at the specified index.
 // Panics if the index is out of range.
-func (receiver *List[T]) Get(i int) T {
+func (receiver *List[T]) GetAt(i int) T {
 	guard.EnsureIndexRange(i, receiver.count)
 
 	return receiver.elements[i]
 }
 
-// Set the value of the element at the specified index.
+// SetAt the value of the element at the specified index.
 // Panics if the index is out of range.
-func (receiver *List[T]) Set(i int, item T) {
+func (receiver *List[T]) SetAt(i int, item T) {
 	guard.EnsureIndexRange(i, receiver.count)
 
 	receiver.elements[i] = item
@@ -174,9 +174,9 @@ func (receiver *List[T]) Find(predicate func(T) bool) int {
 	return index
 }
 
-// Remove item at the specified index.
+// RemoveAt item at the specified index.
 // Panics if the index is out of range.
-func (receiver *List[T]) Remove(i int) T {
+func (receiver *List[T]) RemoveAt(i int) T {
 	guard.EnsureIndexRange(i, receiver.count)
 
 	var item = receiver.elements[i]
@@ -184,6 +184,31 @@ func (receiver *List[T]) Remove(i int) T {
 	receiver.count--
 
 	return item
+}
+
+// TryGetAt the value of the element at the specified index.
+// Returns the value and true if the index is in range, otherwise the default value and false.
+func (receiver *List[T]) TryGetAt(i int) (T, bool) {
+	defer guard.RecoverDefaultFalse[T]()
+
+	return receiver.GetAt(i), true
+}
+
+// TrySetAt the value of the element at the specified index.
+// Returns true if the index is in range, otherwise false.
+func (receiver *List[T]) TrySetAt(i int, item T) bool {
+	defer guard.RecoverFalse[T]()
+
+	receiver.SetAt(i, item)
+	return true
+}
+
+// TryRemoveAt item at the specified index.
+// Returns the value and true if the index is in range, otherwise the default value and false.
+func (receiver *List[T]) TryRemoveAt(i int) (T, bool) {
+	defer guard.RecoverDefaultFalse[T]()
+
+	return receiver.RemoveAt(i), true
 }
 
 // endregion

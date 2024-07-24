@@ -38,3 +38,8 @@ func HashCodeOf[T any](item T) string {
 
 	return fmt.Sprintf("%v", item)
 }
+
+func DefaultValue[T any]() T {
+	var result T
+	return result
+}

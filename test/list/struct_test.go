@@ -2,6 +2,7 @@ package list
 
 import (
 	"generic-collections/list"
+	"generic-collections/utils"
 	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"
 )
@@ -105,35 +106,35 @@ var _ = Describe("Test List implements ICollection", func() {
 		})
 
 		It("Should get elements", func() {
-			Expect(bookList.Get(0).Title).To(Equal("The Alchemist"))
-			Expect(bookList.Get(1).Title).To(Equal("The Little Prince"))
-			Expect(bookList.Get(2).Title).To(Equal("The Catcher in the Rye"))
+			Expect(bookList.GetAt(0).Title).To(Equal("The Alchemist"))
+			Expect(bookList.GetAt(1).Title).To(Equal("The Little Prince"))
+			Expect(bookList.GetAt(2).Title).To(Equal("The Catcher in the Rye"))
 		})
 
 		It("Should set elements", func() {
-			bookList.Set(0, Book{
+			bookList.SetAt(0, Book{
 				Title: "The Great Gatsby",
 			})
-			bookList.Set(1, Book{
+			bookList.SetAt(1, Book{
 				Title: "To Kill a Mockingbird",
 			})
-			bookList.Set(2, Book{
+			bookList.SetAt(2, Book{
 				Title: "1984",
 			})
 
-			Expect(bookList.Get(0).Title).To(Equal("The Great Gatsby"))
-			Expect(bookList.Get(1).Title).To(Equal("To Kill a Mockingbird"))
-			Expect(bookList.Get(2).Title).To(Equal("1984"))
+			Expect(bookList.GetAt(0).Title).To(Equal("The Great Gatsby"))
+			Expect(bookList.GetAt(1).Title).To(Equal("To Kill a Mockingbird"))
+			Expect(bookList.GetAt(2).Title).To(Equal("1984"))
 		})
 
 		It("Should remove elements", func() {
-			var book0 = bookList.Remove(0)
+			var book0 = bookList.RemoveAt(0)
 			Expect(book0.Title).To(Equal("The Alchemist"))
 
-			var book1 = bookList.Remove(0)
+			var book1 = bookList.RemoveAt(0)
 			Expect(book1.Title).To(Equal("The Little Prince"))
 
-			var book2 = bookList.Remove(0)
+			var book2 = bookList.RemoveAt(0)
 			Expect(book2.Title).To(Equal("The Catcher in the Rye"))
 
 			Expect(bookList.Count()).To(Equal(0))
@@ -153,7 +154,7 @@ var _ = Describe("Test List implements ICollection", func() {
 			bookList.ForEach(func(index int, book Book) {
 				sum += 1
 
-				Expect(bookList.Get(index).Title).To(Equal(book.Title))
+				Expect(bookList.GetAt(index).Title).To(Equal(book.Title))
 			})
 
 			Expect(sum).To(Equal(3))
@@ -165,7 +166,7 @@ var _ = Describe("Test List implements ICollection", func() {
 			})
 
 			Expect(index).To(Equal(1))
-			Expect(bookList.Get(index).Title).To(Equal("The Little Prince"))
+			Expect(bookList.GetAt(index).Title).To(Equal("The Little Prince"))
 		})
 
 		It("Should not find elements", func() {
@@ -181,9 +182,9 @@ var _ = Describe("Test List implements ICollection", func() {
 				return book.Title
 			})
 
-			Expect(titleList.Get(0)).To(Equal("The Alchemist"))
-			Expect(titleList.Get(1)).To(Equal("The Little Prince"))
-			Expect(titleList.Get(2)).To(Equal("The Catcher in the Rye"))
+			Expect(titleList.GetAt(0)).To(Equal("The Alchemist"))
+			Expect(titleList.GetAt(1)).To(Equal("The Little Prince"))
+			Expect(titleList.GetAt(2)).To(Equal("The Catcher in the Rye"))
 
 			// Type of titleList is *List[any] instead of *List[string]
 			// Because List can't handle 2nd type parameter
@@ -230,15 +231,98 @@ var _ = Describe("Test List implements ICollection", func() {
 
 			var group1943 = groups.Get(1943)
 			Expect(group1943.Count()).To(Equal(1))
-			Expect(group1943.Get(0).Title).To(Equal("The Little Prince"))
+			Expect(group1943.GetAt(0).Title).To(Equal("The Little Prince"))
 
 			var group1951 = groups.Get(1951)
 			Expect(group1951.Count()).To(Equal(1))
-			Expect(group1951.Get(0).Title).To(Equal("The Catcher in the Rye"))
+			Expect(group1951.GetAt(0).Title).To(Equal("The Catcher in the Rye"))
 
 			var group1988 = groups.Get(1988)
 			Expect(group1988.Count()).To(Equal(1))
-			Expect(group1988.Get(0).Title).To(Equal("The Alchemist"))
+			Expect(group1988.GetAt(0).Title).To(Equal("The Alchemist"))
+		})
+
+		It("Should try get elements in range", func() {
+			var book, ok = bookList.TryGetAt(0)
+			Expect(ok).To(BeTrue())
+			Expect(book.Title).To(Equal("The Alchemist"))
+
+			book, ok = bookList.TryGetAt(1)
+			Expect(ok).To(BeTrue())
+			Expect(book.Title).To(Equal("The Little Prince"))
+
+			book, ok = bookList.TryGetAt(2)
+			Expect(ok).To(BeTrue())
+			Expect(book.Title).To(Equal("The Catcher in the Rye"))
+		})
+
+		It("Should try get elements out of range", func() {
+			var book, ok = bookList.TryGetAt(-1)
+			Expect(ok).To(BeFalse())
+			Expect(book).To(Equal(utils.DefaultValue[Book]()))
+
+			book, ok = bookList.TryGetAt(3)
+			Expect(ok).To(BeFalse())
+			var defaultBook Book
+			Expect(book).To(Equal(defaultBook))
+		})
+
+		It("Should try set elements in range", func() {
+			var ok = bookList.TrySetAt(0, Book{
+				Title: "The Great Gatsby",
+			})
+			Expect(ok).To(BeTrue())
+			Expect(bookList.GetAt(0).Title).To(Equal("The Great Gatsby"))
+
+			ok = bookList.TrySetAt(1, Book{
+				Title: "To Kill a Mockingbird",
+			})
+			Expect(ok).To(BeTrue())
+			Expect(bookList.GetAt(1).Title).To(Equal("To Kill a Mockingbird"))
+
+			ok = bookList.TrySetAt(2, Book{
+				Title: "1984",
+			})
+			Expect(ok).To(BeTrue())
+			Expect(bookList.GetAt(2).Title).To(Equal("1984"))
+		})
+
+		It("Should try set elements out of range", func() {
+			var ok = bookList.TrySetAt(-1, Book{
+				Title: "The Great Gatsby",
+			})
+			Expect(ok).To(BeFalse())
+
+			ok = bookList.TrySetAt(3, Book{
+				Title: "To Kill a Mockingbird",
+			})
+			Expect(ok).To(BeFalse())
+		})
+
+		It("Should try remove elements in range", func() {
+			var book, ok = bookList.TryRemoveAt(0)
+			Expect(ok).To(BeTrue())
+			Expect(book.Title).To(Equal("The Alchemist"))
+
+			book, ok = bookList.TryRemoveAt(0)
+			Expect(ok).To(BeTrue())
+			Expect(book.Title).To(Equal("The Little Prince"))
+
+			book, ok = bookList.TryRemoveAt(0)
+			Expect(ok).To(BeTrue())
+			Expect(book.Title).To(Equal("The Catcher in the Rye"))
+
+			Expect(bookList.Count()).To(Equal(0))
+		})
+
+		It("Should try remove elements out of range", func() {
+			var book, ok = bookList.TryRemoveAt(-1)
+			Expect(ok).To(BeFalse())
+			Expect(book).To(Equal(utils.DefaultValue[Book]()))
+
+			book, ok = bookList.TryRemoveAt(11)
+			Expect(ok).To(BeFalse())
+			Expect(book).To(Equal(utils.DefaultValue[Book]()))
 		})
 	})
 
@@ -278,25 +362,25 @@ var _ = Describe("Test List implements ICollection", func() {
 		})
 
 		It("Should get elements", func() {
-			Expect(studentList.Get(0).Name).To(Equal("Alice"))
-			Expect(studentList.Get(1).Name).To(Equal("Bob"))
-			Expect(studentList.Get(2).Name).To(Equal("Charlie"))
+			Expect(studentList.GetAt(0).Name).To(Equal("Alice"))
+			Expect(studentList.GetAt(1).Name).To(Equal("Bob"))
+			Expect(studentList.GetAt(2).Name).To(Equal("Charlie"))
 		})
 
 		It("Should set elements", func() {
-			studentList.Set(0, &Student{
+			studentList.SetAt(0, &Student{
 				Name: "David",
 			})
-			studentList.Set(1, &Student{
+			studentList.SetAt(1, &Student{
 				Name: "Eve",
 			})
-			studentList.Set(2, &Student{
+			studentList.SetAt(2, &Student{
 				Name: "Frank",
 			})
 
-			Expect(studentList.Get(0).Name).To(Equal("David"))
-			Expect(studentList.Get(1).Name).To(Equal("Eve"))
-			Expect(studentList.Get(2).Name).To(Equal("Frank"))
+			Expect(studentList.GetAt(0).Name).To(Equal("David"))
+			Expect(studentList.GetAt(1).Name).To(Equal("Eve"))
+			Expect(studentList.GetAt(2).Name).To(Equal("Frank"))
 		})
 
 		It("Should convert to slice", func() {
@@ -313,17 +397,99 @@ var _ = Describe("Test List implements ICollection", func() {
 			studentList.ForEach(func(index int, student *Student) {
 				sum += 1
 
-				Expect(studentList.Get(index).Name).To(Equal(student.Name))
+				Expect(studentList.GetAt(index).Name).To(Equal(student.Name))
 			})
 
 			Expect(sum).To(Equal(3))
 		})
 
 		It("Should update elements", func() {
-			var student = studentList.Get(0)
+			var student = studentList.GetAt(0)
 			student.SetName("Kafka")
 
-			Expect(studentList.Get(0).Name).To(Equal("Kafka"))
+			Expect(studentList.GetAt(0).Name).To(Equal("Kafka"))
+		})
+
+		It("Should try get in range", func() {
+			var student, ok = studentList.TryGetAt(0)
+			Expect(ok).To(BeTrue())
+			Expect(student.Name).To(Equal("Alice"))
+
+			student, ok = studentList.TryGetAt(1)
+			Expect(ok).To(BeTrue())
+			Expect(student.Name).To(Equal("Bob"))
+
+			student, ok = studentList.TryGetAt(2)
+			Expect(ok).To(BeTrue())
+			Expect(student.Name).To(Equal("Charlie"))
+		})
+
+		It("Should try get out of range", func() {
+			var student, ok = studentList.TryGetAt(-1)
+			Expect(ok).To(BeFalse())
+			Expect(student).To(Equal(utils.DefaultValue[*Student]()))
+
+			student, ok = studentList.TryGetAt(3)
+			Expect(ok).To(BeFalse())
+			Expect(student).To(BeNil())
+		})
+
+		It("Should try set in range", func() {
+			var ok = studentList.TrySetAt(0, &Student{
+				Name: "David",
+			})
+			Expect(ok).To(BeTrue())
+			Expect(studentList.GetAt(0).Name).To(Equal("David"))
+
+			ok = studentList.TrySetAt(1, &Student{
+				Name: "Eve",
+			})
+			Expect(ok).To(BeTrue())
+			Expect(studentList.GetAt(1).Name).To(Equal("Eve"))
+
+			ok = studentList.TrySetAt(2, &Student{
+				Name: "Frank",
+			})
+			Expect(ok).To(BeTrue())
+			Expect(studentList.GetAt(2).Name).To(Equal("Frank"))
+		})
+
+		It("Should try set out of range", func() {
+			var ok = studentList.TrySetAt(-1, &Student{
+				Name: "David",
+			})
+			Expect(ok).To(BeFalse())
+
+			ok = studentList.TrySetAt(3, &Student{
+				Name: "Eve",
+			})
+			Expect(ok).To(BeFalse())
+		})
+
+		It("Should try remove in range", func() {
+			var student, ok = studentList.TryRemoveAt(0)
+			Expect(ok).To(BeTrue())
+			Expect(student.Name).To(Equal("Alice"))
+
+			student, ok = studentList.TryRemoveAt(0)
+			Expect(ok).To(BeTrue())
+			Expect(student.Name).To(Equal("Bob"))
+
+			student, ok = studentList.TryRemoveAt(0)
+			Expect(ok).To(BeTrue())
+			Expect(student.Name).To(Equal("Charlie"))
+
+			Expect(studentList.Count()).To(Equal(0))
+		})
+
+		It("Should try remove out of range", func() {
+			var student, ok = studentList.TryRemoveAt(-1)
+			Expect(ok).To(BeFalse())
+			Expect(student).To(Equal(utils.DefaultValue[*Student]()))
+
+			student, ok = studentList.TryRemoveAt(11)
+			Expect(ok).To(BeFalse())
+			Expect(student).To(BeNil())
 		})
 	})
 })

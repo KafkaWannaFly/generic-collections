@@ -1,8 +1,12 @@
 package interfaces
 
 type IIndexable[TIndex any, TValue any] interface {
-	Get(TIndex) TValue
-	Set(TIndex, TValue)
+	GetAt(TIndex) TValue
+	SetAt(TIndex, TValue)
 	Find(predicate func(TValue) bool) TIndex
-	Remove(TIndex) TValue
+	RemoveAt(TIndex) TValue
+
+	TryGetAt(TIndex) (TValue, bool)
+	TrySetAt(TIndex, TValue) bool
+	TryRemoveAt(TIndex) (TValue, bool)
 }

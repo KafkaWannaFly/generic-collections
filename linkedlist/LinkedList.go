@@ -158,9 +158,9 @@ func (receiver *LinkedList[T]) Clone() interfaces.ICollection[T] {
 	return linkedList
 }
 
-// Get item with certain index in LinkedList.
+// GetAt item with certain index in LinkedList.
 // Panic if index out of range or less than 0
-func (receiver *LinkedList[T]) Get(index int) T {
+func (receiver *LinkedList[T]) GetAt(index int) T {
 	guard.EnsureIndexRange(index, receiver.count)
 
 	var curr = receiver.Head
@@ -176,9 +176,9 @@ func (receiver *LinkedList[T]) Get(index int) T {
 	return val
 }
 
-// Set value to index.
+// SetAt value to index.
 // Panic if index out of range or less than 0
-func (receiver *LinkedList[T]) Set(index int, value T) {
+func (receiver *LinkedList[T]) SetAt(index int, value T) {
 	guard.EnsureIndexRange(index, receiver.count)
 
 	var curr = receiver.Head
@@ -207,10 +207,10 @@ func (receiver *LinkedList[T]) Find(predicate func(T) bool) int {
 	return index
 }
 
-// Remove item from LinkedList at certain index.
+// RemoveAt item from LinkedList at certain index.
 // Return the removed item.
 // Panic if index out of range or less than 0
-func (receiver *LinkedList[T]) Remove(index int) T {
+func (receiver *LinkedList[T]) RemoveAt(index int) T {
 	guard.EnsureIndexRange(index, receiver.count)
 
 	var curr = receiver.Head
@@ -246,6 +246,32 @@ func (receiver *LinkedList[T]) Remove(index int) T {
 	receiver.count--
 
 	return removedItemValue
+}
+
+// TryGetAt item with certain index in LinkedList.
+// Return the value and true if index in range, else default value and false
+func (receiver *LinkedList[T]) TryGetAt(index int) (T, bool) {
+	defer guard.RecoverDefaultFalse[T]()
+
+	return receiver.GetAt(index), true
+}
+
+// TrySetAt value to index.
+// Return true if index in range, else false
+func (receiver *LinkedList[T]) TrySetAt(index int, value T) bool {
+	defer guard.RecoverFalse[T]()
+
+	receiver.SetAt(index, value)
+	return true
+}
+
+// TryRemoveAt item from LinkedList at certain index.
+// Return the removed item and true.
+// Return default value and false if index out of range.
+func (receiver *LinkedList[T]) TryRemoveAt(index int) (T, bool) {
+	defer guard.RecoverDefaultFalse[T]()
+
+	return receiver.RemoveAt(index), true
 }
 
 // NodeAt get Node object at certain index.
