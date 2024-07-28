@@ -1,3 +1,4 @@
+#file: noinspection SpellCheckingInspection
 name: Auto merge Dependabot PRs
 
 on:
@@ -12,4 +13,5 @@ jobs:
       - name: Auto merge
         uses: ahmadnassri/action-dependabot-auto-merge@v2
         with:
+          target: minor
           github-token: ${{ secrets.GITHUB_TOKEN }}

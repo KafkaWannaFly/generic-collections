@@ -1,6 +1,7 @@
 package linkedlist
 
 import (
+	"generic-collections/doctor"
 	"generic-collections/guard"
 	"generic-collections/interfaces"
 	"generic-collections/set"
@@ -29,6 +30,8 @@ func From[T any](elements ...T) *LinkedList[T] {
 
 var _ interfaces.ICollection[any] = (*LinkedList[any])(nil)
 var _ interfaces.IIndexable[int, any] = (*LinkedList[any])(nil)
+
+// region ICollection[T]
 
 // ForEach loops through each item in LinkedList and apply function
 func (receiver *LinkedList[T]) ForEach(appliedFunc func(int, T)) {
@@ -158,6 +161,10 @@ func (receiver *LinkedList[T]) Clone() interfaces.ICollection[T] {
 	return linkedList
 }
 
+// endregion
+
+// region IIndexable[int, T]
+
 // GetAt item with certain index in LinkedList.
 // Panic if index out of range or less than 0
 func (receiver *LinkedList[T]) GetAt(index int) T {
@@ -251,7 +258,7 @@ func (receiver *LinkedList[T]) RemoveAt(index int) T {
 // TryGetAt item with certain index in LinkedList.
 // Return the value and true if index in range, else default value and false
 func (receiver *LinkedList[T]) TryGetAt(index int) (T, bool) {
-	defer guard.RecoverDefaultFalse[T]()
+	defer doctor.RecoverDefaultFalse[T]()
 
 	return receiver.GetAt(index), true
 }
@@ -259,7 +266,7 @@ func (receiver *LinkedList[T]) TryGetAt(index int) (T, bool) {
 // TrySetAt value to index.
 // Return true if index in range, else false
 func (receiver *LinkedList[T]) TrySetAt(index int, value T) bool {
-	defer guard.RecoverFalse[T]()
+	defer doctor.RecoverFalse()
 
 	receiver.SetAt(index, value)
 	return true
@@ -269,7 +276,7 @@ func (receiver *LinkedList[T]) TrySetAt(index int, value T) bool {
 // Return the removed item and true.
 // Return default value and false if index out of range.
 func (receiver *LinkedList[T]) TryRemoveAt(index int) (T, bool) {
-	defer guard.RecoverDefaultFalse[T]()
+	defer doctor.RecoverDefaultFalse[T]()
 
 	return receiver.RemoveAt(index), true
 }
@@ -289,3 +296,5 @@ func (receiver *LinkedList[T]) NodeAt(index int) *Node[T] {
 
 	return nil
 }
+
+// endregion

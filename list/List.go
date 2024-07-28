@@ -1,6 +1,7 @@
 package list
 
 import (
+	"generic-collections/doctor"
 	"generic-collections/guard"
 	"generic-collections/hashmap"
 	"generic-collections/interfaces"
@@ -189,7 +190,7 @@ func (receiver *List[T]) RemoveAt(i int) T {
 // TryGetAt the value of the element at the specified index.
 // Returns the value and true if the index is in range, otherwise the default value and false.
 func (receiver *List[T]) TryGetAt(i int) (T, bool) {
-	defer guard.RecoverDefaultFalse[T]()
+	defer doctor.RecoverDefaultFalse[T]()
 
 	return receiver.GetAt(i), true
 }
@@ -197,7 +198,7 @@ func (receiver *List[T]) TryGetAt(i int) (T, bool) {
 // TrySetAt the value of the element at the specified index.
 // Returns true if the index is in range, otherwise false.
 func (receiver *List[T]) TrySetAt(i int, item T) bool {
-	defer guard.RecoverFalse[T]()
+	defer doctor.RecoverFalse()
 
 	receiver.SetAt(i, item)
 	return true
@@ -206,7 +207,7 @@ func (receiver *List[T]) TrySetAt(i int, item T) bool {
 // TryRemoveAt item at the specified index.
 // Returns the value and true if the index is in range, otherwise the default value and false.
 func (receiver *List[T]) TryRemoveAt(i int) (T, bool) {
-	defer guard.RecoverDefaultFalse[T]()
+	defer doctor.RecoverDefaultFalse[T]()
 
 	return receiver.RemoveAt(i), true
 }
