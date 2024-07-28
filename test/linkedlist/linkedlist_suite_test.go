@@ -195,6 +195,92 @@ var _ = Describe("Test LinkedList implements ICollection", func() {
 			Expect(stringList.Count()).To(Equal(10))
 		})
 
+		It("Should add an element at the head", func() {
+			stringList.AddFirst("z")
+
+			Expect(stringList.Count()).To(Equal(11))
+			Expect(stringList.GetAt(0)).To(Equal("z"))
+			Expect(stringList.Head.Value).To(Equal("z"))
+		})
+
+		It("Should add an element at the tail", func() {
+			stringList.AddLast("z")
+
+			Expect(stringList.Count()).To(Equal(11))
+			Expect(stringList.GetAt(10)).To(Equal("z"))
+			Expect(stringList.Tail.Value).To(Equal("z"))
+		})
+
+		It("Should add before an element", func() {
+			stringList.AddBefore(0, "head")
+			stringList.AddBefore(stringList.Count(), "tail")
+
+			Expect(stringList.Count()).To(Equal(12))
+			Expect(stringList.GetAt(0)).To(Equal("head"))
+			Expect(stringList.GetAt(stringList.Count() - 1)).To(Equal("tail"))
+
+			stringList.AddBefore(5, "middle")
+
+			Expect(stringList.Count()).To(Equal(13))
+			Expect(stringList.GetAt(5)).To(Equal("middle"))
+		})
+
+		It("Should add after an element", func() {
+			stringList.AddAfter(-1, "head")
+			stringList.AddAfter(stringList.Count()-1, "tail")
+
+			Expect(stringList.Count()).To(Equal(12))
+			Expect(stringList.GetAt(0)).To(Equal("head"))
+			Expect(stringList.GetAt(stringList.Count() - 1)).To(Equal("tail"))
+
+			stringList.AddAfter(5, "middle")
+
+			Expect(stringList.Count()).To(Equal(13))
+			Expect(stringList.GetAt(6)).To(Equal("middle"))
+		})
+
+		It("Should try add before an element in range", func() {
+			ok := stringList.TryAddBefore(0, "head")
+			Expect(ok).To(BeTrue())
+			Expect(stringList.Count()).To(Equal(11))
+			Expect(stringList.GetAt(0)).To(Equal("head"))
+		})
+
+		It("Should try add before an element out of range", func() {
+			ok := stringList.TryAddBefore(-1, "head")
+			Expect(ok).To(BeFalse())
+			Expect(stringList.Count()).To(Equal(10))
+		})
+
+		It("Should try add after an element in range", func() {
+			ok := stringList.TryAddAfter(-1, "head")
+			Expect(ok).To(BeTrue())
+			Expect(stringList.Count()).To(Equal(11))
+			Expect(stringList.GetAt(0)).To(Equal("head"))
+		})
+
+		It("Should try add after an element out of range", func() {
+			ok := stringList.TryAddAfter(stringList.Count(), "tail")
+			Expect(ok).To(BeFalse())
+			Expect(stringList.Count()).To(Equal(10))
+		})
+
+		It("Should remove first item", func() {
+			stringList.RemoveFirst()
+
+			Expect(stringList.Count()).To(Equal(9))
+			Expect(stringList.GetAt(0)).To(Equal("b"))
+			Expect(stringList.Head.Value).To(Equal("b"))
+		})
+
+		It("Should remove last item", func() {
+			stringList.RemoveLast()
+
+			Expect(stringList.Count()).To(Equal(9))
+			Expect(stringList.GetAt(8)).To(Equal("i"))
+			Expect(stringList.Tail.Value).To(Equal("i"))
+		})
+
 		It("Should get an element", func() {
 			Expect(stringList.GetAt(0)).To(Equal("a"))
 			Expect(stringList.GetAt(1)).To(Equal("b"))
@@ -266,6 +352,19 @@ var _ = Describe("Test LinkedList implements ICollection", func() {
 
 			Expect(index).To(Equal(4))
 			Expect(stringList.GetAt(index)).To(Equal("e"))
+
+			firstIndex := stringList.FindFirst(func(element string) bool {
+				return element == "b"
+			})
+
+			Expect(firstIndex).To(Equal(1))
+			Expect(stringList.GetAt(firstIndex)).To(Equal("b"))
+
+			lastIndex := stringList.FindLast(func(element string) bool {
+				return element >= "a"
+			})
+			Expect(lastIndex).To(Equal(9))
+			Expect(stringList.GetAt(lastIndex)).To(Equal("j"))
 		})
 
 		It("Should not find an element", func() {
@@ -274,6 +373,18 @@ var _ = Describe("Test LinkedList implements ICollection", func() {
 			})
 
 			Expect(index).To(Equal(-1))
+
+			firstIndex := stringList.FindFirst(func(element string) bool {
+				return element == "z"
+			})
+
+			Expect(firstIndex).To(Equal(-1))
+
+			lastIndex := stringList.FindLast(func(element string) bool {
+				return element == "z"
+			})
+
+			Expect(lastIndex).To(Equal(-1))
 		})
 
 		It("Should try get element in range", func() {

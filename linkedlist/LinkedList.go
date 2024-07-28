@@ -42,7 +42,7 @@ func (receiver *LinkedList[T]) ForEach(appliedFunc func(int, T)) {
 	}
 }
 
-// Add an item to LinkedList.
+// Add an item to the tail of LinkedList.
 // Return LinkedList after modification
 func (receiver *LinkedList[T]) Add(item T) interfaces.ICollection[T] {
 	var node = NodeOf(item)
@@ -279,6 +279,144 @@ func (receiver *LinkedList[T]) TryRemoveAt(index int) (T, bool) {
 	defer doctor.RecoverDefaultFalse[T]()
 
 	return receiver.RemoveAt(index), true
+}
+
+// endregion
+
+// region LinkedList[T]
+
+// AddFirst an item to the head of LinkedList.
+// Return LinkedList after modification.
+func (receiver *LinkedList[T]) AddFirst(item T) interfaces.ICollection[T] {
+	if receiver.Head == nil {
+		receiver.Add(item)
+	} else {
+		var node = NodeOf(item)
+		node.Next = receiver.Head
+		receiver.Head = node
+		receiver.count++
+	}
+
+	return receiver
+}
+
+// AddLast an item to the tail of LinkedList. Same as Add
+// Return LinkedList after modification.
+func (receiver *LinkedList[T]) AddLast(item T) interfaces.ICollection[T] {
+	return receiver.Add(item)
+}
+
+// AddBefore an item before certain index.
+// Return LinkedList after modification.
+func (receiver *LinkedList[T]) AddBefore(index int, item T) interfaces.ICollection[T] {
+	guard.EnsureIndexRange(index, receiver.count+1)
+
+	if index == 0 {
+		return receiver.AddFirst(item)
+	}
+
+	if index == receiver.count {
+		return receiver.AddLast(item)
+	}
+
+	var curr = receiver.Head
+	for i := 0; curr != nil; i++ {
+		if i == index-1 {
+			var node = NodeOf(item)
+			node.Next = curr.Next
+			curr.Next = node
+			receiver.count++
+			break
+		}
+
+		curr = curr.Next
+	}
+
+	return receiver
+}
+
+// AddAfter an item after certain index.
+// Return LinkedList after modification.
+func (receiver *LinkedList[T]) AddAfter(index int, item T) interfaces.ICollection[T] {
+	guard.EnsureIndexRange(index+1, receiver.count+1)
+
+	if index == -1 {
+		return receiver.AddFirst(item)
+	}
+
+	if index == receiver.count-1 {
+		return receiver.AddLast(item)
+	}
+
+	var curr = receiver.Head
+	for i := 0; curr != nil; i++ {
+		if i == index {
+			var node = NodeOf(item)
+			node.Next = curr.Next
+			curr.Next = node
+			receiver.count++
+			break
+		}
+
+		curr = curr.Next
+	}
+
+	return receiver
+}
+
+// TryAddBefore an item before certain index.
+// Return true if index in range, else false.
+func (receiver *LinkedList[T]) TryAddBefore(index int, item T) bool {
+	defer doctor.RecoverFalse()
+
+	receiver.AddBefore(index, item)
+	return true
+}
+
+// TryAddAfter an item after certain index.
+// Return true if index in range, else false.
+func (receiver *LinkedList[T]) TryAddAfter(index int, item T) bool {
+	defer doctor.RecoverFalse()
+
+	receiver.AddAfter(index, item)
+	return true
+}
+
+// RemoveFirst item from LinkedList.
+// Return the removed item.
+func (receiver *LinkedList[T]) RemoveFirst() T {
+	return receiver.RemoveAt(0)
+}
+
+// RemoveLast item from LinkedList.
+// Return the removed item.
+func (receiver *LinkedList[T]) RemoveLast() T {
+	return receiver.RemoveAt(receiver.count - 1)
+}
+
+// FindFirst item based on predicate.
+// Return first matched index if found, else -1
+func (receiver *LinkedList[T]) FindFirst(predicate func(T) bool) int {
+	return receiver.Find(predicate)
+}
+
+// FindLast item based on predicate.
+// Return last matched index if found, else -1
+func (receiver *LinkedList[T]) FindLast(predicate func(T) bool) int {
+	var isFoundYet = false
+	var index = -1
+	receiver.ForEach(func(i int, item T) {
+		if predicate(item) {
+			index = i
+			isFoundYet = true
+		}
+	})
+
+	if !isFoundYet {
+		return -1
+	}
+
+	return index
 }
 
 // NodeAt get Node object at certain index.
