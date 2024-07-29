@@ -30,6 +30,9 @@ func From[T any](elements ...T) *LinkedList[T] {
 
 var _ interfaces.ICollection[any] = (*LinkedList[any])(nil)
 var _ interfaces.IIndexableGetSet[int, any] = (*LinkedList[any])(nil)
+var _ interfaces.IIndexableAdder[int, any] = (*LinkedList[any])(nil)
+var _ interfaces.IIndexableRemover[int, any] = (*LinkedList[any])(nil)
+var _ interfaces.IIndexableFinder[int, any] = (*LinkedList[any])(nil)
 
 // region ICollection[T]
 
@@ -411,6 +414,19 @@ func (receiver *LinkedList[T]) FindLast(predicate func(T) bool) int {
 	}
 
 	return index
+}
+
+// FindAll items based on predicate.
+// Return all matched indexes.
+func (receiver *LinkedList[T]) FindAll(predicate func(T) bool) []int {
+	var indexes = make([]int, 0)
+	receiver.ForEach(func(i int, item T) {
+		if predicate(item) {
+			indexes = append(indexes, i)
+		}
+	})
+
+	return indexes
 }
 
 // NodeAt get Node object at certain index.

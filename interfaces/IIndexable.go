@@ -34,4 +34,5 @@ type IIndexableRemover[TIndex any, TValue any] interface {
 type IIndexableFinder[TIndex any, TValue any] interface {
 	FindFirst(predicate func(TValue) bool) TIndex
 	FindLast(predicate func(TValue) bool) TIndex
+	FindAll(predicate func(TValue) bool) []TIndex
 }

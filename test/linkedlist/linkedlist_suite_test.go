@@ -99,7 +99,7 @@ var _ = Describe("Test LinkedList implements ICollection", func() {
 		})
 
 		It("Should find an element", func() {
-			var index = integerList.Find(func(element int) bool {
+			var index = integerList.FindFirst(func(element int) bool {
 				return element >= 5
 			})
 
@@ -107,8 +107,16 @@ var _ = Describe("Test LinkedList implements ICollection", func() {
 			Expect(integerList.GetAt(index)).To(Equal(5))
 		})
 
+		It("Should find all elements", func() {
+			var indexes = integerList.FindAll(func(element int) bool {
+				return element >= 5
+			})
+
+			Expect(indexes).To(Equal([]int{4, 5, 6, 7, 8, 9}))
+		})
+
 		It("Should not find an element", func() {
-			var index = integerList.Find(func(element int) bool {
+			var index = integerList.FindFirst(func(element int) bool {
 				return element == 11
 			})
 
@@ -346,7 +354,7 @@ var _ = Describe("Test LinkedList implements ICollection", func() {
 		})
 
 		It("Should find an element", func() {
-			var index = stringList.Find(func(element string) bool {
+			var index = stringList.FindFirst(func(element string) bool {
 				return element == "e"
 			})
 
@@ -368,7 +376,7 @@ var _ = Describe("Test LinkedList implements ICollection", func() {
 		})
 
 		It("Should not find an element", func() {
-			var index = stringList.Find(func(element string) bool {
+			var index = stringList.FindFirst(func(element string) bool {
 				return element == "z"
 			})
 
