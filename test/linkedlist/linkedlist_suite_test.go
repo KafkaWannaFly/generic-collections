@@ -99,7 +99,7 @@ var _ = Describe("Test LinkedList implements ICollection", func() {
 		})
 
 		It("Should find an element", func() {
-			var index = integerList.FindFirst(func(element int) bool {
+			var index = integerList.FindFirst(func(_ int, element int) bool {
 				return element >= 5
 			})
 
@@ -108,7 +108,7 @@ var _ = Describe("Test LinkedList implements ICollection", func() {
 		})
 
 		It("Should find all elements", func() {
-			var indexes = integerList.FindAll(func(element int) bool {
+			var indexes = integerList.FindAll(func(_ int, element int) bool {
 				return element >= 5
 			})
 
@@ -116,7 +116,7 @@ var _ = Describe("Test LinkedList implements ICollection", func() {
 		})
 
 		It("Should not find an element", func() {
-			var index = integerList.FindFirst(func(element int) bool {
+			var index = integerList.FindFirst(func(_ int, element int) bool {
 				return element == 11
 			})
 
@@ -354,21 +354,21 @@ var _ = Describe("Test LinkedList implements ICollection", func() {
 		})
 
 		It("Should find an element", func() {
-			var index = stringList.FindFirst(func(element string) bool {
+			var index = stringList.FindFirst(func(_ int, element string) bool {
 				return element == "e"
 			})
 
 			Expect(index).To(Equal(4))
 			Expect(stringList.GetAt(index)).To(Equal("e"))
 
-			firstIndex := stringList.FindFirst(func(element string) bool {
+			firstIndex := stringList.FindFirst(func(_ int, element string) bool {
 				return element == "b"
 			})
 
 			Expect(firstIndex).To(Equal(1))
 			Expect(stringList.GetAt(firstIndex)).To(Equal("b"))
 
-			lastIndex := stringList.FindLast(func(element string) bool {
+			lastIndex := stringList.FindLast(func(_ int, element string) bool {
 				return element >= "a"
 			})
 			Expect(lastIndex).To(Equal(9))
@@ -376,19 +376,19 @@ var _ = Describe("Test LinkedList implements ICollection", func() {
 		})
 
 		It("Should not find an element", func() {
-			var index = stringList.FindFirst(func(element string) bool {
+			var index = stringList.FindFirst(func(_ int, element string) bool {
 				return element == "z"
 			})
 
 			Expect(index).To(Equal(-1))
 
-			firstIndex := stringList.FindFirst(func(element string) bool {
+			firstIndex := stringList.FindFirst(func(_ int, element string) bool {
 				return element == "z"
 			})
 
 			Expect(firstIndex).To(Equal(-1))
 
-			lastIndex := stringList.FindLast(func(element string) bool {
+			lastIndex := stringList.FindLast(func(_ int, element string) bool {
 				return element == "z"
 			})
 
