@@ -15,6 +15,9 @@ type List[T any] struct {
 
 var _ interfaces.ICollection[any] = (*List[any])(nil)
 var _ interfaces.IIndexableGetSet[int, any] = (*List[any])(nil)
+var _ interfaces.IIndexableAdder[int, any] = (*List[any])(nil)
+var _ interfaces.IIndexableRemover[int, any] = (*List[any])(nil)
+var _ interfaces.IIndexableFinder[int, any] = (*List[any])(nil)
 
 // New creates a new empty list.
 func New[T any]() *List[T] {
@@ -160,33 +163,6 @@ func (receiver *List[T]) SetAt(i int, item T) {
 	receiver.elements[i] = item
 }
 
-// FindFirst the first element that satisfies the predicate.
-// Returns the index of the element if found, otherwise -1.
-func (receiver *List[T]) FindFirst(predicate func(T) bool) int {
-	var index = -1
-
-	for i, element := range receiver.elements {
-		if predicate(element) {
-			index = i
-			break
-		}
-	}
-
-	return index
-}
-
-// RemoveAt item at the specified index.
-// Panics if the index is out of range.
-func (receiver *List[T]) RemoveAt(i int) T {
-	guard.EnsureIndexRange(i, receiver.count)
-
-	var item = receiver.elements[i]
-	receiver.elements = append(receiver.elements[:i], receiver.elements[i+1:]...)
-	receiver.count--
-
-	return item
-}
-
 // TryGetAt the value of the element at the specified index.
 // Returns the value and true if the index is in range, otherwise the default value and false.
 func (receiver *List[T]) TryGetAt(i int) (T, bool) {
@@ -204,12 +180,146 @@ func (receiver *List[T]) TrySetAt(i int, item T) bool {
 	return true
 }
 
+// endregion
+
+// region IIndexableAdder[TItem] implementation
+
+// AddFirst adds the item to the beginning of the list.
+// Returns the list itself.
+func (receiver *List[T]) AddFirst(item T) interfaces.ICollection[T] {
+	receiver.elements = append([]T{item}, receiver.elements...)
+	receiver.count++
+
+	return receiver
+}
+
+// AddLast adds the item to the end of the list.
+// Returns the list itself.
+func (receiver *List[T]) AddLast(item T) interfaces.ICollection[T] {
+	return receiver.Add(item)
+}
+
+// AddBefore adds the item before the element at the specified index.
+// Returns the list itself.
+func (receiver *List[T]) AddBefore(i int, item T) interfaces.ICollection[T] {
+	guard.EnsureIndexRange(i, receiver.count+1)
+
+	receiver.elements = append(receiver.elements[:i], append([]T{item}, receiver.elements[i:]...)...)
+	receiver.count++
+
+	return receiver
+}
+
+// TryAddBefore adds the item before the element at the specified index.
+// Returns true if the index is in range, otherwise false.
+func (receiver *List[T]) TryAddBefore(i int, item T) bool {
+	defer doctor.RecoverFalse()
+
+	receiver.AddBefore(i, item)
+	return true
+}
+
+// AddAfter adds the item after the element at the specified index.
+// Returns the list itself.
+func (receiver *List[T]) AddAfter(i int, item T) interfaces.ICollection[T] {
+	guard.EnsureIndexRange(i+1, receiver.count+1)
+
+	receiver.elements = append(receiver.elements[:i+1], append([]T{item}, receiver.elements[i+1:]...)...)
+	receiver.count++
+
+	return receiver
+}
+
+// TryAddAfter adds the item after the element at the specified index.
+// Returns true if the index is in range, otherwise false.
+func (receiver *List[T]) TryAddAfter(i int, item T) bool {
+	defer doctor.RecoverFalse()
+
+	receiver.AddAfter(i, item)
+	return true
+}
+
+// endregion
+
+// region IIndexableRemover[TItem] implementation
+
+// RemoveAt item at the specified index.
+// Panics if the index is out of range.
+func (receiver *List[T]) RemoveAt(i int) T {
+	guard.EnsureIndexRange(i, receiver.count)
+
+	var item = receiver.elements[i]
+	receiver.elements = append(receiver.elements[:i], receiver.elements[i+1:]...)
+	receiver.count--
+
+	return item
+}
+
 // TryRemoveAt item at the specified index.
 // Returns the value and true if the index is in range, otherwise the default value and false.
 func (receiver *List[T]) TryRemoveAt(i int) (T, bool) {
 	defer doctor.RecoverDefaultFalse[T]()
 
 	return receiver.RemoveAt(i), true
+}
+
+// RemoveFirst item from the beginning of the list.
+// Panics if the list is empty.
+func (receiver *List[T]) RemoveFirst() T {
+	return receiver.RemoveAt(0)
+}
+
+// RemoveLast item from the end of the list.
+// Panics if the list is empty.
+func (receiver *List[T]) RemoveLast() T {
+	return receiver.RemoveAt(receiver.count - 1)
+}
+
+// endregion
+
+// region IIndexableFinder[TItem] implementation
+
+// FindFirst the first element that satisfies the predicate.
+// Returns the index of the element if found, otherwise -1.
+func (receiver *List[T]) FindFirst(predicate func(T) bool) int {
+	var index = -1
+
+	for i, element := range receiver.elements {
+		if predicate(element) {
+			index = i
+			break
+		}
+	}
+
+	return index
+}
+
+// FindLast the last element that satisfies the predicate.
+// Returns the index of the element if found, otherwise -1.
+func (receiver *List[T]) FindLast(predicate func(T) bool) int {
+	var index = -1
+
+	for i := receiver.count - 1; i >= 0; i-- {
+		if predicate(receiver.elements[i]) {
+			index = i
+			break
+		}
+	}
+
+	return index
+}
+
+// FindAll items based on predicate.
+// Return all matched indexes.
+func (receiver *List[T]) FindAll(predicate func(T) bool) []int {
+	var indexes = make([]int, 0)
+	receiver.ForEach(func(i int, item T) {
+		if predicate(item) {
+			indexes = append(indexes, i)
+		}
+	})
+
+	return indexes
 }
 
 // endregion
