@@ -202,47 +202,6 @@ func (receiver *LinkedList[T]) SetAt(index int, value T) {
 	}
 }
 
-// RemoveAt item from LinkedList at certain index.
-// Return the removed item.
-// Panic if index out of range or less than 0
-func (receiver *LinkedList[T]) RemoveAt(index int) T {
-	guard.EnsureIndexRange(index, receiver.count)
-
-	var curr = receiver.Head
-	var removedItemValue T
-	for i := 0; curr != nil; i++ {
-		if index == 0 {
-			// If remove the head
-			removedItemValue = receiver.Head.Value
-			receiver.Head = receiver.Head.Next
-			break
-		}
-
-		if index-1 == i {
-			// If remove at middle of the list
-			var beforeRemovedItem = curr
-			var tobeRemovedItem = beforeRemovedItem.Next
-			var afterRemovedItem = tobeRemovedItem.Next
-			removedItemValue = tobeRemovedItem.Value
-
-			beforeRemovedItem.Next = afterRemovedItem
-
-			if index == receiver.count-1 {
-				// If remove at the tail
-				receiver.Tail = beforeRemovedItem
-			}
-
-			break
-		}
-
-		curr = curr.Next
-	}
-
-	receiver.count--
-
-	return removedItemValue
-}
-
 // TryGetAt item with certain index in LinkedList.
 // Return the value and true if index in range, else default value and false
 func (receiver *LinkedList[T]) TryGetAt(index int) (T, bool) {
@@ -271,7 +230,7 @@ func (receiver *LinkedList[T]) TryRemoveAt(index int) (T, bool) {
 
 // endregion
 
-// region LinkedList[T]
+// region IIndexableAdder[int, T]
 
 // AddFirst an item to the head of LinkedList.
 // Return LinkedList after modification.
@@ -370,6 +329,51 @@ func (receiver *LinkedList[T]) TryAddAfter(index int, item T) bool {
 	return true
 }
 
+// endregion
+
+// region IIndexableRemover[int, T]
+
+// RemoveAt item from LinkedList at certain index.
+// Return the removed item.
+// Panic if index out of range or less than 0
+func (receiver *LinkedList[T]) RemoveAt(index int) T {
+	guard.EnsureIndexRange(index, receiver.count)
+
+	var curr = receiver.Head
+	var removedItemValue T
+	for i := 0; curr != nil; i++ {
+		if index == 0 {
+			// If remove the head
+			removedItemValue = receiver.Head.Value
+			receiver.Head = receiver.Head.Next
+			break
+		}
+
+		if index-1 == i {
+			// If remove at middle of the list
+			var beforeRemovedItem = curr
+			var tobeRemovedItem = beforeRemovedItem.Next
+			var afterRemovedItem = tobeRemovedItem.Next
+			removedItemValue = tobeRemovedItem.Value
+
+			beforeRemovedItem.Next = afterRemovedItem
+
+			if index == receiver.count-1 {
+				// If remove at the tail
+				receiver.Tail = beforeRemovedItem
+			}
+
+			break
+		}
+
+		curr = curr.Next
+	}
+
+	receiver.count--
+
+	return removedItemValue
+}
+
 // RemoveFirst item from LinkedList.
 // Return the removed item.
 func (receiver *LinkedList[T]) RemoveFirst() T {
@@ -381,6 +385,10 @@ func (receiver *LinkedList[T]) RemoveFirst() T {
 func (receiver *LinkedList[T]) RemoveLast() T {
 	return receiver.RemoveAt(receiver.count - 1)
 }
+
+// endregion
+
+// region IIndexableFinder[int, T]
 
 // FindFirst item based on predicate.
 // Return first matched index if found, else -1
@@ -428,6 +436,10 @@ func (receiver *LinkedList[T]) FindAll(predicate func(T) bool) []int {
 
 	return indexes
 }
+
+// endregion
+
+// region LinkedList[T] specific methods
 
 // NodeAt get Node object at certain index.
 func (receiver *LinkedList[T]) NodeAt(index int) *Node[T] {
