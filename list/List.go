@@ -281,11 +281,11 @@ func (receiver *List[T]) RemoveLast() T {
 
 // FindFirst the first element that satisfies the predicate.
 // Returns the index of the element if found, otherwise -1.
-func (receiver *List[T]) FindFirst(predicate func(T) bool) int {
+func (receiver *List[T]) FindFirst(predicate func(int, T) bool) int {
 	var index = -1
 
 	for i, element := range receiver.elements {
-		if predicate(element) {
+		if predicate(i, element) {
 			index = i
 			break
 		}
@@ -296,25 +296,24 @@ func (receiver *List[T]) FindFirst(predicate func(T) bool) int {
 
 // FindLast the last element that satisfies the predicate.
 // Returns the index of the element if found, otherwise -1.
-func (receiver *List[T]) FindLast(predicate func(T) bool) int {
+func (receiver *List[T]) FindLast(predicate func(int, T) bool) int {
 	var index = -1
 
-	for i := receiver.count - 1; i >= 0; i-- {
-		if predicate(receiver.elements[i]) {
+	receiver.ForEach(func(i int, element T) {
+		if predicate(i, element) {
 			index = i
-			break
 		}
-	}
+	})
 
 	return index
 }
 
 // FindAll items based on predicate.
 // Return all matched indexes.
-func (receiver *List[T]) FindAll(predicate func(T) bool) []int {
+func (receiver *List[T]) FindAll(predicate func(int, T) bool) []int {
 	var indexes = make([]int, 0)
 	receiver.ForEach(func(i int, item T) {
-		if predicate(item) {
+		if predicate(i, item) {
 			indexes = append(indexes, i)
 		}
 	})

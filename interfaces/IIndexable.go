@@ -32,7 +32,7 @@ type IIndexableRemover[TIndex any, TValue any] interface {
 
 // IIndexableFinder is an interface for finding items in a ICollection which has index
 type IIndexableFinder[TIndex any, TValue any] interface {
-	FindFirst(predicate func(TValue) bool) TIndex
-	FindLast(predicate func(TValue) bool) TIndex
-	FindAll(predicate func(TValue) bool) []TIndex
+	FindFirst(predicate func(TIndex, TValue) bool) TIndex
+	FindLast(predicate func(TIndex, TValue) bool) TIndex
+	FindAll(predicate func(TIndex, TValue) bool) []TIndex
 }

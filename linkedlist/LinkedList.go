@@ -219,15 +219,6 @@ func (receiver *LinkedList[T]) TrySetAt(index int, value T) bool {
 	return true
 }
 
-// TryRemoveAt item from LinkedList at certain index.
-// Return the removed item and true.
-// Return default value and false if index out of range.
-func (receiver *LinkedList[T]) TryRemoveAt(index int) (T, bool) {
-	defer doctor.RecoverDefaultFalse[T]()
-
-	return receiver.RemoveAt(index), true
-}
-
 // endregion
 
 // region IIndexableAdder[int, T]
@@ -374,6 +365,15 @@ func (receiver *LinkedList[T]) RemoveAt(index int) T {
 	return removedItemValue
 }
 
+// TryRemoveAt item from LinkedList at certain index.
+// Return the removed item and true.
+// Return default value and false if index out of range.
+func (receiver *LinkedList[T]) TryRemoveAt(index int) (T, bool) {
+	defer doctor.RecoverDefaultFalse[T]()
+
+	return receiver.RemoveAt(index), true
+}
+
 // RemoveFirst item from LinkedList.
 // Return the removed item.
 func (receiver *LinkedList[T]) RemoveFirst() T {
@@ -392,11 +392,11 @@ func (receiver *LinkedList[T]) RemoveLast() T {
 
 // FindFirst item based on predicate.
 // Return first matched index if found, else -1
-func (receiver *LinkedList[T]) FindFirst(predicate func(T) bool) int {
+func (receiver *LinkedList[T]) FindFirst(predicate func(int, T) bool) int {
 	var isFoundYet = false
 	var index = -1
 	receiver.ForEach(func(i int, item T) {
-		if predicate(item) && !isFoundYet {
+		if predicate(i, item) && !isFoundYet {
 			index = i
 			isFoundYet = true
 		}
@@ -407,11 +407,11 @@ func (receiver *LinkedList[T]) FindFirst(predicate func(T) bool) int {
 
 // FindLast item based on predicate.
 // Return last matched index if found, else -1
-func (receiver *LinkedList[T]) FindLast(predicate func(T) bool) int {
+func (receiver *LinkedList[T]) FindLast(predicate func(int, T) bool) int {
 	var isFoundYet = false
 	var index = -1
 	receiver.ForEach(func(i int, item T) {
-		if predicate(item) {
+		if predicate(i, item) {
 			index = i
 			isFoundYet = true
 		}
@@ -426,10 +426,10 @@ func (receiver *LinkedList[T]) FindLast(predicate func(T) bool) int {
 
 // FindAll items based on predicate.
 // Return all matched indexes.
-func (receiver *LinkedList[T]) FindAll(predicate func(T) bool) []int {
+func (receiver *LinkedList[T]) FindAll(predicate func(int, T) bool) []int {
 	var indexes = make([]int, 0)
 	receiver.ForEach(func(i int, item T) {
-		if predicate(item) {
+		if predicate(i, item) {
 			indexes = append(indexes, i)
 		}
 	})
