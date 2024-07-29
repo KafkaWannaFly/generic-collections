@@ -161,7 +161,7 @@ var _ = Describe("Test List implements ICollection", func() {
 		})
 
 		It("Should find elements", func() {
-			var index = bookList.Find(func(book Book) bool {
+			var index = bookList.FindFirst(func(book Book) bool {
 				return book.Title == "The Little Prince"
 			})
 
@@ -170,7 +170,7 @@ var _ = Describe("Test List implements ICollection", func() {
 		})
 
 		It("Should not find elements", func() {
-			var index = bookList.Find(func(book Book) bool {
+			var index = bookList.FindFirst(func(book Book) bool {
 				return book.Title == "The Great Gatsby"
 			})
 

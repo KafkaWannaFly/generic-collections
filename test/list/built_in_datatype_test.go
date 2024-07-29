@@ -84,7 +84,7 @@ var _ = Describe("Test List implements ICollection", func() {
 		})
 
 		It("Should find an element", func() {
-			var index = integerList.Find(func(element int) bool {
+			var index = integerList.FindFirst(func(element int) bool {
 				return element >= 5
 			})
 
@@ -93,7 +93,7 @@ var _ = Describe("Test List implements ICollection", func() {
 		})
 
 		It("Should not find an element", func() {
-			var index = integerList.Find(func(element int) bool {
+			var index = integerList.FindFirst(func(element int) bool {
 				return element == 11
 			})
 
@@ -199,14 +199,14 @@ var _ = Describe("Test List implements ICollection", func() {
 		})
 
 		It("Should find an element", func() {
-			var index = stringList.Find(func(element string) bool {
+			var index = stringList.FindFirst(func(element string) bool {
 				return element == "Grape"
 			})
 
 			Expect(index).To(Equal(6))
 			Expect(stringList.GetAt(index)).To(Equal("Grape"))
 
-			index = stringList.Find(func(element string) bool {
+			index = stringList.FindFirst(func(element string) bool {
 				return strings.Contains(element, "r")
 			})
 
@@ -215,13 +215,13 @@ var _ = Describe("Test List implements ICollection", func() {
 		})
 
 		It("Should not find an element", func() {
-			var index = stringList.Find(func(element string) bool {
+			var index = stringList.FindFirst(func(element string) bool {
 				return element == "Lime"
 			})
 
 			Expect(index).To(Equal(-1))
 
-			index = stringList.Find(func(element string) bool {
+			index = stringList.FindFirst(func(element string) bool {
 				return strings.Contains(element, "z")
 			})
 

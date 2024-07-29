@@ -14,7 +14,7 @@ type List[T any] struct {
 }
 
 var _ interfaces.ICollection[any] = (*List[any])(nil)
-var _ interfaces.IIndexable[int, any] = (*List[any])(nil)
+var _ interfaces.IIndexableGetSet[int, any] = (*List[any])(nil)
 
 // New creates a new empty list.
 func New[T any]() *List[T] {
@@ -142,7 +142,7 @@ func (receiver *List[T]) Clone() interfaces.ICollection[T] {
 
 // endregion
 
-// region IIndexable[TItem] implementation
+// region IIndexableGetSet[TItem] implementation
 
 // GetAt the value of the element at the specified index.
 // Panics if the index is out of range.
@@ -160,9 +160,9 @@ func (receiver *List[T]) SetAt(i int, item T) {
 	receiver.elements[i] = item
 }
 
-// Find the first element that satisfies the predicate.
+// FindFirst the first element that satisfies the predicate.
 // Returns the index of the element if found, otherwise -1.
-func (receiver *List[T]) Find(predicate func(T) bool) int {
+func (receiver *List[T]) FindFirst(predicate func(T) bool) int {
 	var index = -1
 
 	for i, element := range receiver.elements {

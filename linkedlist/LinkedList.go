@@ -29,7 +29,7 @@ func From[T any](elements ...T) *LinkedList[T] {
 }
 
 var _ interfaces.ICollection[any] = (*LinkedList[any])(nil)
-var _ interfaces.IIndexable[int, any] = (*LinkedList[any])(nil)
+var _ interfaces.IIndexableGetSet[int, any] = (*LinkedList[any])(nil)
 
 // region ICollection[T]
 
@@ -163,7 +163,7 @@ func (receiver *LinkedList[T]) Clone() interfaces.ICollection[T] {
 
 // endregion
 
-// region IIndexable[int, T]
+// region IIndexableGetSet[int, T]
 
 // GetAt item with certain index in LinkedList.
 // Panic if index out of range or less than 0
@@ -197,21 +197,6 @@ func (receiver *LinkedList[T]) SetAt(index int, value T) {
 
 		curr = curr.Next
 	}
-}
-
-// Find item based on predicate.
-// Return first matched index if found, else -1
-func (receiver *LinkedList[T]) Find(predicate func(T) bool) int {
-	var isFoundYet = false
-	var index = -1
-	receiver.ForEach(func(i int, item T) {
-		if predicate(item) && !isFoundYet {
-			index = i
-			isFoundYet = true
-		}
-	})
-
-	return index
 }
 
 // RemoveAt item from LinkedList at certain index.
@@ -397,7 +382,16 @@ func (receiver *LinkedList[T]) RemoveLast() T {
 // FindFirst item based on predicate.
 // Return first matched index if found, else -1
 func (receiver *LinkedList[T]) FindFirst(predicate func(T) bool) int {
-	return receiver.Find(predicate)
+	var isFoundYet = false
+	var index = -1
+	receiver.ForEach(func(i int, item T) {
+		if predicate(item) && !isFoundYet {
+			index = i
+			isFoundYet = true
+		}
+	})
+
+	return index
 }
 
 // FindLast item based on predicate.
