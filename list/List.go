@@ -140,7 +140,10 @@ func (receiver *List[T]) IsEmpty() bool {
 
 // Clone returns a new list with the same elements.
 func (receiver *List[T]) Clone() interfaces.ICollection[T] {
-	return From[T](receiver.elements...)
+	var newList = New[T]()
+	newList.AddAll(receiver)
+
+	return newList
 }
 
 // endregion

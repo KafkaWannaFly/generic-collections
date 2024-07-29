@@ -47,7 +47,7 @@ func integerTests(collection interfaces.ICollection[int]) func() {
 			integerCollection = collection.Clone().(any).(_IIndexableCollection[int, int])
 
 			Expect(integerCollection.Count()).To(Equal(10))
-			Expect(integerCollection.ToSlice()).To(Equal([]int{1, 2, 3, 4, 5, 6, 7, 8, 9, 10}))
+			Expect(collection.ToSlice()).To(Equal([]int{1, 2, 3, 4, 5, 6, 7, 8, 9, 10}))
 		})
 
 		It("Should be able to get element by index", func() {
