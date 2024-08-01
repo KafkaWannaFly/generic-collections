@@ -17,13 +17,13 @@ var _ = Describe("Hashmap", func() {
 	When("Use basic datatypes as key and value", func() {
 		var stringMap *hashmap.HashMap[string, string]
 		BeforeEach(func() {
-			stringMap = hashmap.Of(make(map[string]string))
-
-			stringMap.Put("key1", "value1")
-			stringMap.Put("key2", "value2")
-			stringMap.Put("key3", "value3")
-			stringMap.Put("key4", "value4")
-			stringMap.Put("key5", "value5")
+			stringMap = hashmap.Of(map[string]string{
+				"key1": "value1",
+				"key2": "value2",
+				"key3": "value3",
+				"key4": "value4",
+				"key5": "value5",
+			})
 
 			Expect(stringMap.Count()).To(Equal(5))
 		})
@@ -154,6 +154,12 @@ var _ = Describe("Hashmap", func() {
 			Expect(stringMap.HasAny(newMap2.ToSlice()...)).To(BeFalse())
 		})
 
+		It("Should has any key from an array", func() {
+			Expect(stringMap.HasAnyKey([]string{"key1", "key6"})).To(BeTrue())
+
+			Expect(stringMap.HasAnyKey([]string{"key6", "key7"})).To(BeFalse())
+		})
+
 		It("Should be able to get all keys", func() {
 			var keys = stringMap.GetKeys()
 			Expect(len(keys)).To(Equal(5))
@@ -197,6 +203,27 @@ var _ = Describe("Hashmap", func() {
 			Expect(filtered.Get("key2")).To(Equal("value2"))
 
 			Expect(filtered.HasKey("key3")).To(BeFalse())
+		})
+
+		It("Should clone the map", func() {
+			var cloned = stringMap.Clone()
+
+			Expect(cloned.Count()).To(Equal(stringMap.Count()))
+			Expect(cloned.HasAll(stringMap.GetEntries()...)).To(BeTrue())
+
+			cloned.ForEach(func(entry hashmap.Entry[string, string]) {
+				Expect(stringMap.Get(entry.Key)).To(Equal(entry.Value))
+			})
+		})
+
+		It("Should clone entry", func() {
+			var entry = hashmap.NewEntry("key1", "value1")
+			var cloned = entry.Clone()
+
+			Expect(cloned).To(Equal(entry))
+			Expect(cloned.Key).To(Equal(entry.Key))
+			Expect(cloned.Value).To(Equal(entry.Value))
+			Expect(cloned.Equals(entry)).To(BeTrue())
 		})
 	})
 })

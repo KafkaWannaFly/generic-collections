@@ -151,6 +151,88 @@ func integerTests(collection interfaces.ICollection[int]) func() {
 			Expect(ok).To(BeFalse())
 		})
 
+		It("Should add element after a certain index", func() {
+			integerCollection.AddAfter(5, 999)
+
+			Expect(integerCollection.Count()).To(Equal(11))
+			Expect(integerCollection.GetAt(6)).To(Equal(999))
+
+			integerCollection.AddAfter(0, 888)
+
+			Expect(integerCollection.Count()).To(Equal(12))
+			Expect(integerCollection.GetAt(1)).To(Equal(888))
+
+			integerCollection.AddAfter(integerCollection.Count()-1, 777)
+
+			Expect(integerCollection.Count()).To(Equal(13))
+			Expect(integerCollection.GetAt(integerCollection.Count() - 1)).To(Equal(777))
+
+			integerCollection.AddAfter(-1, 666)
+
+			Expect(integerCollection.Count()).To(Equal(14))
+			Expect(integerCollection.GetAt(0)).To(Equal(666))
+		})
+
+		It("Should try add element after a certain index", func() {
+			ok := integerCollection.TryAddAfter(5, 999)
+			Expect(ok).To(BeTrue())
+			Expect(integerCollection.GetAt(6)).To(Equal(999))
+
+			ok = integerCollection.TryAddAfter(0, 888)
+			Expect(ok).To(BeTrue())
+			Expect(integerCollection.GetAt(1)).To(Equal(888))
+
+			ok = integerCollection.TryAddAfter(integerCollection.Count()-1, 777)
+			Expect(ok).To(BeTrue())
+			Expect(integerCollection.GetAt(integerCollection.Count() - 1)).To(Equal(777))
+
+			ok = integerCollection.TryAddAfter(-1, 666)
+			Expect(ok).To(BeTrue())
+			Expect(integerCollection.GetAt(0)).To(Equal(666))
+		})
+
+		It("Should try add element after a certain index but out of range", func() {
+			ok := integerCollection.TryAddAfter(999999999999999, 999)
+			Expect(ok).To(BeFalse())
+
+			ok = integerCollection.TryAddAfter(-999999999999999, 999)
+			Expect(ok).To(BeFalse())
+		})
+
+		It("Should remove first element", func() {
+			first := integerCollection.RemoveFirst()
+			Expect(integerCollection.Count()).To(Equal(9))
+			Expect(first).To(Equal(1))
+			Expect(integerCollection.GetAt(0)).To(Equal(2))
+
+			first = integerCollection.RemoveFirst()
+			Expect(integerCollection.Count()).To(Equal(8))
+			Expect(first).To(Equal(2))
+			Expect(integerCollection.GetAt(0)).To(Equal(3))
+
+			first = integerCollection.RemoveFirst()
+			Expect(integerCollection.Count()).To(Equal(7))
+			Expect(first).To(Equal(3))
+			Expect(integerCollection.GetAt(0)).To(Equal(4))
+		})
+
+		It("Should remove last element", func() {
+			last := integerCollection.RemoveLast()
+			Expect(integerCollection.Count()).To(Equal(9))
+			Expect(last).To(Equal(10))
+			Expect(integerCollection.GetAt(integerCollection.Count() - 1)).To(Equal(9))
+
+			last = integerCollection.RemoveLast()
+			Expect(integerCollection.Count()).To(Equal(8))
+			Expect(last).To(Equal(9))
+			Expect(integerCollection.GetAt(integerCollection.Count() - 1)).To(Equal(8))
+
+			last = integerCollection.RemoveLast()
+			Expect(integerCollection.Count()).To(Equal(7))
+			Expect(last).To(Equal(8))
+			Expect(integerCollection.GetAt(integerCollection.Count() - 1)).To(Equal(7))
+		})
+
 		It("Should remove element by index", func() {
 			integerCollection.RemoveAt(0)
 			Expect(integerCollection.Count()).To(Equal(9))

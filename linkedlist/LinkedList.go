@@ -457,4 +457,10 @@ func (receiver *LinkedList[T]) NodeAt(index int) *Node[T] {
 	return nil
 }
 
+func (receiver *LinkedList[T]) TryNodeAt(index int) (*Node[T], bool) {
+	defer doctor.RecoverDefaultFalse[*Node[T]]()
+
+	return receiver.NodeAt(index), true
+}
+
 // endregion

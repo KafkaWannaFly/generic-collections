@@ -135,6 +135,11 @@ var _ = Describe("Test LinkedList implements ICollection", func() {
 			val, ok = integerList.TryGetAt(9)
 			Expect(val).To(Equal(10))
 			Expect(ok).To(BeTrue())
+
+			node, ok := integerList.TryNodeAt(0)
+			Expect(node.Value).To(Equal(1))
+			Expect(ok).To(BeTrue())
+			Expect(node).To(Equal(integerList.Head))
 		})
 
 		It("Should try get element out of range", func() {
@@ -191,6 +196,15 @@ var _ = Describe("Test LinkedList implements ICollection", func() {
 			Expect(val).To(Equal(0))
 			Expect(ok).To(BeFalse())
 			Expect(integerList.Count()).To(Equal(10))
+		})
+
+		It("Should clone a node", func() {
+			node := integerList.NodeAt(0)
+			cloned := node.Clone()
+
+			Expect(cloned.Value).To(Equal(node.Value))
+			Expect(cloned.Next).To(BeNil())
+			Expect(cloned).ToNot(Equal(node))
 		})
 	})
 
