@@ -5,6 +5,7 @@ import (
 	"generic-collections/linkedlist"
 	"generic-collections/list"
 	"generic-collections/set"
+	"generic-collections/stack"
 	"generic-collections/utils"
 	"testing"
 
@@ -28,6 +29,9 @@ var _ = Describe("Test Collection", func() {
 
 		var integerLinkedList = linkedlist.From(1, 2, 3, 4, 5, 6, 7, 8, 9, 10)
 		Context("For LinkedList", integerTests(integerLinkedList))
+
+		var integerStack = stack.From(1, 2, 3, 4, 5, 6, 7, 8, 9, 10)
+		Context("For Stack", integerTests(integerStack))
 	})
 
 	When("Using string", func() {
@@ -50,6 +54,9 @@ var _ = Describe("Test Collection", func() {
 
 		var stringLinkedList = linkedlist.From(stringList.ToSlice()...)
 		Context("For LinkedList", stringTests(stringLinkedList))
+
+		var stringStack = stack.From(stringList.ToSlice()...)
+		Context("For Stack", stringTests(stringStack))
 	})
 
 	When("Using struct", func() {
@@ -104,6 +111,9 @@ var _ = Describe("Test Collection", func() {
 
 		var bookLinkedList = linkedlist.From(bookList.ToSlice()...)
 		Context("For LinkedList", structTests(bookLinkedList))
+
+		var bookStack = stack.From(bookList.ToSlice()...)
+		Context("For Stack", structTests(bookStack))
 	})
 
 	When("Using pointer", func() {
@@ -131,6 +141,9 @@ var _ = Describe("Test Collection", func() {
 
 		var studentLinkedList = linkedlist.From(studentList.ToSlice()...)
 		Context("For LinkedList", pointerTests(studentLinkedList))
+
+		var studentStack = stack.From(studentList.ToSlice()...)
+		Context("For Stack", pointerTests(studentStack))
 	})
 })
 

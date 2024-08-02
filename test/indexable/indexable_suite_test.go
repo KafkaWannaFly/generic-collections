@@ -4,6 +4,7 @@ import (
 	"generic-collections/interfaces"
 	"generic-collections/linkedlist"
 	"generic-collections/list"
+	"generic-collections/stack"
 	"generic-collections/utils"
 	"testing"
 
@@ -12,18 +13,6 @@ import (
 )
 
 // region Struct and Interface
-
-type _IIndexable[TIndex any, TValue any] interface {
-	interfaces.IIndexableGetSet[TIndex, TValue]
-	interfaces.IIndexableAdder[TIndex, TValue]
-	interfaces.IIndexableRemover[TIndex, TValue]
-	interfaces.IIndexableFinder[TIndex, TValue]
-}
-
-type _IIndexableCollection[TIndex any, TValue any] interface {
-	interfaces.ICollection[TValue]
-	_IIndexable[TIndex, TValue]
-}
 
 type Book struct {
 	Title         string
@@ -83,14 +72,20 @@ var _ = Describe("Test indexable collection", func() {
 
 		integerList := list.From(1, 2, 3, 4, 5, 6, 7, 8, 9, 10)
 		Context("For List", testInteger(integerList))
+
+		integerStack := stack.From(1, 2, 3, 4, 5, 6, 7, 8, 9, 10)
+		Context("For Stack", testInteger(integerStack))
 	})
 
 	When("Using string", func() {
 		stringLinkedList := linkedlist.From("a", "b", "c", "d", "e", "f", "g", "h", "i", "j")
 		Context("For LinkedList", testString(stringLinkedList))
 
-		stringList := list.From("a", "b", "c", "d", "e", "f", "g", "h", "i", "j")
+		stringList := list.From(stringLinkedList.ToSlice()...)
 		Context("For List", testString(stringList))
+
+		stringStack := stack.From(stringLinkedList.ToSlice()...)
+		Context("For Stack", testString(stringStack))
 	})
 
 	When("Using struct", func() {
@@ -143,6 +138,9 @@ var _ = Describe("Test indexable collection", func() {
 
 		bookLinkedList := linkedlist.From(bookList.ToSlice()...)
 		Context("For LinkedList", testStruct(bookLinkedList))
+
+		bookStack := stack.From(bookList.ToSlice()...)
+		Context("For Stack", testStruct(bookStack))
 	})
 
 	When("Using pointer", func() {
@@ -171,15 +169,18 @@ var _ = Describe("Test indexable collection", func() {
 
 		studentLinkedList := linkedlist.From(studentList.ToSlice()...)
 		Context("For LinkedList", testPointer(studentLinkedList))
+
+		studentStack := stack.From(studentList.ToSlice()...)
+		Context("For Stack", testPointer(studentStack))
 	})
 })
 
 func testInteger(collection interfaces.ICollection[int]) func() {
 	return func() {
-		var integerCollection _IIndexableCollection[int, int]
+		var integerCollection interfaces.IIndexableCollection[int, int]
 
 		BeforeEach(func() {
-			integerCollection = collection.Clone().(any).(_IIndexableCollection[int, int])
+			integerCollection = collection.Clone().(any).(interfaces.IIndexableCollection[int, int])
 
 			Expect(integerCollection.Count()).To(Equal(10))
 			Expect(collection.ToSlice()).To(Equal([]int{1, 2, 3, 4, 5, 6, 7, 8, 9, 10}))
@@ -429,10 +430,10 @@ func testInteger(collection interfaces.ICollection[int]) func() {
 
 func testString(collection interfaces.ICollection[string]) func() {
 	return func() {
-		var stringCollection _IIndexableCollection[int, string]
+		var stringCollection interfaces.IIndexableCollection[int, string]
 
 		BeforeEach(func() {
-			stringCollection = collection.Clone().(any).(_IIndexableCollection[int, string])
+			stringCollection = collection.Clone().(any).(interfaces.IIndexableCollection[int, string])
 
 			Expect(stringCollection.Count()).To(Equal(10))
 		})
@@ -696,10 +697,10 @@ func testString(collection interfaces.ICollection[string]) func() {
 
 func testStruct(collection interfaces.ICollection[Book]) func() {
 	return func() {
-		var bookCollection _IIndexableCollection[int, Book]
+		var bookCollection interfaces.IIndexableCollection[int, Book]
 
 		BeforeEach(func() {
-			bookCollection = collection.Clone().(any).(_IIndexableCollection[int, Book])
+			bookCollection = collection.Clone().(any).(interfaces.IIndexableCollection[int, Book])
 
 			Expect(bookCollection.Count()).To(Equal(3))
 		})
@@ -863,10 +864,10 @@ func testStruct(collection interfaces.ICollection[Book]) func() {
 
 func testPointer(collection interfaces.ICollection[*Student]) func() {
 	return func() {
-		var studentCollection _IIndexableCollection[int, *Student]
+		var studentCollection interfaces.IIndexableCollection[int, *Student]
 
 		BeforeEach(func() {
-			studentCollection = collection.Clone().(any).(_IIndexableCollection[int, *Student])
+			studentCollection = collection.Clone().(any).(interfaces.IIndexableCollection[int, *Student])
 
 			Expect(studentCollection.Count()).To(Equal(3))
 		})

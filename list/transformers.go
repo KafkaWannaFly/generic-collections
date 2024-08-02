@@ -26,7 +26,7 @@ func Reduce[TType any, TResult any](list *List[TType], reducer func(TResult, TTy
 
 // GroupBy groups the elements of the list by the specified key.
 // Returns a map where the key is the result of the keySelector function
-func GroupBy[TType any, TKey comparable](items *List[TType], keySelector func(TType) TKey) *hashmap.HashMap[TKey, *List[TType]] {
+func GroupBy[TType any, TKey any](items *List[TType], keySelector func(TType) TKey) *hashmap.HashMap[TKey, *List[TType]] {
 	var groups = hashmap.New[TKey, *List[TType]]()
 	items.ForEach(func(index int, item TType) {
 		var key = keySelector(item)

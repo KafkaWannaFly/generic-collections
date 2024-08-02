@@ -1,5 +1,14 @@
 package interfaces
 
+// IIndexableCollection is an interface for a collection that has index
+type IIndexableCollection[TIndex any, TValue any] interface {
+	ICollection[TValue]
+	IIndexableGetSet[TIndex, TValue]
+	IIndexableAdder[TIndex, TValue]
+	IIndexableRemover[TIndex, TValue]
+	IIndexableFinder[TIndex, TValue]
+}
+
 // IIndexableGetSet is an interface for getting and setting item in a ICollection that have index
 type IIndexableGetSet[TIndex any, TValue any] interface {
 	GetAt(TIndex) TValue
