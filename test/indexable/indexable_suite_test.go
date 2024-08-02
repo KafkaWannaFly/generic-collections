@@ -11,6 +11,8 @@ import (
 	. "github.com/onsi/gomega"
 )
 
+// region Struct and Interface
+
 type _IIndexable[TIndex any, TValue any] interface {
 	interfaces.IIndexableGetSet[TIndex, TValue]
 	interfaces.IIndexableAdder[TIndex, TValue]
@@ -23,31 +25,156 @@ type _IIndexableCollection[TIndex any, TValue any] interface {
 	_IIndexable[TIndex, TValue]
 }
 
+type Book struct {
+	Title         string
+	Author        string
+	CurrentPage   int
+	Pages         []string
+	PublishedYear int
+	Price         float64
+}
+
+func (receiver Book) Compare(book Book) int {
+	if receiver.Title == book.Title {
+		return 0
+	} else if receiver.Title > book.Title {
+		return 1
+	} else {
+		return -1
+	}
+}
+
+func (receiver Book) HashCode() string {
+	return receiver.Title
+}
+
+type Student struct {
+	Name string
+	Age  int
+	GPA  float64
+}
+
+func (receiver *Student) Compare(item *Student) int {
+	if receiver.Name == item.Name {
+		return 0
+	} else if receiver.Name > item.Name {
+		return 1
+	} else {
+		return -1
+	}
+}
+
+func (receiver *Student) HashCode() string {
+	return receiver.Name
+}
+
+// endregion
+
 func TestIndexable(t *testing.T) {
 	RegisterFailHandler(Fail)
 	RunSpecs(t, "Indexable Suite")
 }
 
-var _ = Describe("Test IndexableCollection", func() {
+var _ = Describe("Test indexable collection", func() {
 
 	When("Using integer", func() {
 		integerLinkedList := linkedlist.From(1, 2, 3, 4, 5, 6, 7, 8, 9, 10)
-		Context("For LinkedList", integerTests(integerLinkedList))
+		Context("For LinkedList", testInteger(integerLinkedList))
 
 		integerList := list.From(1, 2, 3, 4, 5, 6, 7, 8, 9, 10)
-		Context("For List", integerTests(integerList))
+		Context("For List", testInteger(integerList))
 	})
 
 	When("Using string", func() {
 		stringLinkedList := linkedlist.From("a", "b", "c", "d", "e", "f", "g", "h", "i", "j")
-		Context("For LinkedList", stringTests(stringLinkedList))
+		Context("For LinkedList", testString(stringLinkedList))
 
 		stringList := list.From("a", "b", "c", "d", "e", "f", "g", "h", "i", "j")
-		Context("For List", stringTests(stringList))
+		Context("For List", testString(stringList))
+	})
+
+	When("Using struct", func() {
+		bookList := list.New[Book]()
+		bookList.Add(
+			Book{
+				Title:       "The Alchemist",
+				Author:      "Paulo Coelho",
+				CurrentPage: 0,
+				Pages: []string{
+					"Prologue",
+					"Part One",
+					"Part Two",
+					"Part Three",
+				},
+				PublishedYear: 1988,
+				Price:         10.99,
+			},
+		).Add(
+			Book{
+				Title:       "The Little Prince",
+				Author:      "Antoine de Saint-Exupéry",
+				CurrentPage: 0,
+				Pages: []string{
+					"Chapter 1",
+					"Chapter 2",
+					"Chapter 3",
+					"Chapter 4",
+				},
+				PublishedYear: 1943,
+				Price:         9.99,
+			},
+		).Add(
+			Book{
+				Title:       "The Catcher in the Rye",
+				Author:      "J. D. Salinger",
+				CurrentPage: 0,
+				Pages: []string{
+					"Chapter 1",
+					"Chapter 2",
+					"Chapter 3",
+					"Chapter 4",
+				},
+				PublishedYear: 1951,
+				Price:         11.99,
+			},
+		)
+
+		Context("For List", testStruct(bookList))
+
+		bookLinkedList := linkedlist.From(bookList.ToSlice()...)
+		Context("For LinkedList", testStruct(bookLinkedList))
+	})
+
+	When("Using pointer", func() {
+		studentList := list.New[*Student]()
+		studentList.Add(
+			&Student{
+				Name: "Alice",
+				Age:  20,
+				GPA:  3.5,
+			},
+		).Add(
+			&Student{
+				Name: "Bob",
+				Age:  21,
+				GPA:  3.6,
+			},
+		).Add(
+			&Student{
+				Name: "Charlie",
+				Age:  22,
+				GPA:  3.7,
+			},
+		)
+
+		Context("For List", testPointer(studentList))
+
+		studentLinkedList := linkedlist.From(studentList.ToSlice()...)
+		Context("For LinkedList", testPointer(studentLinkedList))
 	})
 })
 
-func integerTests(collection interfaces.ICollection[int]) func() {
+func testInteger(collection interfaces.ICollection[int]) func() {
 	return func() {
 		var integerCollection _IIndexableCollection[int, int]
 
@@ -300,7 +427,7 @@ func integerTests(collection interfaces.ICollection[int]) func() {
 	}
 }
 
-func stringTests(collection interfaces.ICollection[string]) func() {
+func testString(collection interfaces.ICollection[string]) func() {
 	return func() {
 		var stringCollection _IIndexableCollection[int, string]
 
@@ -563,6 +690,309 @@ func stringTests(collection interfaces.ICollection[string]) func() {
 			Expect(val).To(Equal(""))
 			Expect(ok).To(BeFalse())
 			Expect(stringCollection.Count()).To(Equal(10))
+		})
+	}
+}
+
+func testStruct(collection interfaces.ICollection[Book]) func() {
+	return func() {
+		var bookCollection _IIndexableCollection[int, Book]
+
+		BeforeEach(func() {
+			bookCollection = collection.Clone().(any).(_IIndexableCollection[int, Book])
+
+			Expect(bookCollection.Count()).To(Equal(3))
+		})
+
+		It("Should get elements", func() {
+			Expect(bookCollection.GetAt(0).Title).To(Equal("The Alchemist"))
+			Expect(bookCollection.GetAt(1).Title).To(Equal("The Little Prince"))
+			Expect(bookCollection.GetAt(2).Title).To(Equal("The Catcher in the Rye"))
+		})
+
+		It("Should set elements", func() {
+			bookCollection.SetAt(0, Book{
+				Title: "The Great Gatsby",
+			})
+			bookCollection.SetAt(1, Book{
+				Title: "To Kill a Mockingbird",
+			})
+			bookCollection.SetAt(2, Book{
+				Title: "1984",
+			})
+
+			Expect(bookCollection.GetAt(0).Title).To(Equal("The Great Gatsby"))
+			Expect(bookCollection.GetAt(1).Title).To(Equal("To Kill a Mockingbird"))
+			Expect(bookCollection.GetAt(2).Title).To(Equal("1984"))
+		})
+
+		It("Should remove elements", func() {
+			var book0 = bookCollection.RemoveAt(0)
+			Expect(book0.Title).To(Equal("The Alchemist"))
+
+			var book1 = bookCollection.RemoveAt(0)
+			Expect(book1.Title).To(Equal("The Little Prince"))
+
+			var book2 = bookCollection.RemoveAt(0)
+			Expect(book2.Title).To(Equal("The Catcher in the Rye"))
+
+			Expect(bookCollection.Count()).To(Equal(0))
+		})
+
+		It("Should convert to slice", func() {
+			var bookSlice = bookCollection.ToSlice()
+			Expect(bookSlice[0].Title).To(Equal("The Alchemist"))
+			Expect(bookSlice[1].Title).To(Equal("The Little Prince"))
+			Expect(bookSlice[2].Title).To(Equal("The Catcher in the Rye"))
+
+			Expect(len(bookSlice)).To(Equal(3))
+		})
+
+		It("Should iterate over elements", func() {
+			var sum int
+			bookCollection.ForEach(func(index int, book Book) {
+				sum += 1
+
+				Expect(bookCollection.GetAt(index).Title).To(Equal(book.Title))
+			})
+
+			Expect(sum).To(Equal(3))
+		})
+
+		It("Should find elements", func() {
+			var index = bookCollection.FindFirst(func(_ int, book Book) bool {
+				return book.Title == "The Little Prince"
+			})
+
+			Expect(index).To(Equal(1))
+			Expect(bookCollection.GetAt(index).Title).To(Equal("The Little Prince"))
+		})
+
+		It("Should not find elements", func() {
+			var index = bookCollection.FindFirst(func(_ int, book Book) bool {
+				return book.Title == "The Great Gatsby"
+			})
+
+			Expect(index).To(Equal(-1))
+		})
+
+		It("Should try get elements in range", func() {
+			var book, ok = bookCollection.TryGetAt(0)
+			Expect(ok).To(BeTrue())
+			Expect(book.Title).To(Equal("The Alchemist"))
+
+			book, ok = bookCollection.TryGetAt(1)
+			Expect(ok).To(BeTrue())
+			Expect(book.Title).To(Equal("The Little Prince"))
+
+			book, ok = bookCollection.TryGetAt(2)
+			Expect(ok).To(BeTrue())
+			Expect(book.Title).To(Equal("The Catcher in the Rye"))
+		})
+
+		It("Should try get elements out of range", func() {
+			var book, ok = bookCollection.TryGetAt(-1)
+			Expect(ok).To(BeFalse())
+			Expect(book).To(Equal(utils.DefaultValue[Book]()))
+
+			book, ok = bookCollection.TryGetAt(3)
+			Expect(ok).To(BeFalse())
+			var defaultBook Book
+			Expect(book).To(Equal(defaultBook))
+		})
+
+		It("Should try set elements in range", func() {
+			var ok = bookCollection.TrySetAt(0, Book{
+				Title: "The Great Gatsby",
+			})
+			Expect(ok).To(BeTrue())
+			Expect(bookCollection.GetAt(0).Title).To(Equal("The Great Gatsby"))
+
+			ok = bookCollection.TrySetAt(1, Book{
+				Title: "To Kill a Mockingbird",
+			})
+			Expect(ok).To(BeTrue())
+			Expect(bookCollection.GetAt(1).Title).To(Equal("To Kill a Mockingbird"))
+
+			ok = bookCollection.TrySetAt(2, Book{
+				Title: "1984",
+			})
+			Expect(ok).To(BeTrue())
+			Expect(bookCollection.GetAt(2).Title).To(Equal("1984"))
+		})
+
+		It("Should try set elements out of range", func() {
+			var ok = bookCollection.TrySetAt(-1, Book{
+				Title: "The Great Gatsby",
+			})
+			Expect(ok).To(BeFalse())
+
+			ok = bookCollection.TrySetAt(3, Book{
+				Title: "To Kill a Mockingbird",
+			})
+			Expect(ok).To(BeFalse())
+		})
+
+		It("Should try remove elements in range", func() {
+			var book, ok = bookCollection.TryRemoveAt(0)
+			Expect(ok).To(BeTrue())
+			Expect(book.Title).To(Equal("The Alchemist"))
+
+			book, ok = bookCollection.TryRemoveAt(0)
+			Expect(ok).To(BeTrue())
+			Expect(book.Title).To(Equal("The Little Prince"))
+
+			book, ok = bookCollection.TryRemoveAt(0)
+			Expect(ok).To(BeTrue())
+			Expect(book.Title).To(Equal("The Catcher in the Rye"))
+
+			Expect(bookCollection.Count()).To(Equal(0))
+		})
+
+		It("Should try remove elements out of range", func() {
+			var book, ok = bookCollection.TryRemoveAt(-1)
+			Expect(ok).To(BeFalse())
+			Expect(book).To(Equal(utils.DefaultValue[Book]()))
+
+			book, ok = bookCollection.TryRemoveAt(11)
+			Expect(ok).To(BeFalse())
+			Expect(book).To(Equal(utils.DefaultValue[Book]()))
+		})
+	}
+}
+
+func testPointer(collection interfaces.ICollection[*Student]) func() {
+	return func() {
+		var studentCollection _IIndexableCollection[int, *Student]
+
+		BeforeEach(func() {
+			studentCollection = collection.Clone().(any).(_IIndexableCollection[int, *Student])
+
+			Expect(studentCollection.Count()).To(Equal(3))
+		})
+
+		It("Should get elements", func() {
+			Expect(studentCollection.GetAt(0).Name).To(Equal("Alice"))
+			Expect(studentCollection.GetAt(1).Name).To(Equal("Bob"))
+			Expect(studentCollection.GetAt(2).Name).To(Equal("Charlie"))
+		})
+
+		It("Should set elements", func() {
+			studentCollection.SetAt(0, &Student{
+				Name: "David",
+			})
+			studentCollection.SetAt(1, &Student{
+				Name: "Eve",
+			})
+			studentCollection.SetAt(2, &Student{
+				Name: "Frank",
+			})
+
+			Expect(studentCollection.GetAt(0).Name).To(Equal("David"))
+			Expect(studentCollection.GetAt(1).Name).To(Equal("Eve"))
+			Expect(studentCollection.GetAt(2).Name).To(Equal("Frank"))
+		})
+
+		It("Should convert to slice", func() {
+			var studentSlice = studentCollection.ToSlice()
+			Expect(studentSlice[0].Name).To(Equal("Alice"))
+			Expect(studentSlice[1].Name).To(Equal("Bob"))
+			Expect(studentSlice[2].Name).To(Equal("Charlie"))
+
+			Expect(len(studentSlice)).To(Equal(3))
+		})
+
+		It("Should iterate over elements", func() {
+			var sum int
+			studentCollection.ForEach(func(index int, student *Student) {
+				sum += 1
+
+				Expect(studentCollection.GetAt(index).Name).To(Equal(student.Name))
+			})
+
+			Expect(sum).To(Equal(3))
+		})
+
+		It("Should try get in range", func() {
+			var student, ok = studentCollection.TryGetAt(0)
+			Expect(ok).To(BeTrue())
+			Expect(student.Name).To(Equal("Alice"))
+
+			student, ok = studentCollection.TryGetAt(1)
+			Expect(ok).To(BeTrue())
+			Expect(student.Name).To(Equal("Bob"))
+
+			student, ok = studentCollection.TryGetAt(2)
+			Expect(ok).To(BeTrue())
+			Expect(student.Name).To(Equal("Charlie"))
+		})
+
+		It("Should try get out of range", func() {
+			var student, ok = studentCollection.TryGetAt(-1)
+			Expect(ok).To(BeFalse())
+			Expect(student).To(Equal(utils.DefaultValue[*Student]()))
+
+			student, ok = studentCollection.TryGetAt(3)
+			Expect(ok).To(BeFalse())
+			Expect(student).To(BeNil())
+		})
+
+		It("Should try set in range", func() {
+			var ok = studentCollection.TrySetAt(0, &Student{
+				Name: "David",
+			})
+			Expect(ok).To(BeTrue())
+			Expect(studentCollection.GetAt(0).Name).To(Equal("David"))
+
+			ok = studentCollection.TrySetAt(1, &Student{
+				Name: "Eve",
+			})
+			Expect(ok).To(BeTrue())
+			Expect(studentCollection.GetAt(1).Name).To(Equal("Eve"))
+
+			ok = studentCollection.TrySetAt(2, &Student{
+				Name: "Frank",
+			})
+			Expect(ok).To(BeTrue())
+			Expect(studentCollection.GetAt(2).Name).To(Equal("Frank"))
+		})
+
+		It("Should try set out of range", func() {
+			var ok = studentCollection.TrySetAt(-1, &Student{
+				Name: "David",
+			})
+			Expect(ok).To(BeFalse())
+
+			ok = studentCollection.TrySetAt(3, &Student{
+				Name: "Eve",
+			})
+			Expect(ok).To(BeFalse())
+		})
+
+		It("Should try remove in range", func() {
+			var student, ok = studentCollection.TryRemoveAt(0)
+			Expect(ok).To(BeTrue())
+			Expect(student.Name).To(Equal("Alice"))
+
+			student, ok = studentCollection.TryRemoveAt(0)
+			Expect(ok).To(BeTrue())
+			Expect(student.Name).To(Equal("Bob"))
+
+			student, ok = studentCollection.TryRemoveAt(0)
+			Expect(ok).To(BeTrue())
+			Expect(student.Name).To(Equal("Charlie"))
+
+			Expect(studentCollection.Count()).To(Equal(0))
+		})
+
+		It("Should try remove out of range", func() {
+			var student, ok = studentCollection.TryRemoveAt(-1)
+			Expect(ok).To(BeFalse())
+			Expect(student).To(Equal(utils.DefaultValue[*Student]()))
+
+			student, ok = studentCollection.TryRemoveAt(11)
+			Expect(ok).To(BeFalse())
+			Expect(student).To(BeNil())
 		})
 	}
 }
