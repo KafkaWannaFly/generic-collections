@@ -135,7 +135,7 @@ var _ = Describe("Hashmap Struct Test", func() {
 		})
 
 		It("Should be created from list of Entry", func() {
-			var entries = []hashmap.Entry[City, District]{
+			var entries = []*hashmap.Entry[City, District]{
 				hashmap.NewEntry(K1, V1),
 				hashmap.NewEntry(K2, V2),
 				hashmap.NewEntry(K3, V3),
@@ -155,7 +155,7 @@ var _ = Describe("Hashmap Struct Test", func() {
 
 		It("Should loop through all entries", func() {
 			var count = 0
-			cityMap.ForEach(func(entry hashmap.Entry[City, District]) {
+			cityMap.ForEach(func(entry *hashmap.Entry[City, District]) {
 				count++
 			})
 
@@ -223,7 +223,7 @@ var _ = Describe("Hashmap Struct Test", func() {
 		})
 
 		It("Should be able to filter entries", func() {
-			var filtered = cityMap.Filter(func(entry hashmap.Entry[City, District]) bool {
+			var filtered = cityMap.Filter(func(entry *hashmap.Entry[City, District]) bool {
 				return entry.Key.Name == "Istanbul"
 			})
 

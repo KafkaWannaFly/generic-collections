@@ -70,7 +70,7 @@ var _ = Describe("Hashmap", func() {
 		})
 
 		It("Should find the key", func() {
-			var k1 = stringMap.Find(func(entry hashmap.Entry[string, string]) bool {
+			var k1 = stringMap.Find(func(entry *hashmap.Entry[string, string]) bool {
 				return entry.Value == "value1"
 			})
 
@@ -78,7 +78,7 @@ var _ = Describe("Hashmap", func() {
 		})
 
 		It("Should not find the key", func() {
-			var k6 = stringMap.Find(func(entry hashmap.Entry[string, string]) bool {
+			var k6 = stringMap.Find(func(entry *hashmap.Entry[string, string]) bool {
 				return entry.Value == "value6"
 			})
 
@@ -86,7 +86,7 @@ var _ = Describe("Hashmap", func() {
 		})
 
 		It("Should be created from list of Entry", func() {
-			var entries = []hashmap.Entry[string, string]{
+			var entries = []*hashmap.Entry[string, string]{
 				{Key: "key6", Value: "value6"},
 				{Key: "key7", Value: "value7"},
 				{Key: "key8", Value: "value8"},
@@ -100,7 +100,7 @@ var _ = Describe("Hashmap", func() {
 
 		It("Should loop through all entries", func() {
 			var count = 0
-			stringMap.ForEach(func(entry hashmap.Entry[string, string]) {
+			stringMap.ForEach(func(entry *hashmap.Entry[string, string]) {
 				count++
 			})
 
@@ -194,7 +194,7 @@ var _ = Describe("Hashmap", func() {
 		})
 
 		It("Should be able to filter the map", func() {
-			var filtered = stringMap.Filter(func(entry hashmap.Entry[string, string]) bool {
+			var filtered = stringMap.Filter(func(entry *hashmap.Entry[string, string]) bool {
 				return entry.Value == "value1" || entry.Value == "value2"
 			})
 			Expect(filtered.Count()).To(Equal(2))
@@ -211,7 +211,7 @@ var _ = Describe("Hashmap", func() {
 			Expect(cloned.Count()).To(Equal(stringMap.Count()))
 			Expect(cloned.HasAll(stringMap.GetEntries()...)).To(BeTrue())
 
-			cloned.ForEach(func(entry hashmap.Entry[string, string]) {
+			cloned.ForEach(func(entry *hashmap.Entry[string, string]) {
 				Expect(stringMap.Get(entry.Key)).To(Equal(entry.Value))
 			})
 		})
