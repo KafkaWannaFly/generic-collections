@@ -3,6 +3,7 @@ package linkedlist
 import (
 	"generic-collections/doctor"
 	"generic-collections/guard"
+	"generic-collections/hashmap"
 	"generic-collections/interfaces"
 	"generic-collections/set"
 	"generic-collections/utils"
@@ -461,6 +462,24 @@ func (receiver *LinkedList[T]) TryNodeAt(index int) (*Node[T], bool) {
 	defer doctor.RecoverDefaultFalse[*Node[T]]()
 
 	return receiver.NodeAt(index), true
+}
+
+// Map applies the given mapper function to each element of the list.
+// Returns a new list containing the results. Don't modify the original list.
+func (receiver *LinkedList[T]) Map(mapper func(int, T) any) *LinkedList[any] {
+	return Map(receiver, mapper)
+}
+
+// Reduce applies the given reducer function to each element of the list.
+// Returns the accumulated result.
+func (receiver *LinkedList[T]) Reduce(reducer func(any, T) any, initialValue any) any {
+	return Reduce(receiver, reducer, initialValue)
+}
+
+// GroupBy groups the elements of the list by the specified key.
+// Returns a map where the key is the result of the keySelector function
+func (receiver *LinkedList[T]) GroupBy(keySelector func(T) any) *hashmap.HashMap[any, *LinkedList[T]] {
+	return GroupBy(receiver, keySelector)
 }
 
 // endregion
