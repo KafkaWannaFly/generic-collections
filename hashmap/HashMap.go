@@ -50,14 +50,12 @@ func (receiver *HashMap[K, V]) ForEach(appliedFunc func(key K, value V)) {
 // Add new element to the hashmap.
 // If the element already exists, it is overwritten.
 // Returns the hashmap itself.
-func (receiver *HashMap[K, V]) Add(key K, value V) *HashMap[K, V] {
-	item := NewEntry(key, value)
-
-	if !receiver.Has(item) {
+func (receiver *HashMap[K, V]) Add(entry *Entry[K, V]) *HashMap[K, V] {
+	if !receiver.Has(entry) {
 		receiver.count++
 	}
 
-	receiver.elements[item.HashCode()] = item
+	receiver.elements[entry.HashCode()] = entry
 
 	return receiver
 }
@@ -67,7 +65,7 @@ func (receiver *HashMap[K, V]) Add(key K, value V) *HashMap[K, V] {
 // Returns the hashmap itself.
 func (receiver *HashMap[K, V]) AddAll(items ...*Entry[K, V]) *HashMap[K, V] {
 	for _, item := range items {
-		receiver.Add(item.Key, item.Value)
+		receiver.Add(item)
 	}
 
 	receiver.count = len(receiver.elements)
@@ -157,7 +155,7 @@ func (receiver *HashMap[K, V]) Clone() *HashMap[K, V] {
 // Put adds a new element to the hashmap. Similar to Add method.
 // Returns the hashmap itself.
 func (receiver *HashMap[K, V]) Put(key K, value V) *HashMap[K, V] {
-	receiver.Add(key, value)
+	receiver.Add(NewEntry(key, value))
 
 	return receiver
 }
@@ -234,7 +232,7 @@ func (receiver *HashMap[K, V]) Get(index K) V {
 // If the key does not exist, a new element is created with the specified key and value.
 // If the key exists, the value of the element is updated.
 func (receiver *HashMap[K, V]) Set(key K, value V) {
-	receiver.Add(key, value)
+	receiver.Add(NewEntry(key, value))
 }
 
 // Find the key of the first element that satisfies the predicate.
