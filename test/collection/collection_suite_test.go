@@ -5,6 +5,7 @@ import (
 	"generic-collections/linkedlist"
 	"generic-collections/list"
 	"generic-collections/set"
+	"generic-collections/utils"
 	"testing"
 
 	. "github.com/onsi/ginkgo/v2"
@@ -313,25 +314,25 @@ func (receiver *Student) SetName(name string) {
 
 func structTests(collection interfaces.ICollection[Book]) func() {
 	return func() {
-		var bookList interfaces.ICollection[Book]
+		var bookCollection interfaces.ICollection[Book]
 
 		BeforeEach(func() {
-			bookList = collection.Clone()
+			bookCollection = collection.Clone()
 
-			Expect(bookList.Count()).To(Equal(3))
+			Expect(bookCollection.Count()).To(Equal(3))
 		})
 
 		It("Should add elements", func() {
-			bookList.Add(
+			bookCollection.Add(
 				Book{
 					Title: "The Great Gatsby",
 				})
 
-			Expect(bookList.Count()).To(Equal(4))
+			Expect(bookCollection.Count()).To(Equal(4))
 		})
 
 		It("Should add all elements", func() {
-			bookList.AddAll(list.From(
+			bookCollection.AddAll(list.From(
 				Book{
 					Title: "The Great Gatsby",
 				},
@@ -349,28 +350,28 @@ func structTests(collection interfaces.ICollection[Book]) func() {
 				},
 			))
 
-			Expect(bookList.Count()).To(Equal(8))
+			Expect(bookCollection.Count()).To(Equal(8))
 		})
 
 		It("Should clear all elements", func() {
-			bookList.Clear()
+			bookCollection.Clear()
 
-			Expect(bookList.Count()).To(Equal(0))
-			Expect(bookList.IsEmpty()).To(BeTrue())
+			Expect(bookCollection.Count()).To(Equal(0))
+			Expect(bookCollection.IsEmpty()).To(BeTrue())
 		})
 
 		It("Should contain an element", func() {
-			Expect(bookList.Has(Book{
+			Expect(bookCollection.Has(Book{
 				Title: "The Alchemist",
 			})).To(BeTrue())
 
-			Expect(bookList.Has(Book{
+			Expect(bookCollection.Has(Book{
 				Title: "The Great Gatsby",
 			})).To(BeFalse())
 		})
 
 		It("Should contain all elements", func() {
-			Expect(bookList.HasAll(list.From(
+			Expect(bookCollection.HasAll(list.From(
 				Book{
 					Title: "The Alchemist",
 				},
@@ -382,7 +383,7 @@ func structTests(collection interfaces.ICollection[Book]) func() {
 				},
 			))).To(BeTrue())
 
-			Expect(bookList.HasAll(list.From(
+			Expect(bookCollection.HasAll(list.From(
 				Book{
 					Title: "The Alchemist",
 				},
@@ -393,7 +394,7 @@ func structTests(collection interfaces.ICollection[Book]) func() {
 		})
 
 		It("Should contain any element", func() {
-			Expect(bookList.HasAny(list.From(
+			Expect(bookCollection.HasAny(list.From(
 				Book{
 					Title: "The Alchemist",
 				},
@@ -405,7 +406,7 @@ func structTests(collection interfaces.ICollection[Book]) func() {
 				},
 			))).To(BeTrue())
 
-			Expect(bookList.HasAny(list.From(
+			Expect(bookCollection.HasAny(list.From(
 				Book{
 					Title: "The Great Gatsby",
 				},
@@ -413,7 +414,7 @@ func structTests(collection interfaces.ICollection[Book]) func() {
 		})
 
 		It("Should filter elements", func() {
-			filtered := bookList.Filter(func(book Book) bool {
+			filtered := bookCollection.Filter(func(book Book) bool {
 				return book.PublishedYear > 1950
 			})
 
@@ -422,11 +423,25 @@ func structTests(collection interfaces.ICollection[Book]) func() {
 
 		It("Should iterate over elements", func() {
 			var sum int
-			bookList.ForEach(func(index int, book Book) {
+			bookCollection.ForEach(func(index int, book Book) {
 				sum += 1
 			})
 
 			Expect(sum).To(Equal(3))
+		})
+
+		It("Should clone collection", func() {
+			clonedCollection := collection.Clone()
+
+			Expect(&clonedCollection).ToNot(BeIdenticalTo(&collection)) // Address should not be the same
+
+			clonedCollection.ForEach(func(_ int, book Book) {
+				collection.ForEach(func(_ int, originalBook Book) {
+					if utils.IsEqual(book, originalBook) {
+						Expect(&book).ToNot(BeIdenticalTo(&originalBook)) // Address should not be the same
+					}
+				})
+			})
 		})
 	}
 }
@@ -532,6 +547,12 @@ func pointerTests(collection interfaces.ICollection[*Student]) func() {
 			})
 
 			Expect(sum).To(Equal(3))
+		})
+
+		It("Should clone collection", func() {
+			clonedCollection := collection.Clone()
+
+			Expect(&clonedCollection).ToNot(BeIdenticalTo(&collection)) // Address should not be the same
 		})
 	}
 }
