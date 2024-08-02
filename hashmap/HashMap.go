@@ -38,21 +38,21 @@ func Of[K comparable, V any](inputMap map[K]V) *HashMap[K, V] {
 	return result
 }
 
-// region HashMap specific methods
-
 // ForEach iterates over the elements of the hashmap.
 // First argument of the appliedFunc is always 0 because hashmaps do not have indexes.
 // Second argument of the appliedFunc is the entry of the hashmap.
-func (receiver *HashMap[K, V]) ForEach(appliedFunc func(*Entry[K, V])) {
+func (receiver *HashMap[K, V]) ForEach(appliedFunc func(key K, value V)) {
 	for _, element := range receiver.elements {
-		appliedFunc(element)
+		appliedFunc(element.Key, element.Value)
 	}
 }
 
 // Add new element to the hashmap.
 // If the element already exists, it is overwritten.
 // Returns the hashmap itself.
-func (receiver *HashMap[K, V]) Add(item *Entry[K, V]) *HashMap[K, V] {
+func (receiver *HashMap[K, V]) Add(key K, value V) *HashMap[K, V] {
+	item := NewEntry(key, value)
+
 	if !receiver.Has(item) {
 		receiver.count++
 	}
@@ -67,7 +67,7 @@ func (receiver *HashMap[K, V]) Add(item *Entry[K, V]) *HashMap[K, V] {
 // Returns the hashmap itself.
 func (receiver *HashMap[K, V]) AddAll(items ...*Entry[K, V]) *HashMap[K, V] {
 	for _, item := range items {
-		receiver.Add(item)
+		receiver.Add(item.Key, item.Value)
 	}
 
 	receiver.count = len(receiver.elements)
@@ -123,11 +123,11 @@ func (receiver *HashMap[K, V]) Clear() *HashMap[K, V] {
 // Filter removes the elements that do not satisfy the predicate.
 // Return a new hashmap with the filtered elements.
 // The original hashmap is not modified.
-func (receiver *HashMap[K, V]) Filter(predicate func(*Entry[K, V]) bool) *HashMap[K, V] {
+func (receiver *HashMap[K, V]) Filter(predicate func(key K, value V) bool) *HashMap[K, V] {
 	var filtered = New[K, V]()
-	receiver.ForEach(func(entry *Entry[K, V]) {
-		if predicate(entry) {
-			filtered.Add(entry)
+	receiver.ForEach(func(key K, value V) {
+		if predicate(key, value) {
+			filtered.Put(key, value)
 		}
 	})
 
@@ -137,8 +137,8 @@ func (receiver *HashMap[K, V]) Filter(predicate func(*Entry[K, V]) bool) *HashMa
 // ToSlice converts the hashmap to a slice of entries.
 func (receiver *HashMap[K, V]) ToSlice() []*Entry[K, V] {
 	var slice = make([]*Entry[K, V], 0, receiver.Count())
-	receiver.ForEach(func(entry *Entry[K, V]) {
-		slice = append(slice, entry)
+	receiver.ForEach(func(key K, value V) {
+		slice = append(slice, NewEntry(key, value))
 	})
 	return slice
 }
@@ -157,35 +157,32 @@ func (receiver *HashMap[K, V]) Clone() *HashMap[K, V] {
 // Put adds a new element to the hashmap. Similar to Add method.
 // Returns the hashmap itself.
 func (receiver *HashMap[K, V]) Put(key K, value V) *HashMap[K, V] {
-	receiver.Add(&Entry[K, V]{
-		Key:   key,
-		Value: value,
-	})
+	receiver.Add(key, value)
 
 	return receiver
 }
 
-// GetKeys returns all keys of the hashmap.
-func (receiver *HashMap[K, V]) GetKeys() []K {
+// Keys returns all keys of the hashmap.
+func (receiver *HashMap[K, V]) Keys() []K {
 	var keys = make([]K, 0, receiver.Count())
-	receiver.ForEach(func(entry *Entry[K, V]) {
-		keys = append(keys, entry.Key)
+	receiver.ForEach(func(key K, value V) {
+		keys = append(keys, key)
 	})
 	return keys
 }
 
-// GetValues returns all values of the hashmap.
-func (receiver *HashMap[K, V]) GetValues() []V {
+// Values returns all values of the hashmap.
+func (receiver *HashMap[K, V]) Values() []V {
 	var values = make([]V, 0, receiver.Count())
-	receiver.ForEach(func(entry *Entry[K, V]) {
-		values = append(values, entry.Value)
+	receiver.ForEach(func(key K, value V) {
+		values = append(values, value)
 	})
 	return values
 }
 
-// GetEntries returns all entries of the hashmap.
+// Entries returns all entries of the hashmap.
 // Equivalent to ToSlice method.
-func (receiver *HashMap[K, V]) GetEntries() []*Entry[K, V] {
+func (receiver *HashMap[K, V]) Entries() []*Entry[K, V] {
 	return receiver.ToSlice()
 }
 
@@ -220,10 +217,6 @@ func (receiver *HashMap[K, V]) HasAnyKey(keys []K) bool {
 	return hasAny
 }
 
-// endregion
-
-// region IIndexable implementation
-
 // Get the value of the element at the specified key.
 // If the key does not exist, default value of the value type is returned.
 func (receiver *HashMap[K, V]) Get(index K) V {
@@ -241,15 +234,15 @@ func (receiver *HashMap[K, V]) Get(index K) V {
 // If the key does not exist, a new element is created with the specified key and value.
 // If the key exists, the value of the element is updated.
 func (receiver *HashMap[K, V]) Set(key K, value V) {
-	receiver.Add(&Entry[K, V]{Key: key, Value: value})
+	receiver.Add(key, value)
 }
 
 // Find the key of the first element that satisfies the predicate.
-func (receiver *HashMap[K, V]) Find(predicate func(entry *Entry[K, V]) bool) K {
+func (receiver *HashMap[K, V]) Find(predicate func(K, V) bool) K {
 	var key K
-	receiver.ForEach(func(entry *Entry[K, V]) {
-		if predicate(entry) {
-			key = entry.Key
+	receiver.ForEach(func(k K, v V) {
+		if predicate(k, v) {
+			key = k
 		}
 	})
 
@@ -273,8 +266,6 @@ func (receiver *HashMap[K, V]) Remove(key K) V {
 
 	return utils.DefaultValue[V]()
 }
-
-// endregion
 
 // region Package functions
 

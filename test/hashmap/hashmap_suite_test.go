@@ -70,16 +70,16 @@ var _ = Describe("Hashmap", func() {
 		})
 
 		It("Should find the key", func() {
-			var k1 = stringMap.Find(func(entry *hashmap.Entry[string, string]) bool {
-				return entry.Value == "value1"
+			var k1 = stringMap.Find(func(key string, value string) bool {
+				return value == "value1"
 			})
 
 			Expect(k1).To(Equal("key1"))
 		})
 
 		It("Should not find the key", func() {
-			var k6 = stringMap.Find(func(entry *hashmap.Entry[string, string]) bool {
-				return entry.Value == "value6"
+			var k6 = stringMap.Find(func(key string, value string) bool {
+				return value == "value6"
 			})
 
 			Expect(k6).To(BeEmpty())
@@ -100,7 +100,7 @@ var _ = Describe("Hashmap", func() {
 
 		It("Should loop through all entries", func() {
 			var count = 0
-			stringMap.ForEach(func(entry *hashmap.Entry[string, string]) {
+			stringMap.ForEach(func(key string, value string) {
 				count++
 			})
 
@@ -123,7 +123,7 @@ var _ = Describe("Hashmap", func() {
 			Expect(stringMap.HasKey("key8")).To(BeTrue())
 			Expect(stringMap.HasKey("key9")).To(BeFalse())
 
-			Expect(stringMap.HasAllKey(newMap.GetKeys())).To(BeTrue())
+			Expect(stringMap.HasAllKey(newMap.Keys())).To(BeTrue())
 		})
 
 		It("Should not has all entries from another map", func() {
@@ -135,8 +135,8 @@ var _ = Describe("Hashmap", func() {
 			Expect(stringMap.HasAll(newMap.ToSlice()...)).To(BeFalse())
 			Expect(newMap.HasAll(stringMap.ToSlice()...)).To(BeFalse())
 
-			Expect(stringMap.HasAllKey(newMap.GetKeys())).To(BeFalse())
-			Expect(newMap.HasAllKey(stringMap.GetKeys())).To(BeFalse())
+			Expect(stringMap.HasAllKey(newMap.Keys())).To(BeFalse())
+			Expect(newMap.HasAllKey(stringMap.Keys())).To(BeFalse())
 		})
 
 		It("Should has any entries from another map", func() {
@@ -161,19 +161,19 @@ var _ = Describe("Hashmap", func() {
 		})
 
 		It("Should be able to get all keys", func() {
-			var keys = stringMap.GetKeys()
+			var keys = stringMap.Keys()
 			Expect(len(keys)).To(Equal(5))
 			Expect(keys).To(ContainElements("key1", "key2", "key3", "key4", "key5"))
 		})
 
 		It("Should be able to get all values", func() {
-			var values = stringMap.GetValues()
+			var values = stringMap.Values()
 			Expect(len(values)).To(Equal(5))
 			Expect(values).To(ContainElements("value1", "value2", "value3", "value4", "value5"))
 		})
 
 		It("Should be able to get all entries", func() {
-			var entries = stringMap.GetEntries()
+			var entries = stringMap.Entries()
 			Expect(len(entries)).To(Equal(5))
 
 			Expect(entries).To(
@@ -194,8 +194,8 @@ var _ = Describe("Hashmap", func() {
 		})
 
 		It("Should be able to filter the map", func() {
-			var filtered = stringMap.Filter(func(entry *hashmap.Entry[string, string]) bool {
-				return entry.Value == "value1" || entry.Value == "value2"
+			var filtered = stringMap.Filter(func(key string, value string) bool {
+				return value == "value1" || value == "value2"
 			})
 			Expect(filtered.Count()).To(Equal(2))
 
@@ -209,10 +209,11 @@ var _ = Describe("Hashmap", func() {
 			var cloned = stringMap.Clone()
 
 			Expect(cloned.Count()).To(Equal(stringMap.Count()))
-			Expect(cloned.HasAll(stringMap.GetEntries()...)).To(BeTrue())
+			Expect(cloned.HasAll(stringMap.Entries()...)).To(BeTrue())
+			Expect(cloned).NotTo(BeIdenticalTo(stringMap))
 
-			cloned.ForEach(func(entry *hashmap.Entry[string, string]) {
-				Expect(stringMap.Get(entry.Key)).To(Equal(entry.Value))
+			cloned.ForEach(func(key string, value string) {
+				Expect(stringMap.Get(key)).To(Equal(value))
 			})
 		})
 
