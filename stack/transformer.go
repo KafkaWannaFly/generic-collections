@@ -16,12 +16,13 @@ func Map[TType any, TResult any](collection *Stack[TType], mapper func(TType) TR
 
 // Reduce reduces the stack to a single value by accumulating items
 // The accumulator function receives the current accumulated value and the next item
-func Reduce[TType any, TResult any](collection *Stack[TType], reducer func(int, TType) TResult, initialValue TResult) TResult {
-	collection.ForEach(func(i int, item TType) {
-		initialValue = reducer(i, item)
+func Reduce[TType any, TResult any](collection *Stack[TType], reducer func(TResult, TType) TResult, initialValue TResult) TResult {
+	var result = initialValue
+	collection.ForEach(func(_ int, item TType) {
+		result = reducer(result, item)
 	})
 
-	return initialValue
+	return result
 }
 
 // GroupBy groups the elements of the stack by the specified key
