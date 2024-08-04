@@ -249,3 +249,17 @@ func (receiver *Queue[T]) GroupBy(keySelector func(T) any) *hashmap.HashMap[any,
 }
 
 // endregion
+
+// region package methods.
+
+// IsQueue returns true if the collection is a queue.
+func IsQueue[T any](collection interfaces.ICollection[T]) bool {
+	if collection == nil {
+		return false
+	}
+
+	_, ok := collection.(*Queue[T])
+	return ok
+}
+
+// endregion

@@ -245,3 +245,18 @@ func (receiver *Stack[T]) GroupBy(keySelector func(T) any) *hashmap.HashMap[any,
 }
 
 // endregion.
+
+// region Package functions
+
+// IsStack checks if the specified collection is a stack.
+func IsStack[T any](collection any) bool {
+	if collection == nil {
+		return false
+	}
+
+	_, ok := collection.(*Stack[T])
+
+	return ok
+}
+
+// endregion

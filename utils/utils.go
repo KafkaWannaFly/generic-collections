@@ -7,10 +7,9 @@ import (
 
 // IsEqual If a, b implement IComparer, then use Compare method to compare them.
 // If a, b implement IHashCoder, then use HashCode method to compare them.
-// Else. use == operand
+// Else. use fmt.Sprintf to convert item to string
 func IsEqual[T any](a T, b T) bool {
 	var ia interface{} = a
-	var ib interface{} = b
 
 	iComparerA, aOk := ia.(interfaces.IComparer[T])
 
@@ -18,12 +17,7 @@ func IsEqual[T any](a T, b T) bool {
 		return iComparerA.Compare(b) == 0
 	}
 
-	iHashCoder, aOk := ia.(interfaces.IHashCoder)
-	if aOk {
-		return iHashCoder.HashCode() == HashCodeOf(b)
-	}
-
-	return ia == ib
+	return HashCodeOf(a) == HashCodeOf(b)
 }
 
 // HashCodeOf If item implement IHashCoder, then use HashCode method to get hash code.
