@@ -1,6 +1,7 @@
 package queue
 
 import (
+	"generic-collections/hashmap"
 	"generic-collections/interfaces"
 	"generic-collections/linkedlist"
 )
@@ -191,6 +192,60 @@ func (receiver *Queue[T]) FindLast(predicate func(int, T) bool) int {
 // FindAll returns the indexes of all items that match the predicate.
 func (receiver *Queue[T]) FindAll(predicate func(int, T) bool) []int {
 	return receiver.super.FindAll(predicate)
+}
+
+// endregion
+
+// region Queue[T] methods.
+
+// Dequeue removes and returns the item at the beginning of the queue.
+// Panics if the queue is empty.
+func (receiver *Queue[T]) Dequeue() T {
+	return receiver.RemoveFirst()
+}
+
+// TryDequeue removes and returns the item at the beginning of the queue.
+// Returns default value and false if the queue is empty.
+// Otherwise, returns the item and true.
+func (receiver *Queue[T]) TryDequeue() (T, bool) {
+	return receiver.TryRemoveAt(0)
+}
+
+// Enqueue adds an item to the end of the queue.
+func (receiver *Queue[T]) Enqueue(item T) {
+	receiver.Add(item)
+}
+
+// Peek returns the item at the beginning of the queue.
+// Panics if the queue is empty.
+func (receiver *Queue[T]) Peek() T {
+	return receiver.GetAt(0)
+}
+
+// TryPeek returns the item at the beginning of the queue.
+// Returns default value and false if the queue is empty.
+// Otherwise, returns the item and true.
+func (receiver *Queue[T]) TryPeek() (T, bool) {
+	return receiver.TryGetAt(0)
+}
+
+// Map applies a function to each item in the queue and returns a new queue with the results.
+// The original queue remains unchanged.
+func (receiver *Queue[T]) Map(mapper func(int, T) any) *Queue[any] {
+	return Map(receiver, mapper)
+}
+
+// Reduce applies a function to each item in the queue and returns the accumulated result.
+// The original queue remains unchanged.
+func (receiver *Queue[T]) Reduce(reducer func(any, T) any, initial any) any {
+	return Reduce(receiver, reducer, initial)
+}
+
+// GroupBy groups the items in the queue by the specified key.
+// Returns a map where the key is the result of the keySelector function.
+// The original queue remains unchanged.
+func (receiver *Queue[T]) GroupBy(keySelector func(T) any) *hashmap.HashMap[any, *Queue[T]] {
+	return GroupBy(receiver, keySelector)
 }
 
 // endregion
