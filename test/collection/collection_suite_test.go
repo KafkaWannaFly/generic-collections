@@ -4,6 +4,7 @@ import (
 	"generic-collections/interfaces"
 	"generic-collections/linkedlist"
 	"generic-collections/list"
+	"generic-collections/queue"
 	"generic-collections/set"
 	"generic-collections/stack"
 	"generic-collections/utils"
@@ -32,6 +33,9 @@ var _ = Describe("Test Collection", func() {
 
 		var integerStack = stack.From(1, 2, 3, 4, 5, 6, 7, 8, 9, 10)
 		Context("For Stack", integerTests(integerStack))
+
+		var integerQueue = queue.From(1, 2, 3, 4, 5, 6, 7, 8, 9, 10)
+		Context("For Queue", integerTests(integerQueue))
 	})
 
 	When("Using string", func() {
@@ -57,6 +61,9 @@ var _ = Describe("Test Collection", func() {
 
 		var stringStack = stack.From(stringList.ToSlice()...)
 		Context("For Stack", stringTests(stringStack))
+
+		var stringQueue = queue.From(stringList.ToSlice()...)
+		Context("For Queue", stringTests(stringQueue))
 	})
 
 	When("Using struct", func() {
@@ -114,6 +121,9 @@ var _ = Describe("Test Collection", func() {
 
 		var bookStack = stack.From(bookList.ToSlice()...)
 		Context("For Stack", structTests(bookStack))
+
+		var bookQueue = queue.From(bookList.ToSlice()...)
+		Context("For Queue", structTests(bookQueue))
 	})
 
 	When("Using pointer", func() {
@@ -144,6 +154,9 @@ var _ = Describe("Test Collection", func() {
 
 		var studentStack = stack.From(studentList.ToSlice()...)
 		Context("For Stack", pointerTests(studentStack))
+
+		var studentQueue = queue.From(studentList.ToSlice()...)
+		Context("For Queue", pointerTests(studentQueue))
 	})
 })
 
