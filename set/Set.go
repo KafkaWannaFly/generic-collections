@@ -148,6 +148,11 @@ func (receiver *Set[T]) Clone() interfaces.ICollection[T] {
 	return set
 }
 
+// Default Return a default empty set
+func (receiver *Set[T]) Default() interfaces.ICollection[T] {
+	return New[T]()
+}
+
 // endregion
 
 // region Set[TItem] specific methods

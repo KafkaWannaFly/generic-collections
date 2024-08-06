@@ -193,6 +193,11 @@ func (receiver *Stack[T]) FindAll(predicate func(int, T) bool) []int {
 	return receiver.super.FindAll(predicate)
 }
 
+// Default returns a default empty stack.
+func (receiver *Stack[T]) Default() interfaces.ICollection[T] {
+	return New[T]()
+}
+
 // endregion
 
 // region Stack[T] methods.

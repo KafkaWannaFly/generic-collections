@@ -13,4 +13,5 @@ type ICollection[TItem any] interface {
 	ToSlice() []TItem
 	IsEmpty() bool
 	Clone() ICollection[TItem]
+	Default() ICollection[TItem]
 }

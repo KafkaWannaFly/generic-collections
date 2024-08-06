@@ -194,6 +194,11 @@ func (receiver *Queue[T]) FindAll(predicate func(int, T) bool) []int {
 	return receiver.super.FindAll(predicate)
 }
 
+// Default returns an empty queue.
+func (receiver *Queue[T]) Default() interfaces.ICollection[T] {
+	return New[T]()
+}
+
 // endregion
 
 // region Queue[T] methods.

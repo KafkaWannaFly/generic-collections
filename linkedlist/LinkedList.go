@@ -438,6 +438,11 @@ func (receiver *LinkedList[T]) FindAll(predicate func(int, T) bool) []int {
 	return indexes
 }
 
+// Default return a default empty LinkedList
+func (receiver *LinkedList[T]) Default() interfaces.ICollection[T] {
+	return New[T]()
+}
+
 // endregion
 
 // region LinkedList[T] specific methods

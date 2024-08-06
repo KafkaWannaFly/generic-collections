@@ -13,11 +13,7 @@ type List[T any] struct {
 	count    int
 }
 
-var _ interfaces.ICollection[any] = (*List[any])(nil)
-var _ interfaces.IIndexableGetSet[int, any] = (*List[any])(nil)
-var _ interfaces.IIndexableAdder[int, any] = (*List[any])(nil)
-var _ interfaces.IIndexableRemover[int, any] = (*List[any])(nil)
-var _ interfaces.IIndexableFinder[int, any] = (*List[any])(nil)
+var _ interfaces.IIndexableCollection[int, int] = (*List[int])(nil)
 
 // New creates a new empty list.
 func New[T any]() *List[T] {
@@ -323,6 +319,31 @@ func (receiver *List[T]) FindAll(predicate func(int, T) bool) []int {
 
 	return indexes
 }
+
+// Default returns a new empty list.
+func (receiver *List[T]) Default() interfaces.ICollection[T] {
+	return New[T]()
+}
+
+//
+//func (receiver *List[T]) Slice(index int, length int) interfaces.IIndexableCollection[int, T] {
+//	guard.EnsureIndexRange(index, receiver.count)
+//
+//	out := New[T]()
+//	if length == 0 {
+//		return out
+//	} else if length > 0 {
+//		for i := index; i < receiver.count; i++ {
+//			if i < index+length {
+//				out.Add(receiver.elements[i])
+//			}
+//		}
+//	} else {
+//
+//	}
+//
+//	return out
+//}
 
 // endregion
 
