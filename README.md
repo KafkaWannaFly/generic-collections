@@ -1,0 +1,3 @@
+# Generic Collections of Golang
+
+Provide familiar generic data structures with many convenient methods. Documentation is under construction...
