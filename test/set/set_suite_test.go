@@ -1,7 +1,7 @@
 package set_test
 
 import (
-	"generic-collections/set"
+	"github.com/KafkaWannaFly/generic-collections/set"
 	"strconv"
 	"testing"
 

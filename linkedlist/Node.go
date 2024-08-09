@@ -1,8 +1,8 @@
 package linkedlist
 
 import (
-	"generic-collections/interfaces"
-	"generic-collections/utils"
+	"github.com/KafkaWannaFly/generic-collections/interfaces"
+	"github.com/KafkaWannaFly/generic-collections/utils"
 )
 
 type Node[T any] struct {

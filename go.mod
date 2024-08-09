@@ -1,4 +1,4 @@
-module generic-collections
+module github.com/KafkaWannaFly/generic-collections
 
 go 1.22.4
 

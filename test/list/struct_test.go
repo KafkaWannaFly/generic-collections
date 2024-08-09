@@ -1,7 +1,7 @@
 package list
 
 import (
-	"generic-collections/list"
+	"github.com/KafkaWannaFly/generic-collections/list"
 	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"
 )

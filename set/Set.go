@@ -1,9 +1,9 @@
 package set
 
 import (
-	"generic-collections/hashmap"
-	"generic-collections/interfaces"
-	"generic-collections/utils"
+	"github.com/KafkaWannaFly/generic-collections/hashmap"
+	"github.com/KafkaWannaFly/generic-collections/interfaces"
+	"github.com/KafkaWannaFly/generic-collections/utils"
 )
 
 // Set implements the ICollection interface

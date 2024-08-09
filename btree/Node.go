@@ -1,6 +1,6 @@
 package btree
 
-import "generic-collections/interfaces"
+import "github.com/KafkaWannaFly/generic-collections/interfaces"
 
 type Node[T any] struct {
 	interfaces.IComparer[Node[T]]

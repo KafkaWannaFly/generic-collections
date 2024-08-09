@@ -1,7 +1,7 @@
 package stack_test
 
 import (
-	"generic-collections/stack"
+	"github.com/KafkaWannaFly/generic-collections/stack"
 	"testing"
 
 	. "github.com/onsi/ginkgo/v2"

@@ -1,9 +1,9 @@
 package queue
 
 import (
-	"generic-collections/hashmap"
-	"generic-collections/interfaces"
-	"generic-collections/linkedlist"
+	"github.com/KafkaWannaFly/generic-collections/hashmap"
+	"github.com/KafkaWannaFly/generic-collections/interfaces"
+	"github.com/KafkaWannaFly/generic-collections/linkedlist"
 )
 
 // Queue represents a FIFO (First In First Out) collection.

@@ -1,7 +1,7 @@
 package queue_test
 
 import (
-	"generic-collections/queue"
+	"github.com/KafkaWannaFly/generic-collections/queue"
 	"testing"
 
 	. "github.com/onsi/ginkgo/v2"

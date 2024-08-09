@@ -1,7 +1,7 @@
 package list
 
 import (
-	"generic-collections/hashmap"
+	"github.com/KafkaWannaFly/generic-collections/hashmap"
 )
 
 // Map applies the given mapper function to each element of the list.

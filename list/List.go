@@ -1,11 +1,11 @@
 package list
 
 import (
-	"generic-collections/doctor"
-	"generic-collections/guard"
-	"generic-collections/hashmap"
-	"generic-collections/interfaces"
-	"generic-collections/utils"
+	"github.com/KafkaWannaFly/generic-collections/doctor"
+	"github.com/KafkaWannaFly/generic-collections/guard"
+	"github.com/KafkaWannaFly/generic-collections/hashmap"
+	"github.com/KafkaWannaFly/generic-collections/interfaces"
+	"github.com/KafkaWannaFly/generic-collections/utils"
 )
 
 type List[T any] struct {

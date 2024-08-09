@@ -1,7 +1,7 @@
 package hashmap
 
 import (
-	"generic-collections/utils"
+	"github.com/KafkaWannaFly/generic-collections/utils"
 )
 
 // HashMap is a collection that stores key-value pairs.

@@ -1,9 +1,9 @@
 package stack
 
 import (
-	"generic-collections/hashmap"
-	"generic-collections/interfaces"
-	"generic-collections/linkedlist"
+	"github.com/KafkaWannaFly/generic-collections/hashmap"
+	"github.com/KafkaWannaFly/generic-collections/interfaces"
+	"github.com/KafkaWannaFly/generic-collections/linkedlist"
 )
 
 // Stack represents a LIFO (Last In First Out) collection.

@@ -1,6 +1,6 @@
 package btree
 
-import "generic-collections/interfaces"
+import "github.com/KafkaWannaFly/generic-collections/interfaces"
 
 type BTree[T any] struct {
 	interfaces.ICollection[T]

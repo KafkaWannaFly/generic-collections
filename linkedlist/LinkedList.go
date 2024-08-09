@@ -1,12 +1,12 @@
 package linkedlist
 
 import (
-	"generic-collections/doctor"
-	"generic-collections/guard"
-	"generic-collections/hashmap"
-	"generic-collections/interfaces"
-	"generic-collections/set"
-	"generic-collections/utils"
+	"github.com/KafkaWannaFly/generic-collections/doctor"
+	"github.com/KafkaWannaFly/generic-collections/guard"
+	"github.com/KafkaWannaFly/generic-collections/hashmap"
+	"github.com/KafkaWannaFly/generic-collections/interfaces"
+	"github.com/KafkaWannaFly/generic-collections/set"
+	"github.com/KafkaWannaFly/generic-collections/utils"
 )
 
 type LinkedList[T any] struct {

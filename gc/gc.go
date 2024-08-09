@@ -2,8 +2,8 @@ package gc
 
 import (
 	"fmt"
-	"generic-collections/guard"
-	"generic-collections/interfaces"
+	"github.com/KafkaWannaFly/generic-collections/guard"
+	"github.com/KafkaWannaFly/generic-collections/interfaces"
 )
 
 // Slice returns a new collection that contains a slice of the original collection.

@@ -1,7 +1,7 @@
 package linkedlist_test
 
 import (
-	"generic-collections/linkedlist"
+	"github.com/KafkaWannaFly/generic-collections/linkedlist"
 	"testing"
 
 	. "github.com/onsi/ginkgo/v2"

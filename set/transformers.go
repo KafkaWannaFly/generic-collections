@@ -1,6 +1,6 @@
 package set
 
-import "generic-collections/hashmap"
+import "github.com/KafkaWannaFly/generic-collections/hashmap"
 
 // Map applies the given mapper function to each element of the list.
 // Returns a new list containing the results.

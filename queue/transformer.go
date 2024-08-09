@@ -1,6 +1,6 @@
 package queue
 
-import "generic-collections/hashmap"
+import "github.com/KafkaWannaFly/generic-collections/hashmap"
 
 // Map applies a function to each item in the queue and returns a new queue with the results.
 func Map[TType any, TResult any](queue *Queue[TType], mapper func(int, TType) TResult) *Queue[TResult] {

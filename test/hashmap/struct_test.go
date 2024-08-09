@@ -2,7 +2,7 @@ package hashmap
 
 import (
 	"fmt"
-	"generic-collections/hashmap"
+	"github.com/KafkaWannaFly/generic-collections/hashmap"
 	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"
 )

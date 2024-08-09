@@ -1,7 +1,7 @@
 package hashmap_test
 
 import (
-	"generic-collections/hashmap"
+	"github.com/KafkaWannaFly/generic-collections/hashmap"
 	"testing"
 
 	. "github.com/onsi/ginkgo/v2"

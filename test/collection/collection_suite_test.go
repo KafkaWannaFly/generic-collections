@@ -1,13 +1,13 @@
 package collection_test
 
 import (
-	"generic-collections/interfaces"
-	"generic-collections/linkedlist"
-	"generic-collections/list"
-	"generic-collections/queue"
-	"generic-collections/set"
-	"generic-collections/stack"
-	"generic-collections/utils"
+	"github.com/KafkaWannaFly/generic-collections/interfaces"
+	"github.com/KafkaWannaFly/generic-collections/linkedlist"
+	"github.com/KafkaWannaFly/generic-collections/list"
+	"github.com/KafkaWannaFly/generic-collections/queue"
+	"github.com/KafkaWannaFly/generic-collections/set"
+	"github.com/KafkaWannaFly/generic-collections/stack"
+	"github.com/KafkaWannaFly/generic-collections/utils"
 	"testing"
 
 	. "github.com/onsi/ginkgo/v2"

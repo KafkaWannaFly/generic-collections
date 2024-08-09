@@ -2,7 +2,7 @@ package utils
 
 import (
 	"fmt"
-	"generic-collections/interfaces"
+	"github.com/KafkaWannaFly/generic-collections/interfaces"
 )
 
 // IsEqual If a, b implement IComparer, then use Compare method to compare them.

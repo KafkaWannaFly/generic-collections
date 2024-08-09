@@ -1,6 +1,6 @@
 package stack
 
-import "generic-collections/hashmap"
+import "github.com/KafkaWannaFly/generic-collections/hashmap"
 
 // Map creates a new stack by applying a mapper function to each item in the original stack
 // The original stack remains unchanged

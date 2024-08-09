@@ -1,6 +1,6 @@
 package doctor
 
-import "generic-collections/utils"
+import "github.com/KafkaWannaFly/generic-collections/utils"
 
 // RecoverDefaultFalse Recover from panic, return the default value of the type and false.
 func RecoverDefaultFalse[T any]() (T, bool) {
