@@ -1,17 +1,24 @@
 # Table of contents
 
-* [Welcome](README.md)
-
 ## Getting Started
 
-* [Quickstart](getting-started/quickstart.md)
-* [Publish your docs](getting-started/publish-your-docs.md)
+* [Quickstart](README.md)
 
-## Basics
+## Interfaces & Structures
 
-* [Editor](basics/editor.md)
-* [Markdown](basics/markdown.md)
-* [Images & media](basics/images-and-media.md)
-* [Interactive blocks](basics/interactive-blocks.md)
-* [OpenAPI](basics/openapi.md)
-* [Integrations](basics/integrations.md)
+* [ICollection](interfaces-and-structures/icollection.md)
+* [IIndexableCollection](interfaces-and-structures/iindexablecollection.md)
+* [Set](interfaces-and-structures/set.md)
+* [List](interfaces-and-structures/list.md)
+* [LinkedList](interfaces-and-structures/linkedlist.md)
+* [Stack](interfaces-and-structures/stack.md)
+* [Queue](interfaces-and-structures/queue.md)
+* [HashMap](interfaces-and-structures/hashmap.md)
+* [Binary Tree](interfaces-and-structures/binary-tree.md)
+
+## Utilities Functions
+
+* [gc](utilities-functions/gc.md)
+* [utils](utilities-functions/utils.md)
+* [guard](utilities-functions/guard.md)
+* [doctor](utilities-functions/doctor.md)
