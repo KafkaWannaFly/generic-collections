@@ -25,12 +25,11 @@ jobs:
         run: go mod download
 
       - name: Test
-        run: go run github.com/onsi/ginkgo/v2/ginkgo -r --randomize-all --randomize-suites --fail-on-pending --fail-on-empty --keep-going --cover --coverprofile=cover.profile --trace --json-report=report.json --junit-report=report.xml --github-output
+        run: go test -coverprofile="cover.profile" ./...
 
       - name: Upload coverage reports to Codecov
         uses: codecov/codecov-action@v4.0.1
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           file: ./cover.profile
-          files: ./report.xml,./report.json,./cover.profile
           verbose: true
