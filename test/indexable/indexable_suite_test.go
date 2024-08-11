@@ -199,6 +199,32 @@ func testInteger(collection interfaces.ICollection[int]) func() {
 			Expect(collection.ToSlice()).To(Equal([]int{1, 2, 3, 4, 5, 6, 7, 8, 9, 10}))
 		})
 
+		It("Should be able to slice with internal result", func() {
+			actualResult := integerCollection.Slice(0, 5)
+			expectedResult := []int{1, 2, 3, 4, 5}
+
+			Expect(actualResult.ToSlice()).To(Equal(expectedResult))
+			Expect(actualResult.Count()).To(Equal(len(expectedResult)))
+		})
+
+		It("Should be able to slice with has wrap from begin", func() {
+			actualResult := integerCollection.Slice(8, 5)
+			expectedResult := []int{9, 10, 1, 2, 3}
+
+			Expect(actualResult.ToSlice()).To(Equal(expectedResult))
+			Expect(actualResult.Count()).To(Equal(len(expectedResult)))
+		})
+
+		It("Should be able to slice with panic when index out of range", func() {
+			Expect(func() { integerCollection.Slice(999999999999999, 5) }).To(Panic())
+			Expect(func() { integerCollection.Slice(-999999999999999, 5) }).To(Panic())
+		})
+
+		It("Should be able to slice with panic when length out of range", func() {
+			Expect(func() { integerCollection.Slice(0, 999999999999999) }).To(Panic())
+			Expect(func() { integerCollection.Slice(0, -999999999999999) }).To(Panic())
+		})
+
 		It("Should be able to get element by index", func() {
 			for i := 0; i < integerCollection.Count(); i++ {
 				Expect(integerCollection.GetAt(i)).To(Equal(i + 1))

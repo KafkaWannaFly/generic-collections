@@ -1,6 +1,7 @@
 package queue
 
 import (
+	"github.com/KafkaWannaFly/generic-collections/gc"
 	"github.com/KafkaWannaFly/generic-collections/hashmap"
 	"github.com/KafkaWannaFly/generic-collections/interfaces"
 	"github.com/KafkaWannaFly/generic-collections/linkedlist"
@@ -197,6 +198,12 @@ func (receiver *Queue[T]) FindAll(predicate func(int, T) bool) []int {
 // Default returns an empty queue.
 func (receiver *Queue[T]) Default() interfaces.ICollection[T] {
 	return New[T]()
+}
+
+// Slice returns a new collection that contains a slice of the original collection.
+// Refer to gc.Slice for more information.
+func (receiver *Queue[T]) Slice(index int, length int) interfaces.IIndexableCollection[int, T] {
+	return gc.Slice[T](receiver, index, length)
 }
 
 // endregion

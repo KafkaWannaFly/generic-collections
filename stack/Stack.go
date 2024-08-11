@@ -1,6 +1,7 @@
 package stack
 
 import (
+	"github.com/KafkaWannaFly/generic-collections/gc"
 	"github.com/KafkaWannaFly/generic-collections/hashmap"
 	"github.com/KafkaWannaFly/generic-collections/interfaces"
 	"github.com/KafkaWannaFly/generic-collections/linkedlist"
@@ -196,6 +197,12 @@ func (receiver *Stack[T]) FindAll(predicate func(int, T) bool) []int {
 // Default returns a default empty stack.
 func (receiver *Stack[T]) Default() interfaces.ICollection[T] {
 	return New[T]()
+}
+
+// Slice returns a new collection that contains a slice of the original collection.
+// Refer to gc.Slice for more information.
+func (receiver *Stack[T]) Slice(index int, length int) interfaces.IIndexableCollection[int, T] {
+	return gc.Slice[T](receiver, index, length)
 }
 
 // endregion

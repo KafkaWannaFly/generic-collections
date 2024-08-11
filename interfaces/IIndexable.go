@@ -8,7 +8,7 @@ type IIndexableCollection[TIndex any, TValue any] interface {
 	IIndexableRemover[TIndex, TValue]
 	IIndexableFinder[TIndex, TValue]
 
-	//ISlicer[TValue]
+	ISlicer[TValue]
 }
 
 // IIndexableGetSet is an interface for getting and setting item in a ICollection that have index

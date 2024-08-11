@@ -2,6 +2,7 @@ package list
 
 import (
 	"github.com/KafkaWannaFly/generic-collections/doctor"
+	"github.com/KafkaWannaFly/generic-collections/gc"
 	"github.com/KafkaWannaFly/generic-collections/guard"
 	"github.com/KafkaWannaFly/generic-collections/hashmap"
 	"github.com/KafkaWannaFly/generic-collections/interfaces"
@@ -298,11 +299,13 @@ func (receiver *List[T]) FindFirst(predicate func(int, T) bool) int {
 func (receiver *List[T]) FindLast(predicate func(int, T) bool) int {
 	var index = -1
 
-	receiver.ForEach(func(i int, element T) {
-		if predicate(i, element) {
-			index = i
+	for i := range receiver.elements {
+		reverseIdx := receiver.count - i - 1
+		if predicate(reverseIdx, receiver.elements[reverseIdx]) {
+			index = reverseIdx
+			break
 		}
-	})
+	}
 
 	return index
 }
@@ -325,25 +328,13 @@ func (receiver *List[T]) Default() interfaces.ICollection[T] {
 	return New[T]()
 }
 
-//
-//func (receiver *List[T]) Slice(index int, length int) interfaces.IIndexableCollection[int, T] {
-//	guard.EnsureIndexRange(index, receiver.count)
-//
-//	out := New[T]()
-//	if length == 0 {
-//		return out
-//	} else if length > 0 {
-//		for i := index; i < receiver.count; i++ {
-//			if i < index+length {
-//				out.Add(receiver.elements[i])
-//			}
-//		}
-//	} else {
-//
-//	}
-//
-//	return out
-//}
+// region ISlicer[TItem] implementation
+
+// Slice returns a new list containing the elements from the specified index and a specified length.
+// Refer to gc.Slice for more information.
+func (receiver *List[T]) Slice(index int, length int) interfaces.IIndexableCollection[int, T] {
+	return gc.Slice[T](receiver, index, length)
+}
 
 // endregion
 

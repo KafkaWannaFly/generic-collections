@@ -35,7 +35,6 @@ func GroupBy[TType any, TKey any](items *List[TType], keySelector func(TType) TK
 		} else {
 			groups.Get(key).Add(item)
 		}
-
 	})
 	return groups
 }
