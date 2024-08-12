@@ -9,14 +9,6 @@ import (
 // If a, b implement IHashCoder, then use HashCode method to compare them.
 // Else. use fmt.Sprintf to convert item to string
 func IsEqual[T any](a T, b T) bool {
-	var ia interface{} = a
-
-	iComparerA, aOk := ia.(interfaces.IComparer[T])
-
-	if aOk {
-		return iComparerA.Compare(b) == 0
-	}
-
 	return HashCodeOf(a) == HashCodeOf(b)
 }
 

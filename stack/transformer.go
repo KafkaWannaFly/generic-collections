@@ -1,28 +1,20 @@
 package stack
 
-import "github.com/KafkaWannaFly/generic-collections/hashmap"
+import (
+	"github.com/KafkaWannaFly/generic-collections/gc"
+	"github.com/KafkaWannaFly/generic-collections/hashmap"
+)
 
 // Map creates a new stack by applying a mapper function to each item in the original stack
 // The original stack remains unchanged
-func Map[TType any, TResult any](collection *Stack[TType], mapper func(TType) TResult) *Stack[TResult] {
-	result := New[TResult]()
-
-	collection.ForEach(func(i int, item TType) {
-		result.AddLast(mapper(item))
-	})
-
-	return result
+func Map[TType any, TResult any](collection *Stack[TType], mapper func(int, TType) TResult) *Stack[TResult] {
+	return gc.Map(collection, New[TResult](), mapper).(*Stack[TResult])
 }
 
 // Reduce reduces the stack to a single value by accumulating items
 // The accumulator function receives the current accumulated value and the next item
 func Reduce[TType any, TResult any](collection *Stack[TType], reducer func(TResult, TType) TResult, initialValue TResult) TResult {
-	var result = initialValue
-	collection.ForEach(func(_ int, item TType) {
-		result = reducer(result, item)
-	})
-
-	return result
+	return gc.Reduce(collection, reducer, initialValue)
 }
 
 // GroupBy groups the elements of the stack by the specified key

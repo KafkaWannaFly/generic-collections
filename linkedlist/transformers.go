@@ -1,25 +1,20 @@
 package linkedlist
 
-import "github.com/KafkaWannaFly/generic-collections/hashmap"
+import (
+	"github.com/KafkaWannaFly/generic-collections/gc"
+	"github.com/KafkaWannaFly/generic-collections/hashmap"
+)
 
 // Map applies the given mapper function to each element of the list.
 // Returns a new list containing the results. Don't modify the original list.
 func Map[TType any, TResult any](linkedList *LinkedList[TType], mapper func(int, TType) TResult) *LinkedList[TResult] {
-	var result = New[TResult]()
-	linkedList.ForEach(func(index int, item TType) {
-		result.Add(mapper(index, item))
-	})
-	return result
+	return gc.Map(linkedList, New[TResult](), mapper).(*LinkedList[TResult])
 }
 
 // Reduce applies the given reducer function to each element of the list.
 // Returns the accumulated result.
 func Reduce[TType any, TResult any](linkedList *LinkedList[TType], reducer func(TResult, TType) TResult, initialValue TResult) TResult {
-	var result = initialValue
-	linkedList.ForEach(func(index int, item TType) {
-		result = reducer(result, item)
-	})
-	return result
+	return gc.Reduce(linkedList, reducer, initialValue)
 }
 
 // GroupBy groups the elements of the list by the specified key.

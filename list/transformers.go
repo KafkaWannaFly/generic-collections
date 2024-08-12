@@ -1,6 +1,7 @@
 package list
 
 import (
+	"github.com/KafkaWannaFly/generic-collections/gc"
 	"github.com/KafkaWannaFly/generic-collections/hashmap"
 )
 
@@ -8,20 +9,13 @@ import (
 // Returns a new list containing the results.
 func Map[TType any, TResult any](list *List[TType], mapper func(int, TType) TResult) *List[TResult] {
 	var result = New[TResult]()
-	list.ForEach(func(index int, item TType) {
-		result.Add(mapper(index, item))
-	})
-	return result
+	return gc.Map(list, result, mapper).(*List[TResult])
 }
 
 // Reduce applies the given reducer function to each element of the list.
 // Returns the accumulated result.
 func Reduce[TType any, TResult any](list *List[TType], reducer func(TResult, TType) TResult, initialValue TResult) TResult {
-	var result = initialValue
-	list.ForEach(func(index int, item TType) {
-		result = reducer(result, item)
-	})
-	return result
+	return gc.Reduce(list, reducer, initialValue)
 }
 
 // GroupBy groups the elements of the list by the specified key.

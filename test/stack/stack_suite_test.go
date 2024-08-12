@@ -91,7 +91,7 @@ var _ = Describe("Test Stack", func() {
 		})
 
 		It("Should map and reduce", func() {
-			mapped := integerStack.Map(func(item int) any {
+			mapped := integerStack.Map(func(_ int, item int) any {
 				return item * 2
 			})
 

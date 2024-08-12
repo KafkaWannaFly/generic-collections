@@ -1,25 +1,18 @@
 package queue
 
-import "github.com/KafkaWannaFly/generic-collections/hashmap"
+import (
+	"github.com/KafkaWannaFly/generic-collections/gc"
+	"github.com/KafkaWannaFly/generic-collections/hashmap"
+)
 
 // Map applies a function to each item in the queue and returns a new queue with the results.
 func Map[TType any, TResult any](queue *Queue[TType], mapper func(int, TType) TResult) *Queue[TResult] {
-	result := New[TResult]()
-	queue.ForEach(func(index int, item TType) {
-		result.Add(mapper(index, item))
-	})
-
-	return result
+	return gc.Map(queue, New[TResult](), mapper).(*Queue[TResult])
 }
 
 // Reduce applies a function to each item in the queue and returns the accumulated result.
 func Reduce[TType any, TResult any](queue *Queue[TType], reducer func(TResult, TType) TResult, initial TResult) TResult {
-	result := initial
-	queue.ForEach(func(_ int, item TType) {
-		result = reducer(result, item)
-	})
-
-	return result
+	return gc.Reduce(queue, reducer, initial)
 }
 
 // GroupBy groups the items in the queue by the specified key.
