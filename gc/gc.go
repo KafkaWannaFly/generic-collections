@@ -33,3 +33,30 @@ func Slice[TType any](collection interfaces.IIndexableCollection[int, TType], in
 
 	return out
 }
+
+// Map Internal function used by the library. Consider to use list.Map or set.Map instead.
+func Map[TType any, TResult any](
+	in interfaces.ICollection[TType],
+	out interfaces.ICollection[TResult],
+	mapper func(int, TType) TResult) interfaces.ICollection[TResult] {
+
+	in.ForEach(func(index int, item TType) {
+		out.Add(mapper(index, item))
+	})
+
+	return out
+}
+
+// Reduce Internal function used by the library. Consider to use list.Reduce or set.Reduce instead.
+func Reduce[TType any, TResult any](
+	list interfaces.ICollection[TType],
+	reducer func(TResult, TType) TResult,
+	initialValue TResult) TResult {
+
+	result := initialValue
+	list.ForEach(func(index int, item TType) {
+		result = reducer(result, item)
+	})
+
+	return result
+}

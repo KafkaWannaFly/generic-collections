@@ -242,7 +242,7 @@ func (receiver *Stack[T]) TryPeek() (T, bool) {
 
 // Map creates a new stack by applying a mapper function to each item in the original stack.
 // The original stack remains unchanged.
-func (receiver *Stack[T]) Map(mapper func(T) any) *Stack[any] {
+func (receiver *Stack[T]) Map(mapper func(int, T) any) *Stack[any] {
 	return Map(receiver, mapper)
 }
 
