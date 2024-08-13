@@ -15,9 +15,3 @@ func EnsureIndexRange(index int, length int) {
 		panic(fmt.Sprintf("Index %d is out of range for list of length %d", index, length))
 	}
 }
-
-// EnsureOperationIsNotAllowed Panic with message "This operation is not allowed"
-// This is used to prevent some operations that are not allowed.
-func EnsureOperationIsNotAllowed() {
-	panic("This operation is not allowed")
-}

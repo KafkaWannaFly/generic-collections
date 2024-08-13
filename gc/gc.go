@@ -60,3 +60,22 @@ func Reduce[TType any, TResult any](
 
 	return result
 }
+
+// Using reflection to implement GroupBy
+// This is not the best way to implement GroupBy because it slow. Around x200 times slower than the explicit implementation.
+// https://stackoverflow.com/questions/69909502/performance-of-using-reflect-to-access-struct-field-as-a-string-variable-vs-ac
+//func GroupBy[TType any, TValue any](items interfaces.ICollection[TType], outMap any, keySelector func(TType) TValue) any {
+//	hmValue := reflect.ValueOf(outMap)
+//	items.ForEach(func(index int, item TType) {
+//		key := keySelector(item)
+//		if !hmValue.MethodByName("HasKey").Call([]reflect.Value{reflect.ValueOf(key)})[0].Bool() {
+//			hmValue.MethodByName("Set").Call([]reflect.Value{reflect.ValueOf(key), reflect.ValueOf(items.Default().Add(item))})
+//		} else {
+//			var res interface{} = hmValue.MethodByName("Get").Call([]reflect.Value{reflect.ValueOf(key)})[0]
+//			res.(interfaces.ICollection[TType]).Add(item)
+//		}
+//
+//	})
+//
+//	return outMap
+//}
