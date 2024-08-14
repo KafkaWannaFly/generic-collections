@@ -29,6 +29,11 @@ var _ = Describe("Test LinkedList implements ICollection", func() {
 			Expect(integerList.Count()).To(Equal(10))
 		})
 
+		It("Should assert the type", func() {
+			Expect(linkedlist.IsLinkedList[int](integerList)).To(BeTrue())
+			Expect(linkedlist.IsLinkedList[string](integerList)).To(BeFalse())
+		})
+
 		It("Should clone a node", func() {
 			node := integerList.NodeAt(0)
 			cloned := node.Clone()
@@ -117,6 +122,27 @@ var _ = Describe("Test LinkedList implements ICollection", func() {
 
 			largeCompanies := groups.Get("Large")
 			Expect(largeCompanies.Count()).To(Equal(3))
+		})
+
+		It("Should get node at", func() {
+			node := companyList.NodeAt(0)
+
+			Expect(node.Value).To(Equal(Company{"Company A", "Country A", 1000}))
+			Expect(node.Next.Value).To(Equal(Company{"Company B", "Country B", 2000}))
+
+			Expect(node).To(Equal(companyList.Head))
+		})
+
+		It("Should try get node at", func() {
+			node, ok := companyList.TryNodeAt(0)
+
+			Expect(ok).To(BeTrue())
+			Expect(node.Value).To(Equal(Company{"Company A", "Country A", 1000}))
+			Expect(node.Next.Value).To(Equal(Company{"Company B", "Country B", 2000}))
+
+			node, ok = companyList.TryNodeAt(10)
+			Expect(ok).To(BeFalse())
+			Expect(node).To(BeNil())
 		})
 	})
 

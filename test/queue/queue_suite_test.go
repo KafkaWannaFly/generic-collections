@@ -22,6 +22,11 @@ var _ = Describe("Test Queue", func() {
 		Expect(integerQueue.Count()).To(Equal(5))
 	})
 
+	It("Should assert the type of the queue", func() {
+		Expect(queue.IsQueue[int](integerQueue)).To(BeTrue())
+		Expect(queue.IsQueue[string](integerQueue)).To(BeFalse())
+	})
+
 	It("Should enqueue an item at the end", func() {
 		integerQueue.Enqueue(6)
 

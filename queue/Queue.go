@@ -265,7 +265,7 @@ func (receiver *Queue[T]) GroupBy(keySelector func(T) any) *hashmap.HashMap[any,
 // region package methods.
 
 // IsQueue returns true if the collection is a queue.
-func IsQueue[T any](collection interfaces.ICollection[T]) bool {
+func IsQueue[T any](collection any) bool {
 	if collection == nil {
 		return false
 	}

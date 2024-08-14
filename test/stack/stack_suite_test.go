@@ -23,6 +23,11 @@ var _ = Describe("Test Stack", func() {
 			Expect(integerStack.Count()).To(Equal(5))
 		})
 
+		It("Should assert the type", func() {
+			Expect(stack.IsStack[int](integerStack)).To(BeTrue())
+			Expect(stack.IsStack[string](integerStack)).To(BeFalse())
+		})
+
 		It("Should push an item on top", func() {
 			integerStack.Push(0)
 

@@ -30,12 +30,7 @@ func From[T any](elements ...T) *LinkedList[T] {
 	return list
 }
 
-var _ interfaces.ICollection[any] = (*LinkedList[any])(nil)
-var _ interfaces.IIndexableGetSet[int, any] = (*LinkedList[any])(nil)
-var _ interfaces.IIndexableAdder[int, any] = (*LinkedList[any])(nil)
-var _ interfaces.IIndexableRemover[int, any] = (*LinkedList[any])(nil)
-var _ interfaces.IIndexableFinder[int, any] = (*LinkedList[any])(nil)
-var _ interfaces.ISlicer[any] = (*LinkedList[any])(nil)
+var _ interfaces.IIndexableCollection[int, any] = (*LinkedList[any])(nil)
 
 // region ICollection[T]
 
@@ -504,7 +499,7 @@ func (receiver *LinkedList[T]) GroupBy(keySelector func(T) any) *hashmap.HashMap
 // region package methods
 
 // IsLinkedList check if a collection is a LinkedList
-func IsLinkedList[T any](collection interfaces.ICollection[T]) bool {
+func IsLinkedList[T any](collection any) bool {
 	if collection == nil {
 		return false
 	}
