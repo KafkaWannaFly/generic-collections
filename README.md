@@ -69,8 +69,12 @@ type ILesser[TType any] interface {
 
 #### Can I Use Struct Without Implementing the Above Interfaces?
 
+{% hint style="success" %}
 Yes, you can. The system will try to convert your struct into a string to compare.&#x20;
+{% endhint %}
 
 #### **What If My Object Can’t Be Converted?**
 
+{% hint style="danger" %}
 GGWP  ╮（╯＿╰）╭
+{% endhint %}
