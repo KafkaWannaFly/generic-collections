@@ -8,7 +8,8 @@
 
 * [ICollection](interfaces-and-structures/icollection.md)
 * [IIndexableCollection](interfaces-and-structures/iindexablecollection.md)
-* [Set](interfaces-and-structures/set.md)
+* [Set](interfaces-and-structures/set/README.md)
+  * [Methods](interfaces-and-structures/set/methods.md)
 * [List](interfaces-and-structures/list.md)
 * [LinkedList](interfaces-and-structures/linkedlist.md)
 * [Stack](interfaces-and-structures/stack.md)
