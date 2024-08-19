@@ -64,17 +64,25 @@ This method is used internally by the library. You might not need it.
 
 ### `func (receiver *Set[T]) Union(set *Set[T]) *Set[T]`
 
+<figure><img src="../../.gitbook/assets/image.png" alt=""><figcaption><p>Set Union</p></figcaption></figure>
+
 `Union` returns a new set that contains all elements of the set and the specified set. Does not modify the original sets.
 
 ### `func (receiver *Set[T]) Intersect(set *Set[T]) *Set[T]`
+
+<figure><img src="../../.gitbook/assets/Intersec.jpg" alt=""><figcaption><p>Set Intersect</p></figcaption></figure>
 
 `Intersect` returns a new set that contains all elements that are in both the set and the specified set. Does not modify the original sets.
 
 ### `func (receiver *Set[T]) Difference(set *Set[T]) *Set[T]`
 
+<figure><img src="../../.gitbook/assets/Difference.png" alt=""><figcaption><p><code>setA.Difference(setB)</code></p></figcaption></figure>
+
 `Difference` returns a new set that contains all elements that are in the set but not in the specified set. Does not modify the original sets.
 
 ### `func (receiver *Set[T]) SymmetricDifference(set *Set[T]) *Set[T]`
+
+<figure><img src="../../.gitbook/assets/Symetric Difference.png" alt=""><figcaption><p>Symmetric Difference</p></figcaption></figure>
 
 `SymmetricDifference` returns a new set that contains all elements that are in the set or the specified set, but not in both. Does not modify the original sets.
 
