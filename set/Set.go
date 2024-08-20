@@ -227,13 +227,13 @@ func (receiver *Set[T]) GroupBy(keySelector func(T) any) *hashmap.HashMap[any, *
 
 // region Package functions
 
-// IsSet checks if the specified collection is a set.
-func IsSet[T any](collection any) bool {
-	if collection == nil {
+// IsSet checks if the specified item is a set of type T.
+func IsSet[T any](item any) bool {
+	if item == nil {
 		return false
 	}
 
-	_, ok := collection.(*Set[T])
+	_, ok := item.(*Set[T])
 
 	return ok
 }
