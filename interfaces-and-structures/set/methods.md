@@ -88,12 +88,12 @@ This method is used internally by the library. You might not need it.
 
 ### `func (receiver *Set[T]) Map(mapper func(int, T) any) *Set[any]`
 
-`Map` applies the given mapper function to each element of the list. Returns a new `Set` containing the results.
+`Map` applies the given mapper function to each element of the list. Returns a new `Set` containing the results. For better type assertion, use `set.Map`
 
 ### `func (receiver *Set[T]) Reduce(reducer func(any, T) any, initialValue any) any`
 
-`Reduce` applies the given reducer function to each element of the list. Returns the accumulated result.
+`Reduce` applies the given reducer function to each element of the list. Returns the accumulated result. For better type assertion, use `set.Reduce`
 
 ### `func (receiver *Set[T]) GroupBy(keySelector func(T) any) *hashmap.HashMap[any, *Set[T]]`
 
-`GroupBy` groups the elements of the list by the specified key. Returns a map where the key is the result of the `keySelector` function.
+`GroupBy` groups the elements of the list by the specified key. Returns a map where the key is the result of the `keySelector` function. For better type assertion, use `set.GroupBy`
