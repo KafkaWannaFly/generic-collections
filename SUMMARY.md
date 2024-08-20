@@ -10,6 +10,7 @@
 * [IIndexableCollection](interfaces-and-structures/iindexablecollection.md)
 * [Set](interfaces-and-structures/set/README.md)
   * [Methods](interfaces-and-structures/set/methods.md)
+  * [Package Functions](interfaces-and-structures/set/package-functions.md)
 * [List](interfaces-and-structures/list.md)
 * [LinkedList](interfaces-and-structures/linkedlist.md)
 * [Stack](interfaces-and-structures/stack.md)
