@@ -143,6 +143,11 @@ func (receiver *List[T]) Clone() interfaces.ICollection[T] {
 	return newList
 }
 
+// Default returns a new empty list.
+func (receiver *List[T]) Default() interfaces.ICollection[T] {
+	return New[T]()
+}
+
 // endregion
 
 // region IIndexableGetSet[TItem] implementation
@@ -323,10 +328,7 @@ func (receiver *List[T]) FindAll(predicate func(int, T) bool) []int {
 	return indexes
 }
 
-// Default returns a new empty list.
-func (receiver *List[T]) Default() interfaces.ICollection[T] {
-	return New[T]()
-}
+// endregion
 
 // region ISlicer[TItem] implementation
 

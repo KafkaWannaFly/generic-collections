@@ -11,7 +11,9 @@ import (
 // If the index is greater than the length of the collection or the length is negative, a panic will occur.
 // If the length is greater than the remaining elements in the collection, the slice will continue wrap around to the beginning of the collection.
 // For example, if the list has elements [1, 2, 3, 4, 5]:
+//
 // - Slice(2, 2) returns [3, 4]
+//
 // - Slice(3, 3) returns [4, 5, 1]
 func Slice[TType any](collection interfaces.IIndexableCollection[int, TType], index int, length int) interfaces.IIndexableCollection[int, TType] {
 	guard.EnsureIndexRange(index, collection.Count())
