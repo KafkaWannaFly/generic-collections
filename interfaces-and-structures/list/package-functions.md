@@ -33,12 +33,10 @@ list.IsList[string](integerList) // false
 
 `Map` applies the given mapper function to each element of the list. Returns a new list containing the results.
 
-###
-`func Reduce[TType any, TResult any](list *List[TType], reducer func(TResult, TType) TResult, initialValue TResult) TResult`
+### `func Reduce[TType any, TResult any](list *List[TType], reducer func(TResult, TType) TResult, initialValue TResult) TResult`
 
 `Reduce` applies the given reducer function to each element of the list. Returns the accumulated result.
 
-###
-`func GroupBy[TType any, TKey any](list *List[TType], keySelector func(TType) TKey) *hashmap.HashMap[TKey, *List[TType]]`
+### `func GroupBy[TType any, TKey any](list *List[TType], keySelector func(TType) TKey) *hashmap.HashMap[TKey, *List[TType]]`
 
 `GroupBy` groups the elements of the list by the specified key. Returns a map where the key is the result of the `keySelector` function.
