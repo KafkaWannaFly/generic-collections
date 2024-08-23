@@ -13,6 +13,7 @@
   * [Package Functions](interfaces-and-structures/set/package-functions.md)
 * [List](interfaces-and-structures/list/README.md)
   * [Methods](interfaces-and-structures/list/methods.md)
+  * [Package Functions](interfaces-and-structures/list/package-functions.md)
 * [LinkedList](interfaces-and-structures/linkedlist.md)
 * [Stack](interfaces-and-structures/stack.md)
 * [Queue](interfaces-and-structures/queue.md)
