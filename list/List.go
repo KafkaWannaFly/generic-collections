@@ -362,12 +362,12 @@ func (receiver *List[T]) GroupBy(keySelector func(T) any) *hashmap.HashMap[any, 
 // region Package functions
 
 // IsList checks if the given collection is a list.
-func IsList[T any](collection any) bool {
-	if collection == nil {
+func IsList[T any](item any) bool {
+	if item == nil {
 		return false
 	}
 
-	_, ok := collection.(*List[T])
+	_, ok := item.(*List[T])
 
 	return ok
 }
