@@ -470,6 +470,8 @@ func (receiver *LinkedList[T]) NodeAt(index int) *Node[T] {
 	return nil
 }
 
+// TryNodeAt get Node object at certain index.
+// Return the Node object and true if index in range, else nil and false.
 func (receiver *LinkedList[T]) TryNodeAt(index int) (*Node[T], bool) {
 	defer doctor.RecoverDefaultFalse[*Node[T]]()
 
