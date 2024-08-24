@@ -498,13 +498,13 @@ func (receiver *LinkedList[T]) GroupBy(keySelector func(T) any) *hashmap.HashMap
 
 // region package methods
 
-// IsLinkedList check if a collection is a LinkedList
-func IsLinkedList[T any](collection any) bool {
-	if collection == nil {
+// IsLinkedList check if an object is a LinkedList of type T
+func IsLinkedList[T any](item any) bool {
+	if item == nil {
 		return false
 	}
 
-	_, ok := collection.(*LinkedList[T])
+	_, ok := item.(*LinkedList[T])
 	return ok
 }
 
