@@ -1,42 +1,47 @@
 # Package Functions
 
-These functions live under `list` package.
+These functions live under `linkedlist` package.
 
-### `func New[T any]() *List[T]`
+### `func New[T any]() *LinkedList[T]`
 
-`New` creates a new empty list.
-
-```go
-emptyIntegerList := list.New[int]()
-```
-
-### `func From[T any](items ...T) *List[T]`
-
-`From` creates a new list from a slice of elements.
+`New` creates a new empty linkedlist.
 
 ```go
-integerList := list.From(1, 2, 3, 4, 5, 6, 7, 8, 9, 10)
+emptyIntegerLinkedList := linkedlist.New[int]()
 ```
 
-### `func IsList[T any](item any) bool`
+### `func From[T any](items ...T) *LinkedList[T]`
 
-`IsList` checks if the specified item is a list of type T.
+`From` creates a new linkedlist from a slice of elements.
 
 ```go
-integerList := list.From(1, 2, 3, 4, 5, 6, 7, 8, 9, 10)
-
-list.IsList[int](integerList) // true
-list.IsList[string](integerList) // false
+integerLinkedList := linkedlist.From(1, 2, 3, 4, 5, 6, 7, 8, 9, 10)
 ```
 
-### `func Map[TType any, TResult any](list *List[TType], mapper func(int, TType) TResult) *List[TResult]`
+### `func IsLinkedList[T any](item any) bool`
 
-`Map` applies the given mapper function to each element of the list. Returns a new list containing the results.
+`IsLinkedList` checks if the specified item is a linkedlist of type T.
 
-### `func Reduce[TType any, TResult any](list *List[TType], reducer func(TResult, TType) TResult, initialValue TResult) TResult`
+```go
+integerLinkedList := linkedlist.From(1, 2, 3, 4, 5, 6, 7, 8, 9, 10)
 
-`Reduce` applies the given reducer function to each element of the list. Returns the accumulated result.
+linkedlist.IsLinkedList[int](integerLinkedList) // true
+linkedlist.IsLinkedList[string](integerLinkedList) // false
+```
 
-### `func GroupBy[TType any, TKey any](list *List[TType], keySelector func(TType) TKey) *hashmap.HashMap[TKey, *List[TType]]`
+###
+`func Map[TType any, TResult any](linkedlist *LinkedList[TType], mapper func(int, TType) TResult) *LinkedList[TResult]`
 
-`GroupBy` groups the elements of the list by the specified key. Returns a map where the key is the result of the `keySelector` function.
+`Map` applies the given mapper function to each element of the linkedlist. Returns a new linkedlist containing the
+results.
+
+###
+`func Reduce[TType any, TResult any](linkedlist *LinkedList[TType], reducer func(TResult, TType) TResult, initialValue TResult) TResult`
+
+`Reduce` applies the given reducer function to each element of the linkedlist. Returns the accumulated result.
+
+###
+`func GroupBy[TType any, TKey any](linkedlist *LinkedList[TType], keySelector func(TType) TKey) *hashmap.HashMap[TKey, *LinkedList[TType]]`
+
+`GroupBy` groups the elements of the linkedlist by the specified key. Returns a map where the key is the result of the
+`keySelector` function.
