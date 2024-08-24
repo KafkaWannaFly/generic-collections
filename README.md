@@ -18,6 +18,10 @@ Generic was not a thing in Golang until v1.18 (Feb 2022). We're implementing dif
 go get github.com/KafkaWannaFly/generic-collections
 ```
 
+<figure><img src=".gitbook/assets/family tree (1).svg" alt=""><figcaption><p>Family Tree</p></figcaption></figure>
+
+Overall, we have `ICollection`, an interface that all structs have implemented. Plus, `HashMap`, a wrapper of built-in map with some convenient methods.
+
 ### Working with Struct
 
 This library works well with basic, primitive data-type. If you have any custom struct, which usually yes, you should implement `IHashCoder` and `ILesser` interfaces. They're used by library under the hood. E.g. `Set` would use `IHashCoder` to determine if 2 objects are the same. `List` would use `ILesser` when sorting items.
