@@ -6,7 +6,8 @@ import (
 	"github.com/KafkaWannaFly/generic-collections/utils"
 )
 
-// Set implements the ICollection interface
+// Set implements the ICollection interface.
+// It represents a collection of unique elements.
 type Set[T any] struct {
 	elements map[string]T
 	count    int
@@ -114,6 +115,7 @@ func (receiver *Set[T]) Clear() interfaces.ICollection[T] {
 
 // Filter removes all elements from the set that do not satisfy the predicate function.
 // Returns the set itself.
+// Original set is not modified.
 func (receiver *Set[T]) Filter(predicateFunc func(T) bool) interfaces.ICollection[T] {
 	var filtered = New[T]()
 	receiver.ForEach(func(index int, element T) {
@@ -208,17 +210,17 @@ func (receiver *Set[T]) SymmetricDifference(set *Set[T]) *Set[T] {
 	return symmetricDifference
 }
 
-// Map method refers to the Map function
+// Map method refers to the Map function.
 func (receiver *Set[T]) Map(mapper func(int, T) any) *Set[any] {
 	return Map(receiver, mapper)
 }
 
-// Reduce method refers to the Reduce function
+// Reduce method refers to the Reduce function.
 func (receiver *Set[T]) Reduce(reducer func(any, T) any, initialValue any) any {
 	return Reduce(receiver, reducer, initialValue)
 }
 
-// GroupBy method refers to the GroupBy function
+// GroupBy method refers to the GroupBy function.
 func (receiver *Set[T]) GroupBy(keySelector func(T) any) *hashmap.HashMap[any, *Set[T]] {
 	return GroupBy(receiver, keySelector)
 }
