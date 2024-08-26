@@ -8,7 +8,8 @@ type IIndexableCollection[TIndex any, TValue any] interface {
 	IIndexableRemover[TIndex, TValue]
 	IIndexableFinder[TIndex, TValue]
 
-	ISlicer[TValue]
+	// Slice returns a new collection with items from the given index to the end of the collection.
+	Slice(index int, length int) IIndexableCollection[int, TValue]
 }
 
 // IIndexableGetSet is an interface for getting and setting item in a ICollection that have index

@@ -15,16 +15,6 @@ type Book struct {
 	Price         float64
 }
 
-func (receiver Book) Compare(book Book) int {
-	if receiver.Title == book.Title {
-		return 0
-	} else if receiver.Title > book.Title {
-		return 1
-	} else {
-		return -1
-	}
-}
-
 func (receiver Book) HashCode() string {
 	return receiver.Title
 }
