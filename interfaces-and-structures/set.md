@@ -1,12 +1,12 @@
 # Set
 
-`Set` is unordered and implements the [`ICollection`](../icollection.md) interface. It represents a collection of unique elements.
+`Set` is unordered and implements the [`ICollection`](icollection.md) interface. It represents a collection of unique elements.
 
 ## Example
 
 ### Basic
 
-The basic usage is very similar to [list](../list/ "mention") because they both implement [icollection.md](../icollection.md "mention")
+The basic usage is very similar to [list.md](list.md "mention") because they both implement [icollection.md](icollection.md "mention")
 
 {% code overflow="wrap" %}
 ```go
@@ -52,7 +52,7 @@ func main() {
 
 ### Set Specific Methods
 
-<figure><img src="../../.gitbook/assets/set functions (1).png" alt=""><figcaption></figcaption></figure>
+<figure><img src="../.gitbook/assets/set functions (1).png" alt=""><figcaption></figcaption></figure>
 
 ```go
 package main
