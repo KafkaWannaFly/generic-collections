@@ -1,3 +1,7 @@
+---
+hidden: true
+---
+
 # Package Functions
 
 These functions live under `set` package.
