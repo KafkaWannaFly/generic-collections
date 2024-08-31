@@ -1,6 +1,6 @@
 # ICollection
 
-`ICollection[TItem]` is a shared interface which is implemented by: [list.md](list.md "mention"), [set.md](set.md "mention"), [linkedlist](linkedlist/ "mention"), [stack.md](stack.md "mention"), [queue.md](queue.md "mention"), [binary-tree.md](binary-tree.md "mention"). Declaration:
+`ICollection[TItem]` is a shared interface which is implemented by: [list.md](list.md "mention"), [set.md](set.md "mention"), [linkedlist.md](linkedlist.md "mention"), [stack.md](stack.md "mention"), [queue.md](queue.md "mention"), [binary-tree.md](binary-tree.md "mention"). Declaration:
 
 ```go
 package interfaces

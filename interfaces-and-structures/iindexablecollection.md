@@ -2,7 +2,7 @@
 
 `IIndexableCollection[TIndex any, TValue any]` extends `ICollection[TItem any]`
 
-It is implemented by collection which has index in their structure: [list.md](list.md "mention"), [linkedlist](linkedlist/ "mention"), [stack.md](stack.md "mention"), [queue.md](queue.md "mention")
+It is implemented by collection which has index in their structure: [list.md](list.md "mention"), [linkedlist.md](linkedlist.md "mention"), [stack.md](stack.md "mention"), [queue.md](queue.md "mention")
 
 {% tabs %}
 {% tab title="IIndexableCollection" %}
