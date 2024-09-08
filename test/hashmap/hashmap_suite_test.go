@@ -29,11 +29,11 @@ var _ = Describe("Hashmap", func() {
 		})
 
 		It("Should not add new entry with same key and override value", func() {
-			stringMap.Set("key1", "value6")
-			stringMap.Set("key2", "value7")
-			stringMap.Set("key3", "value8")
-			stringMap.Set("key4", "value9")
-			stringMap.Set("key5", "value10")
+			stringMap.Put("key1", "value6")
+			stringMap.Put("key2", "value7")
+			stringMap.Put("key3", "value8")
+			stringMap.Put("key4", "value9")
+			stringMap.Put("key5", "value10")
 
 			Expect(stringMap.Count()).To(Equal(5))
 

@@ -228,13 +228,6 @@ func (receiver *HashMap[K, V]) Get(index K) V {
 	return entry.Value
 }
 
-// Set the value of the element at the specified key.
-// If the key does not exist, a new element is created with the specified key and value.
-// If the key exists, the value of the element is updated.
-func (receiver *HashMap[K, V]) Set(key K, value V) {
-	receiver.Add(NewEntry(key, value))
-}
-
 // Find the key of the first element that satisfies the predicate.
 func (receiver *HashMap[K, V]) Find(predicate func(K, V) bool) K {
 	var key K

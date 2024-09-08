@@ -65,23 +65,23 @@ var _ = Describe("Hashmap Struct Test", func() {
 		It("Should not add new entry with same key and override value", func() {
 			var c1 = City{"Istanbul", "Turkey"}
 			var v1 = District{"Besiktas", 200000, []string{"Levent", "Etiler"}}
-			cityMap.Set(c1, v1)
+			cityMap.Put(c1, v1)
 
 			var c2 = City{"Ankara", "Turkey"}
 			var v2 = District{"Mamak", 150000, []string{"Sincan", "Cayyolu"}}
-			cityMap.Set(c2, v2)
+			cityMap.Put(c2, v2)
 
 			var c3 = City{"Izmir", "Turkey"}
 			var v3 = District{"Konak", 100000, []string{"Alsancak", "Karsiyaka"}}
-			cityMap.Set(c3, v3)
+			cityMap.Put(c3, v3)
 
 			var c4 = City{"Paris", "France"}
 			var v4 = District{"Montmartre", 50000, []string{"Pigalle", "Clignancourt"}}
-			cityMap.Set(c4, v4)
+			cityMap.Put(c4, v4)
 
 			var c5 = City{"London", "United Kingdom"}
 			var v5 = District{"Covent Garden", 40000, []string{"Holborn", "Strand"}}
-			cityMap.Set(c5, v5)
+			cityMap.Put(c5, v5)
 
 			Expect(cityMap.Count()).To(Equal(5))
 
